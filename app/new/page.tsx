@@ -43,10 +43,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 const appSchema = z.object({
   name: z.string().min(1, {message: "This field is required"}),
-  repository: z.string().min(1, {message: "This field is required"}),
+  git_repository: z.string().min(1, {message: "This field is required"}),
   app_id: z.string().min(5, {message: "This field is required"}),
 });
 
@@ -61,27 +61,29 @@ export default function Page() {
   } = useForm<AppInfo>({
     resolver: zodResolver(appSchema),
     defaultValues: {
-      repository: "https://github.com/PabloG6/lambdacrate.git",
+      git_repository: "https://github.com/PabloG6/lambdacrate.git",
       name: "Lambdacrate",
       app_id: name,
     },
   });
 
   const router = useRouter();
+  const path = usePathname();
 
   useEffect(() => {
     const appId = createUniqueNameId({ adjectives: 2 })
-
+    console.log('use effect called');
     setValue("app_id", appId)
     setName(appId);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [path]);
   const onFormSubmit = async (data: AppInfo, e?: BaseSyntheticEvent) => {
     console.log("form submit");
     console.log(data);
     
     const response: {app_id: string; id: string; name: string} = await createNewApp(data);
-    router.push(`/${response.app_id}/customize`)
+    console.log('response', response);
+    router.replace(`/apps/${response.app_id}/edit`)
   };
   return (
     <>
@@ -118,11 +120,11 @@ export default function Page() {
                   <Label htmlFor="framework">Git Repository</Label>
                   <Input
                     placeholder="e.g. https://github.com/Lambdacrate/helpme.git"
-                    {...register("repository")}
+                    {...register("git_repository")}
                   ></Input>
-                  {errors?.repository?.message && (
+                  {errors?.git_repository?.message && (
                     <span className="text-red-500 text-xs">
-                      {errors.repository.message}
+                      {errors.git_repository.message}
                     </span>
                   )}
                 </div>

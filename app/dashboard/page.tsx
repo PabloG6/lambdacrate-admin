@@ -234,7 +234,8 @@ interface AppObject {
 }
 function AppItem({props}: {props: AppObject}) {
   return (
-    <div className="flex flex-col lg:flex-row bg-white text-sm p-2 relative dark:bg-gray-950">
+    <Link href={`/dashboard/${props.app_id}`}>
+       <div className="flex flex-col lg:flex-row bg-white text-sm p-2 relative dark:bg-gray-950 hover:bg-gray-100 cursor-pointer">
     <div className="p-2 grid gap-1 flex-1">
       <div className="font-medium">{props.name}</div>
       <div className="text-gray-500 dark:text-gray-400">{props.app_id}</div>
@@ -288,6 +289,6 @@ function AppItem({props}: {props: AppObject}) {
         <DropdownMenuItem disabled>Destroy</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  </div>
+  </div></Link>
   );
 }

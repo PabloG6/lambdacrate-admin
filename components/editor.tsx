@@ -10,9 +10,12 @@ import {
   SelectValue,
 } from "./ui/select";
 import { LanguageName, langNames, langs } from "@uiw/codemirror-extensions-langs";
-import { useState } from "react";
-
-export default function Editor() {
+import { useEffect, useState } from "react";
+export interface EditorProps {
+    onValueChange: (val: string) => void;
+    onLanguageChange: (val: string) => void;
+}
+export default function Editor({onLanguageChange, onValueChange}: EditorProps) {
   const [language, setLanguage] = useState<LanguageName>('javascript');
   const [extensions, setExtensions] = useState<Extension[]>();
   const [height, setHeight] = useState('200px');
@@ -21,8 +24,14 @@ export default function Editor() {
     crosshairCursor: false,
   });
 
+  useEffect(() => {
+    onLanguageChange(language)
+ 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const handleLangChange = (value: string) => {
-    console.log(value);
+    onLanguageChange(value)
     setLanguage(value as keyof typeof langs)
   };
   return (
@@ -41,7 +50,7 @@ export default function Editor() {
           </SelectContent>
         </Select>
       </div>
-      <CodeMirror value={"console.log()"} height={`${height} !important`}extensions={[langs[language]()]} basicSetup={basicSetup}></CodeMirror>
+      <CodeMirror onChange={onValueChange} value={''} height={`${height} !important`}extensions={[langs[language]()]} basicSetup={basicSetup}></CodeMirror>
     </>
   );
 }

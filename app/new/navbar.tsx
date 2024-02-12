@@ -11,6 +11,10 @@ function splitWithSlashes(str: string) {
   });
 }
 
+type Props = {
+  navigation: { label: string; href: string; segment: string | null }[];
+  className?: string;
+};
 export function Navbar() {
   const pathName = usePathname();
 

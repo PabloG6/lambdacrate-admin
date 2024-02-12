@@ -73,11 +73,11 @@ export default function Page({ params }: { params: { appId: string } }) {
       id: "actions",
       header: ({ header }) => (
         <div className="flex justify-end">
-          <Link href={`/features/new`}>
-          <Button size={"icon"} variant={"ghost"} className="h-5 w-5" >
-            <PlusCircle />
-          </Button></Link>
-        
+          <Link href={`edit/features/new`}>
+            <Button size={"icon"} variant={"ghost"} className="h-5 w-5">
+              <PlusCircle />
+            </Button>
+          </Link>
         </div>
       ),
       cell: ({ row }) => <></>,
@@ -177,11 +177,6 @@ export default function Page({ params }: { params: { appId: string } }) {
                   </div>
                 </div>
               </CardContent>
-              <CardFooter className="flex justify-end">
-                <Button className="rounded-full px-6" type="submit">
-                  Create App
-                </Button>
-              </CardFooter>
             </form>
           </Card>
 
