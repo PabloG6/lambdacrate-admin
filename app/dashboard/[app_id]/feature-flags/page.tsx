@@ -14,7 +14,7 @@ export default async function Page({ params }: { params: { app_id: string } }) {
       {features.results.length == 0 ? (
         <main className="w-full h-full flex items-center justify-center">
           <div className="flex flex-col items-center justify-center gap-4">
-            <div className="text-lg font-medium mt-[-320px]">
+            <div className="text-lg font-medium">
               Manage Feature Flags for this organization
             </div>
             <div className="max-w-xl  text-muted-foreground text-center text-xs">
@@ -32,7 +32,14 @@ export default async function Page({ params }: { params: { app_id: string } }) {
           </div>
         </main>
       ) : (
-        <FeatureFlagTable data={features.results} />
+        <div className="w-full">
+            <div className="w-full flex justify-end">
+            <Button size={"lg"} className="mt-4" asChild>
+              <Link href="feature-flags/new">Add Flag</Link>
+            </Button>
+            </div>
+            <FeatureFlagTable data={features.results} />
+        </div>
       )}
     </Suspense>
   );

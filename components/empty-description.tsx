@@ -17,7 +17,7 @@ export function EmptyDescription({
     console.log(title);
   return (
     <div className="flex flex-col items-center justify-center gap-4">
-      <div className="text-lg font-medium mt-[-320px]">{title}</div>
+      <div className="text-lg font-medium">{title}</div>
       <div className="max-w-xl  text-muted-foreground text-center text-xs">
         <p>{description}</p>
       </div>
