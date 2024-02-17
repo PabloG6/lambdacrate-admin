@@ -4,15 +4,15 @@ import Link from "next/link";
 import { getFeatureFlags } from "./actions";
 import { Suspense } from "react";
 import Loading from "@/app/apps/[appId]/edit/features/new/loading";
-import { DataTable, FeatureFlagTable } from "./table";
 import { EmptyDescription } from "@/components/empty-description";
+import { FeatureFlagTable } from "./table";
 
 export default async function Page({ params }: { params: { app_id: string } }) {
   const features = await getFeatureFlags(params.app_id);
-
+  console.log(features);
   return (
     <Suspense fallback={<Loading />}>
-      {features.results.length == 0 ? (
+      {!features.success || (features.results && features.results?.length == 0) ? (
         <main className="w-full h-full flex items-center justify-center">
           <EmptyDescription
             description="Feature flags give you more granular control over user api

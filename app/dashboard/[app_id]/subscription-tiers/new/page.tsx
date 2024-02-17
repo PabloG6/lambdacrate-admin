@@ -16,7 +16,7 @@ import { RefinementCtx, z } from "zod";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
-import { createSubscription } from "../actions";
+import { createSubscriptionTier } from "../actions";
 export const SubscriptionSchema = z
   .object({
     name: z.string().min(1),
@@ -41,7 +41,7 @@ export default function Page({ params }: { params: { app_id: string } }) {
   const onValid = async (data: any, e?: React.BaseSyntheticEvent) => {
     e?.preventDefault();
 
-    const { success } = await createSubscription(params.app_id, data);
+    const { success } = await createSubscriptionTier(params.app_id, data);
     if (success) {
       console.log("flag");
       router.replace("../subscription-tiers");

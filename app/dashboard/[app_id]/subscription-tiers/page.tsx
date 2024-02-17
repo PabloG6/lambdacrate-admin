@@ -1,16 +1,27 @@
 import { EmptyDescription } from "@/components/empty-description";
+import { getSubscriptionTiers } from "./actions";
+import { Suspense } from "react";
+import Loading from "@/app/apps/[appId]/edit/features/new/loading";
+import SubTierComponent from "./table";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
-export default function Page() {
+export default async function Page({
+  params: { app_id },
+}: {
+  params: { app_id: string };
+}) {
+  const results = await getSubscriptionTiers(app_id);
+
   return (
-    <main className="w-full h-full items-center justify-center">
-      <EmptyDescription
-        title={"Create Subscription Tiers for your users."}
-        description={
-          "Subscription tiers allow users to subscribe to different offerings of your service. You may have up to four subscription tiers. You can also add multiple feature flags to a tier."
-        }
-        href={"subscription-tiers/new"}
-        buttonText={"Add a Tier"}
-      />
-    </main>
+    <div className="w-full h-full">
+      <div className="w-full flex justify-end max-w-6xl">
+        <Button size={"lg"} className="mt-4" asChild>
+          <Link href="subscription-tiers/new">Create Tier</Link>
+        </Button>
+      </div>
+
+      <SubTierComponent rows={results} />
+    </div>
   );
 }

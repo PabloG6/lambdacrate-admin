@@ -3,6 +3,7 @@ import { Navbar } from "@/components/navbar";
 import { NavLinkProps, SideNav } from "@/components/sidenav";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -26,8 +27,10 @@ import {
   ChevronsUpDown,
   Settings,
   Globe,
+  Paintbrush,
 } from "lucide-react";
 import {
+  useParams,
   useSelectedLayoutSegment,
   useSelectedLayoutSegments,
 } from "next/navigation";
@@ -52,7 +55,7 @@ export default function Layout({
     {
       title: "Appearance",
       href: `/dashboard/${app_id}/appearance`,
-      icon: SunMedium,
+      icon: Paintbrush,
       segment: "appearance",
       variant: "ghost" as const,
     },
@@ -104,21 +107,24 @@ export default function Layout({
   }, [layoutSegment]);
   const [title, setTitle] = useState("");
   const onSideNavChange = (link: NavLinkProps) => {
+
+  
   };
+
   return (
     <>
       <div className="w-full h-full flex">
-        <div className="h-full ">
-          <div className=" w-full border-b border-r flex justify-center flex-col py-4 px-6">
+        <div className="h-screen flex flex-col">
+          <div className=" w-full border-r flex justify-center flex-col py-4 px-6">
             <div className="pt-4 space-y-4">
               <div className="flex items-center space-x-2">
                 <Avatar>
                   <AvatarFallback>L</AvatarFallback>
                 </Avatar>
-                <div>
+                <div className="max-w-80 w-full">
                   <p className="text-sm font-medium">Lambdacrate</p>
-                  <p className="text-xs text-muted-foreground">
-                    sincere-glorious-koala-7hvFmS
+                  <p className="text-xs text-muted-foreground truncate">
+                    {app_id}
                   </p>
                 </div>
               </div>
@@ -126,7 +132,7 @@ export default function Layout({
                 <Select defaultValue="test" value="test">
                   <Label className="font-light text-xs ml-3">Environment</Label>
 
-                  <SelectTrigger className="flex-shrink w-auto min-w-44 border-none hover:bg-gray-100">
+                  <SelectTrigger className="flex-shrink w-auto min-w-44 border-none hover:bg-muted">
                     Choose Environment
                   </SelectTrigger>
                   <SelectContent className="">
@@ -149,16 +155,19 @@ export default function Layout({
           />
         </div>
         <div className="w-full h-full">
-          <nav className="flex w-full h-16 items-center py-4 px-4 justify-between border-b">
+          <nav className="flex w-full h-16 items-center px-4 justify-between border-b sticky top-0">
             <div className="flex w-full h-full items-center">
               <span className="text-lg">{title}</span>
             </div>
             <div className="flex w-full"></div>
             <div className="flex w-full"></div>
           </nav>
-          <div className="w-full px-12 py-8 h-full max-h-[calc(100vh-64px)] overflow-none">
-            {children}
+          <ScrollArea className="w-full px-12 h-full">
+          <div className="py-6 w-full">
+          {children}
           </div>
+        
+          </ScrollArea>
         </div>
       </div>
     </>
