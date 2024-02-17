@@ -30,9 +30,9 @@ export function SideNav({ links, isCollapsed, className, onChange }: NavProps) {
   return (
     <div
 
-      className={cn("group flex flex-col gap-4 py-2 max-w-[345px]w-full  pr-4 border-r border-r-gray-200 h-full", className)}
+      className={cn("group flex flex-col gap-4 py-2 lg:max-w-[345px] xl:max-w-[500px] w-full  pr-4 border-r h-full", className)}
     >
-      <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2 space-y-3">
+      <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2 space-y-3 ">
         {links.map((link, index) =>
         
             <Link

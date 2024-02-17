@@ -5,49 +5,54 @@ import * as React from "react";
 
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { useSelectedLayoutSegment } from "next/navigation";
-
+import { usePathname, useSelectedLayoutSegment } from "next/navigation";
+import { ScrollArea } from "./ui/scroll-area";
+export type NavLink = { label: string; href: string; segment: string | null }
 type Props = {
-  navigation: { label: string; href: string; segment: string | null }[];
+  navigation: NavLink[];
   className?: string;
 };
 
 export const Navbar: React.FC<React.PropsWithChildren<Props>> = ({ navigation, className }) => {
   const selectedSegment = useSelectedLayoutSegment();
-    console.log(selectedSegment)
+    console.log("selected segment", selectedSegment)
+    
+    const pathname = usePathname();
+
   return (
-    <nav className={cn("sticky top-0 bg-background z-20", className)}>
+    <nav className={cn("sticky top-0 d z-20", className)}>
       <div className="flex overflow-x-auto items-center w-full pl-1">
-        <ul className="flex flex-row gap-4">
-          {navigation.map(({ label, href, segment }) => {
+        <ScrollArea className="border-none">
+       <div className="w-full flex items-center py-2">
+       {navigation.map(({ label, href, segment }, index) => {
+            console.log(href, pathname?.startsWith(href))
+
             const active = segment === selectedSegment;
             return (
-              <li
-                key={label}
-                className={cn("flex shrink-0 list-none border-b-2 border-transparent p-2", {
-                  "border-primary ": active,
-                  
-                  
-                })}
-              >
-                <Link
-                  href={href}
+          
+                 <Link
+              href={href}
+              key={href}
+       
                   className={cn(
-                    "text-sm py-2 px-3 -mx-3 text-muted-foreground text-content-subtle  hover:bg-background-subtle rounded-md hover:text-primary",
-                    {
-                      "text-primary": active,
-                      "font-medium": active
-                    },
+                    "text-sm hover:text-primary text-muted-foreground px-4 h-7 flex items-center min-w-20 justify-center rounded-full",
+                    active
+                    ? "bg-muted font-medium text-primary"
+                    : "text-muted-foreground"
+                
                   )}
-                >
-                  {label}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+            >
+              {label}
+            </Link>
+          
+             
+          )})}
+       </div>
+
+        </ScrollArea>
+   
       </div>
-      <Separator />
+
     </nav>
   );
 };
