@@ -73,8 +73,8 @@ export default function Page() {
   useEffect(() => {
     const appId = createUniqueNameId({ adjectives: 2 })
     console.log('use effect called');
-    setValue("app_id", appId)
-    setName(appId);
+    setValue("app_id", appId.toLowerCase())
+    setName(appId.toLowerCase());
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [path]);
   const onFormSubmit = async (data: AppInfo, e?: BaseSyntheticEvent) => {
@@ -83,7 +83,7 @@ export default function Page() {
     
     const response: {app_id: string; id: string; name: string} = await createNewApp(data);
     console.log('response', response);
-    router.replace(`/apps/${response.app_id}/edit`)
+    router.replace(`/dashboard/${response.app_id}`)
   };
   return (
     <>
@@ -134,7 +134,7 @@ export default function Page() {
 
           </CardContent>
           <CardFooter className="flex justify-end">
-            <Button className="rounded-full px-6" type="submit">Create App</Button>
+            <Button type="submit">Create App</Button>
           </CardFooter>
           </form>
         </Card>

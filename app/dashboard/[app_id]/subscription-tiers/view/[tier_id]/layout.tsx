@@ -23,7 +23,7 @@ export default async function Layout({params: {tier_id, app_id}, children}: {par
       
       ] 
     const results = await getSubscriptionTier(tier_id);
-
+  
     return <>
      <div className="flex w-full flex-col gap-2 my-4">
         <h1 className="font-bold text-lg mb-4">Tier Details</h1>

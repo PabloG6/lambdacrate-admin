@@ -37,7 +37,7 @@ export const Navbar: React.FC<React.PropsWithChildren<Props>> = ({ navigation, c
                   className={cn(
                     "text-sm hover:text-primary text-muted-foreground px-4 h-7 flex items-center min-w-20 justify-center rounded-full",
                     active
-                    ? "bg-muted font-medium text-primary"
+                    ? "bg-muted font-medium text-primary-foreground"
                     : "text-muted-foreground"
                 
                   )}

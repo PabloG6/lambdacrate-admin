@@ -58,12 +58,14 @@ export default async function Component() {
               type="search"
             />
             <div className="flex items-center gap-4">
-              <Button variant="outline" size="icon">
-                <Link href="/new">
+            <Link href="/new">
+              <Button variant="outline" size="icon" >
+           
                   {" "}
                   <PlusIcon className="h-4 w-4" />
-                </Link>
+              
               </Button>
+              </Link>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button

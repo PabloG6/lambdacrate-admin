@@ -18,11 +18,23 @@ import {
   MenubarShortcut,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-export default function Page({params} : {params: {app_id: string}}) {
- 
+import { NavLink, Navbar } from "@/components/navbar";
+import { Button } from "@/components/ui/button";
+import {Overview} from "./overview";
+import { getAppMetaData } from "./actions";
+import { Suspense } from "react";
+import Loading from "./loading";
+const navLinks: NavLink[] = [
+  { label: "Overview", href: "", segment: null },
+  { label: "Users", href: "", segment: "users" },
+];
+export default async function Page({ params: {app_id} }: { params: { app_id: string } }) {
+
   return (
-    <main className="h-full w-full">
-         <p>Overview</p>
+    <Suspense fallback={<Loading/>}>
+       <main className="h-full w-full">
+      <Overview app_id={app_id} />
     </main>
+    </Suspense>
   );
 }

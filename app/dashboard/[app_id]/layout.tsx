@@ -46,7 +46,7 @@ export default function Layout({
 }) {
   const links = [
     {
-      title: "Overview",
+      title: "Project",
       href: `/dashboard/${app_id}`,
       icon: LayoutDashboard,
       segment: null,
@@ -129,21 +129,7 @@ export default function Layout({
                 </div>
               </div>
               <div>
-                <Select defaultValue="test" value="test">
-                  <Label className="font-light text-xs ml-3">Environment</Label>
-
-                  <SelectTrigger className="flex-shrink w-auto min-w-44 border-none hover:bg-muted">
-                    Choose Environment
-                  </SelectTrigger>
-                  <SelectContent className="">
-                    <SelectItem value="test" className="font-medium">
-                      Test
-                    </SelectItem>
-                    <SelectItem value="production" className="font-medium">
-                      Production
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
+           
               </div>
             </div>
           </div>
