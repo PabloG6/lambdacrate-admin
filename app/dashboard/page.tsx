@@ -235,6 +235,7 @@ interface AppObject {
   repository: string;
 }
 function AppItem({props}: {props: AppObject}) {
+  const destroy =(id:string) => {}
   return (
     <Link href={`/dashboard/${props.app_id}`}>
        <div className="flex flex-col lg:flex-row bg-white text-sm p-2 relative dark:bg-gray-950 hover:bg-gray-100 cursor-pointer">
@@ -288,7 +289,7 @@ function AppItem({props}: {props: AppObject}) {
         <DropdownMenuItem>View App</DropdownMenuItem>
         <DropdownMenuItem>Redeploy</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem disabled>Destroy</DropdownMenuItem>
+        <DropdownMenuItem>Destroy</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   </div></Link>

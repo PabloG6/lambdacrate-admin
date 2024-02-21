@@ -81,9 +81,10 @@ export default function Page() {
     console.log("form submit");
     console.log(data);
     
-    const response: {app_id: string; id: string; name: string} = await createNewApp(data);
-    console.log('response', response);
-    router.replace(`/dashboard/${response.app_id}`)
+    const response: {app: {app_id: string; id: string; name: string}, deployment_id: string} = await createNewApp(data);
+    const searchParams = new URLSearchParams();
+    searchParams.set("deployment_id", response.deployment_id)
+    router.replace(`/dashboard/${response.app.app_id}?${searchParams.toString()}`)
   };
   return (
     <>

@@ -29,11 +29,12 @@ const navLinks: NavLink[] = [
   { label: "Users", href: "", segment: "users" },
 ];
 export default async function Page({ params: {app_id} }: { params: { app_id: string } }) {
-
+  const appMetaData = await getAppMetaData(app_id);
+  console.log(appMetaData);
   return (
     <Suspense fallback={<Loading/>}>
        <main className="h-full w-full">
-      <Overview app_id={app_id} />
+      <Overview app_id={app_id} data={appMetaData} />
     </main>
     </Suspense>
   );

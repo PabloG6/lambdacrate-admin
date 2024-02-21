@@ -152,8 +152,11 @@ export default function Layout({
           <div className="py-6 w-full">
           {children}
           </div>
-        
+          <div className="h-16"></div>
+
+
           </ScrollArea>
+
         </div>
       </div>
     </>
