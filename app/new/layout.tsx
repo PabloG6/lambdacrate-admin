@@ -7,9 +7,6 @@ export default function Layout({children}: {children: React.ReactNode}) {
 
     const paths = usePathname();
     console.log(paths);
-    return <>
-    <Navbar></Navbar>
-
-    <main>{children}</main></>
+    return  <main>{children}</main>
 }
 

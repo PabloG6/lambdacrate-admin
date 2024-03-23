@@ -65,6 +65,7 @@ export async function GET(
   const stream = new TransformStream();
   const writer = stream.writable.getWriter();
   const encoder = new TextEncoder();
+  //todo fix this so that when the app deployment fails it actually tells u the deployment fails.
   const getStatus = async (notifier: SyncEvents) => {
     console.log(`getting status: ${new Date().toISOString()}`);
     const response = await fetch(`${endpoint}/api/apps/${app_id}/status`, {method: 'GET', cache: 'no-cache'});
@@ -90,6 +91,7 @@ export async function GET(
   request.signal.onabort = (ev) => {
     console.log("aborted");
     console.log(ev);
+    
     clearInterval(intervalId);
   };
   setInterval(() => {

@@ -55,6 +55,12 @@
 
 }
 
+.aspect-square {
+  position: relative;
+}
+
+/* Style the content within each square */
+
 
 @media (prefers-color-scheme: dark) {
   

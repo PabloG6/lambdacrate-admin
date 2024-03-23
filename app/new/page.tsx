@@ -44,25 +44,31 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { usePathname, useRouter } from "next/navigation";
-const appSchema = z.object({
-  name: z.string().min(1, {message: "This field is required"}),
-  git_repository: z.string().min(1, {message: "This field is required"}),
-  app_id: z.string().min(5, {message: "This field is required"}),
-});
+import { Separator } from "@/components/ui/separator";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
+import { GithubIcon, Package2 } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { AppearanceForm } from "./components/appearance-form";
+import { AppInfo, AppSchema } from "@/lib/util/types";
+import { FeatureFlagForm } from "./components/feature-flag-form";
 
-export type AppInfo = z.infer<typeof appSchema>;
+
 export default function Page() {
   const [name, setName] = useState("");
-  const {
-    handleSubmit,
-    register,
-    setValue,
-    formState: { errors },
-  } = useForm<AppInfo>({
-    resolver: zodResolver(appSchema),
+  const form = useForm<AppInfo>({
+    resolver: zodResolver(AppSchema),
     defaultValues: {
       git_repository: "https://github.com/PabloG6/lambdacrate.git",
-      name: "Lambdacrate",
+      name: "",
+      primary_color: "",
+      description: "",
+      features: [],
       app_id: name,
     },
   });
@@ -71,304 +77,281 @@ export default function Page() {
   const path = usePathname();
 
   useEffect(() => {
-    const appId = createUniqueNameId({ adjectives: 2 })
-    console.log('use effect called');
-    setValue("app_id", appId.toLowerCase())
+    const appId = createUniqueNameId({ adjectives: 2 });
+    console.log("use effect called");
+    form.setValue("app_id", appId.toLowerCase());
     setName(appId.toLowerCase());
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [path]);
   const onFormSubmit = async (data: AppInfo, e?: BaseSyntheticEvent) => {
     console.log("form submit");
     console.log(data);
-    
-    const response: {app: {app_id: string; id: string; name: string}, deployment_id: string} = await createNewApp(data);
+
+    const response: {
+      app: { app_id: string; id: string; name: string };
+      deployment_id: string;
+    } = await createNewApp(data);
+   
     const searchParams = new URLSearchParams();
-    searchParams.set("deployment_id", response.deployment_id)
-    router.replace(`/dashboard/${response.app.app_id}?${searchParams.toString()}`)
+    searchParams.set("deployment_id", response.deployment_id);
+    router.replace(
+      `/dashboard/${response.app.app_id}?${searchParams.toString()}`
+    );
   };
   return (
-    <>
-      <div className="w-full max-w-[550px] mx-auto p-6 space-y-6">
-        <Card className=" w-full">
-          <CardHeader>
-            <CardTitle>Create your app</CardTitle>
-            <CardDescription>
-              Give us some details of your app to get started
-            </CardDescription>
-          </CardHeader>
-          <form onSubmit={handleSubmit(onFormSubmit)}>
-          <CardContent>
-    
-              <div className="grid w-full items-center gap-6">
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="name">Name</Label>
-                  <Input
-                    id="name"
-                    placeholder="Name of your project"
-                    {...register("name")}
-                  />
-                  {errors?.name?.message ? (
-                    <span className="text-red-500 text-xs">{errors.name.message}</span>
-                  ) : (
-                    <p className="text-xs">
-                      {" "}
-                      <span>Your app id: </span>
-                      <code>{name}</code>
-                    </p>
-                  )}
-                </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="framework">Git Repository</Label>
-                  <Input
-                    placeholder="e.g. https://github.com/Lambdacrate/helpme.git"
-                    {...register("git_repository")}
-                  ></Input>
-                  {errors?.git_repository?.message && (
-                    <span className="text-red-500 text-xs">
-                      {errors.git_repository.message}
-                    </span>
-                  )}
-                </div>
-              </div>
+    <div className="flex w-full h-full">
+      <div className="w-full lg:max-w-80 md:max-w-72 items-center flex justify-center">
+      <nav className="grid gap-4 text-sm text-muted-foreground top-16 fixed">
+         
+            <Link href="#">General</Link>
+            <Link href="#">Calls To Action</Link>
+            <Link href="#">Appearance</Link>
+            <Link href="#">Feature Flags</Link>
+            <Link href="#">Subscription Tiers</Link>
+            <Link href="#">Developer Settings</Link>
 
-              
-
-          </CardContent>
-          <CardFooter className="flex justify-end">
-            <Button type="submit">Create App</Button>
-          </CardFooter>
-          </form>
-        </Card>
+          </nav>
       </div>
-    </>
-  );
-}
-export function H() {
-  /*
-         <div className="flex justify-between space-y-1.5">
-                  <div >
-                 
-                    <Label htmlFor="framework">Target Production</Label>
-                    <p className="text-xs max-w-64">
-                    Build an app for a production environment, otherwise create a test environment.
-                    </p>
+    
+      <Form {...form}>
+        <form className="w-full space-y-4 h-full">
+        <ScrollArea className="h-screen w-full" type="scroll" >
 
-                  </div>
-                  <Switch></Switch>
-                  
-                </div>
-  /*
-   <section className="pt-6">
-              <div className="space-y-2">
-                <div className="pb-3 ">
-                  <span className="text-3xl font-semibold text-gray-700">
-                    Customizations
-                  </span>
-                </div>
+          <div className="w-full border border-muted rounded-md md:p-10 lg:p-12 mx-8 bg-slate-100/20 space-y-4">
+            <div className="bg-default border-subtle flex w-full rounded-md border p-7 min-w-80 flex-col bg-white">
+            <div className="flex">
+            <div className="bg-muted text-default mt-[3px] flex h-6 w-6 items-center justify-center rounded-full p-1 text-xs font-medium mr-5 rtl:ml-5">
+                1
+              </div>
+            <div>
+            <div className="text-slate-800 text-base font-semibold">
+                
+                Basic Info
               </div>
 
-              <section id="call-to-action" className="space-y-8">
-                <div className="pb-8 flex flex-col space-y-2">
-                  <span className="text-xl font-medium text-slate-500">
-                    Website Details
-                  </span>
-                  <span className="text-sm font-medium text-slate-400">
-                    Information about your app
-                  </span>
-                </div>
-                <Label htmlFor="referral-1">Title </Label>
-                <div className="">
-                  <Input
-                    id="referral-1-name"
-                    placeholder="Lambdacrate"
-                    {...register("title")}
-                  />
-                  {errors?.title?.message && (
-                    <span className="text-red-500">{errors.title.message}</span>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="description">Call to Action</Label>
-                  <div className="">
-                    <Textarea
-                      id=""
-                      placeholder="Deploy a storefront for your rest api with ease."
-                      className="resize-none"
-                      {...register("call_to_action")}
-                    />
-                    {errors?.call_to_action?.message ? (
-                      <span className="text-red-500">
-                        {errors.call_to_action.message}
-                      </span>
-                    ) : (
-                      <p className="text-sm text-muted-foreground">
-                        Value proposition that prompts your users to sign up.
-                      </p>
-                    )}
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="description">Short Description</Label>
-                  <div className="">
-                    <Textarea
-                      id=""
-                      placeholder="Quickly go from zero to production with the click of a button. "
-                      {...register("page_description")}
-                      className="resize-none"
-                    />
+              <div className="text-default text-sm text-muted-foreground">
+                Some info about your app.{" "}
+              </div>
+            </div>
+            </div>
+           
+              <Separator className="my-7 mx-auto" />
+              <div className="space-y-8">
+              <FormField
+                name="name"
+                control={form.control}
+                render={({ field }) => (
+                  
+                  <div className="flex gap-4 items-center">
+                    <FormItem className="w-full">
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="My New App" {...field} />
+                    </FormControl>
+                  </FormItem></div>
+                
+                )}
+              ></FormField>
 
-                    {errors?.page_description?.message ? (
-                      <span className="text-red-500">
-                        {errors.page_description.message}
-                      </span>
-                    ) : (
-                      <p className="text-sm text-muted-foreground">
-                        Expand on your value proposition for the user.
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </section>
-              <div className="w-full h-16"></div>
-              <section id="web-features" className="">
-                <div className="pb-8 flex flex-col space-y-2">
-                  <span className="text-2xl font-medium text-slate-500">
-                    Pricing And Features
-                  </span>
-                  <span className="text-sm font-medium text-muted-foreground">
-                    Subscription tiers and their corresponding features. Each
-                    subscription can give access to multiple features.
-                  </span>
-                </div>
-                <div className="space-y-8">
-                  <div className="space-y-1">
-                    <Label>Title</Label>
-                    <Input
-                      placeholder="Choose a pricing plan that's right for you. "
-                      {...register("pricing_title")}
-                    />
+<FormField
+                name="description"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
 
-                    {errors?.pricing_title?.message ? (
-                      <span className="text-red-500 text-sm">
-                        {errors.pricing_title.message}
-                      </span>
-                    ) : (
-                      <p className="text-muted-foreground text-sm">
-                        A short title for the pricing page of your website.
-                      </p>
-                    )}
-                  </div>
+                    <FormControl className="flex">
+                      <Textarea placeholder="This app is really easy..." {...field} />
+                    </FormControl>
+               
+                  
+                  </FormItem>
+                )}
+              ></FormField>
 
-                  <div className="space-y-4">
-                    <Label htmlFor="description">Description</Label>
-                    <div className="space-y-1">
-                      <Textarea
-                        id=""
-                        placeholder="Choose from a variety of pricing options, tailored to every developer. "
-                        {...register("pricing_description")}
-                        className="resize-none"
-                      />
-                      {errors?.pricing_description?.message ? (
-                        <span className="text-red-500 text-sm">
-                          {errors.pricing_description.message}
-                        </span>
-                      ) : (
-                        <p className="text-sm text-muted-foreground">
-                          A short description that expands on the pricing title.
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <div className="grid w-full gap-2 border-b pb-6">
-                    <div className="flex w-full justify-between">
-                      <p className="text-muted-foreground text-lg">Features</p>
-                      <Button size="icon">
-                        <PlusIcon />
-                      </Button>
-                    </div>
-                    <div className="flex flex-row gap-2 justify-center items-center"></div>
-                  </div>
-                </div>
+              <FormField
+                name="git_repository"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Repository Url</FormLabel>
+                
+                    <FormControl className="flex">
+                      <Input placeholder="My New App" {...field} />
+                    </FormControl>
+               
+                  
+                  </FormItem>
+                )}
+              ></FormField>
+              </div>
+             
+            </div>
 
-                <section id="subscription-form" className="mt-8 mb-6 space-y-8">
-                  <div className="pb-8 flex flex-col space-y-2">
-                    <div className="flex justify-between w-full items-center">
-                      <span className="text-lg font-medium text-slate-500">
-                        Subscription Details
-                      </span>
-                      <Button
-                        className="rounded-lg"
-                        variant={"default"}
-                        size="icon"
-                      >
-                        <PlusIcon />
-                      </Button>
-                    </div>
-                    <span className="text-sm text-muted-foreground">
-                      Here you can add different subscription tiers to
-                      differentiate your users. You may add up to three sub
-                      tiers
-                    </span>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="rounded-md border">
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <TableHead className="min-w-[150px]">
-                              Name
-                            </TableHead>
-                            <TableHead className="w-[70px]">Price</TableHead>
-                            <TableHead className="hidden md:table-cell">
-                              Features
-                            </TableHead>
-                            <TableHead className="hidden md:table-cell">
-                              Actions
-                            </TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          <TableRow>
-                            <TableCell className="font-medium">
-                              Premium
-                            </TableCell>
-                            <TableCell>$49.00</TableCell>
-                            <TableCell className="hidden md:table-cell">
-                              <Badge className="text-xs font-normal rounded-full">
-                                15 Features
-                              </Badge>
-                            </TableCell>
+            <div className="bg-default border-subtle flex w-full rounded-md border p-7 min-w-80 flex-col bg-white">
+            <div className="flex">
+            <div className="bg-muted text-default mt-[3px] flex h-6 w-6 items-center justify-center rounded-full p-1 text-xs font-medium mr-5 rtl:ml-5">
+                2
+              </div>
+            <div>
+            <div className="text-slate-800 text-base font-semibold">
+                
+                Calls To Action
+              </div>
 
-                            <TableCell className="text-right">
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <Button size="icon" variant="ghost">
-                                    <DotsVerticalIcon className="w-4 h-4" />
-                                    <span className="sr-only">Actions</span>
-                                  </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                  <DropdownMenuItem>
-                                    View order
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem>
-                                    Customer details
-                                  </DropdownMenuItem>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            </TableCell>
-                          </TableRow>
-                        </TableBody>
-                      </Table>
-                    </div>
-                    <div className="flex flex-row justify-end w-full"></div>
-                  </div>
-                </section>
-              </section>
-            </section>
+              <div className="text-default text-sm text-muted-foreground">
+               Style your landing page with custom copy that explains what your app does.
+              </div>
+            </div>
+            </div>
+           
+              <Separator className="my-7 mx-auto" />
+              <div className="space-y-8">
+              <FormField
+                name="name"
+                control={form.control}
+                render={({ field }) => (
+                  <div className="flex gap-4 items-center">
+                    <FormItem className="w-full">
+                    <FormLabel>Main Headline</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g. Create commercial apis from docker containers in minutes" {...field} />
+                    </FormControl>
+                  </FormItem></div>
+                
+                )}
+              ></FormField>
 
-            <Button className="rounded-full px-6" type="submit">
-              Create My App
-            </Button>
-    */
+<FormField
+                name="description"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Secondary Headline</FormLabel>
+
+                    <FormControl className="flex">
+                      <Textarea placeholder="Lambdacrate deploys your docker container behind an api gateway alongside a fully functional, feature rich dashboard." {...field} />
+                    </FormControl>
+               
+                  
+                  </FormItem>
+                )}
+              ></FormField>
+
+         
+              </div>
+             
+            </div>
+
+            <div className="bg-default border-subtle flex w-full rounded-md border p-7 min-w-80 flex-col bg-white">
+            <div className="flex">
+            <div className="bg-muted text-default mt-[3px] flex h-6 w-6 items-center justify-center rounded-full p-1 text-xs font-medium mr-5 rtl:ml-5">
+                3
+              </div>
+            <div>
+            <div className="text-slate-800 text-base font-semibold">
+                
+                Appearance
+              </div>
+
+              <div className="text-default text-sm text-muted-foreground">
+               Here you can customize attributes of your app to give it a more personal feel.
+              </div>
+            </div>
+            </div>
+           
+              <Separator className="my-7 mx-auto" />
+                <AppearanceForm control={form.control}/>
+             
+            </div>
+            <div className="bg-default border-subtle flex w-full rounded-md border p-7 min-w-80 flex-col bg-white">
+            <div className="flex">
+            <div className="bg-muted text-default mt-[3px] flex h-6 w-6 items-center justify-center rounded-full p-1 text-xs font-medium mr-5 rtl:ml-5">
+                3
+              </div>
+            <div>
+            <div className="text-slate-800 text-base font-semibold">
+                
+                Feature Flags
+              </div>
+
+              <div className="text-default text-sm text-muted-foreground">
+                  This section allows you to place the most prominent features of your API on your landing page.
+              </div>
+            </div>
+            </div>
+           
+              <Separator className="my-7 mx-auto" />
+                  <FeatureFlagForm control={form.control} parent={form}/>
+             
+            </div>
+
+            <div className="bg-default border-subtle flex w-full rounded-md border p-7 min-w-80 flex-col bg-white">
+            <div className="flex">
+            <div className="bg-muted text-default mt-[3px] flex h-6 w-6 items-center justify-center rounded-full p-1 text-xs font-medium mr-5 rtl:ml-5">
+                4
+              </div>
+            <div>
+            <div className="text-slate-800 text-base font-semibold">
+                
+                Subscription Tiers
+              </div>
+
+              <div className="text-default text-sm text-muted-foreground">
+                  Group multiple feature flags under one pricing tier, allowing you to meet your customer&apos;s pricing needs.
+              </div>
+            </div>
+            </div>
+           
+              <Separator className="my-7 mx-auto" />
+              <div className="space-y-8">
+              <FormField
+                name="name"
+                control={form.control}
+                render={({ field }) => (
+                  <div className="flex gap-4 items-center">
+                    <FormItem className="w-full">
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="My New App" {...field} />
+                    </FormControl>
+                  </FormItem></div>
+                
+                )}
+              ></FormField>
+
+<FormField
+                name="description"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+
+                    <FormControl className="flex">
+                      <Textarea placeholder="This app is really easy..." {...field} />
+                    </FormControl>
+               
+                  
+                  </FormItem>
+                )}
+              ></FormField>
+
+             
+              </div>
+             
+            </div>
+          </div>
+
+         
+
+       
+          </ScrollArea>
+
+        </form>
+      </Form>
+
+
+      <div className="md:max-w-80 w-full"></div>
+    </div>
+  );
 }

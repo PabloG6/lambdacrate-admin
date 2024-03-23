@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,15 +14,40 @@ import {
   DropdownMenu,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuGroup,
+  DropdownMenuSubContent,
+  DropdownMenuPortal,
+  DropdownMenuSubTrigger,
+  DropdownMenuSub,
+  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { PlusIcon } from "@radix-ui/react-icons";
+import { GitHubLogoIcon, PlusIcon } from "@radix-ui/react-icons";
 import { unstable_noStore } from "next/cache";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {
+  AppWindowMac,
+  ExternalLink,
+  GithubIcon,
+  LayoutGrid,
+  MoreVerticalIcon,
+  TimerResetIcon,
+  Zap,
+} from "lucide-react";
+import { Dialog } from "@/components/ui/dialog";
+import {
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "@radix-ui/react-dialog";
+import { AppItem, AppObject } from "@/components/app-item";
 
 export default async function Component() {
   unstable_noStore();
-  const response = await fetch(`http://127.0.0.1:4000/api/apps`)
+  const response = await fetch(`http://127.0.0.1:4000/api/apps`);
   const appList = await response.json();
   console.log(appList);
   return (
@@ -48,51 +72,34 @@ export default async function Component() {
       </header>
       <main className="flex min-h-[calc(100vh_-_theme(spacing.16))]  flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10 dark:bg-gray-800/40">
         <div className="max-w-6xl w-full mx-auto grid gap-2">
-          <h1 className="font-semibold text-3xl">Apps</h1>
         </div>
         <div className="grid gap-6 max-w-6xl w-full mx-auto">
-          <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
-            <Input
-              className="bg-white md:flex-1 dark:bg-gray-950"
-              placeholder="Search apps..."
-              type="search"
-            />
-            <div className="flex items-center gap-4">
-            <Link href="/new">
-              <Button variant="outline" size="icon" >
-           
-                  {" "}
-                  <PlusIcon className="h-4 w-4" />
-              
-              </Button>
-              </Link>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    className="bg-white dark:bg-gray-950"
-                    variant="outline"
-                  >
-                    Status
-                    <ChevronDownIcon className="ml-2 h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuCheckboxItem checked>
-                    Active
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Destroyed</DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem>Failed</DropdownMenuCheckboxItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-          <div className="border rounded-lg overflow-hidden grid gap-4 lg:gap-px lg:bg-gray-100">
-              {appList.map((item: AppObject) => (<AppItem props={item} key={item.id}/>))}
+    
+          <>
+            {appList.length > 0 ? (
+              <div className="grid grid-cols-3 gap-5">
+                {appList.map((item: AppObject) => (
+                  <AppItem props={item} key={item.id} />
+                ))}
+              </div>
+            ) : (
+              <div className="w-full flex h-full items-center justify-center">
+                <div className="flex flex-col items-center w-[330px]">
+                  <LayoutGrid />
+                  <div className="text-center mb-6 space-y-2">
+                    <h2 className="font-medium text-lg">Your Apps</h2>
+                    <p className="text-[#606060] text-sm">
+                      You don&apos;t have any apps. Click the button below to
+                      start creating your first app.
+                    </p>
 
-          
-  
-      
-          </div>
+                    <Button asChild><Link href="/new">Create an app</Link></Button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
+          <div className=" grid grid-cols-3 gap-5 "></div>
         </div>
       </main>
     </div>
@@ -225,73 +232,5 @@ function MoreHorizontalIcon(props: any) {
       <circle cx="19" cy="12" r="1" />
       <circle cx="5" cy="12" r="1" />
     </svg>
-  );
-}
-
-interface AppObject {
-  id: string;
-  name: string;
-  app_id: string;
-  repository: string;
-}
-function AppItem({props}: {props: AppObject}) {
-  const destroy =(id:string) => {}
-  return (
-    <Link href={`/dashboard/${props.app_id}`}>
-       <div className="flex flex-col lg:flex-row bg-white text-sm p-2 relative dark:bg-gray-950 hover:bg-gray-100 cursor-pointer">
-    <div className="p-2 grid gap-1 flex-1">
-      <div className="font-medium">{props.name}</div>
-      <div className="text-gray-500 dark:text-gray-400">{props.app_id}</div>
-    </div>
-    <Separator className="my-2 lg:hidden" />
-    <div className="p-2 grid gap-1 flex-1">
-      <div className="flex items-start gap-2">
-        <span className="inline-flex w-3 h-3 bg-red-400 rounded-full translate-y-1" />
-        <div>
-          Failed
-          <div className="text-gray-500 dark:text-gray-400">
-            4m 22s
-          </div>
-        </div>
-      </div>
-    </div>
-    <Separator className="my-2 lg:hidden" />
-    <div className="p-2 grid gap-1 flex-1">
-      <div className="flex items-center gap-2">
-        <GitBranchIcon className="w-4 h-4" />
-        shadcn/history-sidebar
-      </div>
-      <div className="flex items-center gap-2">
-        <GitCommitIcon className="w-4 h-4" />
-        <span className="line-clamp-1">
-          feat: implement history sidebar
-        </span>
-      </div>
-    </div>
-    <Separator className="my-2 lg:hidden" />
-    <div className="p-2 grid gap-1 flex-1">
-      <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-        1 day ago by shadcn
-      </div>
-    </div>
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          className="absolute top-4 right-4"
-          size="icon"
-          variant="ghost"
-        >
-          <MoreHorizontalIcon className="w-4 h-4" />
-          <span className="sr-only">Toggle menu</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem>View App</DropdownMenuItem>
-        <DropdownMenuItem>Redeploy</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>Destroy</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  </div></Link>
   );
 }
