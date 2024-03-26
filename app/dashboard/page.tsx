@@ -44,37 +44,26 @@ import {
   DialogTrigger,
 } from "@radix-ui/react-dialog";
 import { AppItem, AppObject } from "@/components/app-item";
+import App from "next/app";
 
 export default async function Component() {
   unstable_noStore();
-  const response = await fetch(`http://127.0.0.1:4000/api/apps`);
+  const response = await fetch(`http://127.0.0.1:4000/api/apps`, {cache: 'no-cache'});
   const appList = await response.json();
-  console.log(appList);
+
   return (
     <div className="flex flex-col w-full min-h-screen">
-      <header className="flex items-center h-16 px-4 border-b shrink-0 md:px-6">
-        <Link
-          className="flex items-center gap-2 text-lg font-semibold sm:text-base mr-4"
-          href="#"
-        >
-          <FrameIcon className="w-6 h-6" />
-          <span className="sr-only">Acme Inc</span>
-        </Link>
-        <nav className="hidden font-medium sm:flex flex-row items-center gap-5 text-sm lg:gap-6">
-          <Link className="font-bold" href="#">
-            Apps
-          </Link>
 
-          <Link className="text-gray-500 dark:text-gray-400" href="#">
-            Settings
-          </Link>
-        </nav>
-      </header>
-      <main className="flex min-h-[calc(100vh_-_theme(spacing.16))]  flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10 dark:bg-gray-800/40">
-        <div className="max-w-6xl w-full mx-auto grid gap-2">
-        </div>
-        <div className="grid gap-6 max-w-6xl w-full mx-auto">
-    
+      <main className="flex min-h-[calc(100vh_-_theme(spacing.16))]  flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
+        <div className="max-w-6xl w-full mx-auto">
+          <div className="flex w-full justify-end py-6">
+            {appList.length > 0 ?  <Button size={"icon"} >
+              <PlusIcon />
+            </Button>: <></>}
+          </div>
+          <div className="grid grid-cols-3 gap-7 w-full">
+           
+          </div>
           <>
             {appList.length > 0 ? (
               <div className="grid grid-cols-3 gap-5">
@@ -84,16 +73,16 @@ export default async function Component() {
               </div>
             ) : (
               <div className="w-full flex h-full items-center justify-center">
-                <div className="flex flex-col items-center w-[330px]">
+                <div className="flex flex-col items-center w-[330px] gap-6">
                   <LayoutGrid />
-                  <div className="text-center mb-6 space-y-2">
+                  <div className="text-center mb-6 space-y-4">
                     <h2 className="font-medium text-lg">Your Apps</h2>
-                    <p className="text-[#606060] text-sm">
+                    <p className="text-muted-foreground text-sm">
                       You don&apos;t have any apps. Click the button below to
                       start creating your first app.
                     </p>
 
-                    <Button asChild><Link href="/new">Create an app</Link></Button>
+                    <Button asChild><Link href="/dashboard/create-new">Create an app</Link></Button>
                   </div>
                 </div>
               </div>
@@ -103,134 +92,5 @@ export default async function Component() {
         </div>
       </main>
     </div>
-  );
-}
-
-function CalendarClockIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5" />
-      <path d="M16 2v4" />
-      <path d="M8 2v4" />
-      <path d="M3 10h5" />
-      <path d="M17.5 17.5 16 16.25V14" />
-      <path d="M22 16a6 6 0 1 1-12 0 6 6 0 0 1 12 0Z" />
-    </svg>
-  );
-}
-
-function ChevronDownIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m6 9 6 6 6-6" />
-    </svg>
-  );
-}
-
-function FrameIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <line x1="22" x2="2" y1="6" y2="6" />
-      <line x1="22" x2="2" y1="18" y2="18" />
-      <line x1="6" x2="6" y1="2" y2="22" />
-      <line x1="18" x2="18" y1="2" y2="22" />
-    </svg>
-  );
-}
-
-function GitBranchIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <line x1="6" x2="6" y1="3" y2="15" />
-      <circle cx="18" cy="6" r="3" />
-      <circle cx="6" cy="18" r="3" />
-      <path d="M18 9a9 9 0 0 1-9 9" />
-    </svg>
-  );
-}
-
-function GitCommitIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="3" />
-      <line x1="3" x2="9" y1="12" y2="12" />
-      <line x1="15" x2="21" y1="12" y2="12" />
-    </svg>
-  );
-}
-
-function MoreHorizontalIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="1" />
-      <circle cx="19" cy="12" r="1" />
-      <circle cx="5" cy="12" r="1" />
-    </svg>
   );
 }

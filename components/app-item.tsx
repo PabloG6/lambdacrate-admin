@@ -43,7 +43,7 @@ export function AppItem({ props }: { props: AppObject }) {
     setInputText(e.target.value);
   }
   return (
-    <div className="flex  flex-col p-3  border rounded-sm">
+    <div className="flex  flex-col p-3  border rounded-sm bg-card h-64">
       <div className="flex gap-2 w-full">
         <div className="flex w-full space-x-2">
           <Avatar>
@@ -124,29 +124,19 @@ export function AppItem({ props }: { props: AppObject }) {
         </div>
       </div>
       <div className="py-4 space-x-2 flex items-center">
-        <div className="flex">
-          <GitBranchIcon className=" h-5 w-5 text-muted-foreground" />
-          <p className="text-sm text-muted-foreground">main</p>
-        </div>
+     
       </div>
       <div className="py-4 space-y-3">
-        <div className="text-sm flex font-medium gap-2">
-          <div className="flex gap-2 text-muted-foreground">
-            <TimerResetIcon className="h-5 w-5" /> <p>Last deployed:</p>{" "}
-          </div>
-          <p className="font-normal">2 weeks ago</p>
-        </div>
+      
 
-        <div className="text-sm flex font-medium gap-2">
-          <div className="flex gap-2 text-muted-foreground">
-            <Zap className="w-5 h- text-green-500" /> <p>Status: </p>{" "}
-          </div>
-          <p className="font-normal">Online</p>
-        </div>
+      
       </div>
-      <Button variant={"outline"} size={"lg"} asChild>
+      <div className="flex w-full mt-auto">
+      <Button variant={"outline"} size={"lg"} asChild className="w-full bg-inherit">
         <Link href={`/dashboard/${props.app_id}`}>More Details</Link>
       </Button>
+      </div>
+     
     </div>
   );
 }

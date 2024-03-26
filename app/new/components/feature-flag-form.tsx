@@ -52,7 +52,7 @@ onOpenChange={(open)=> {
       <FlagOff />
       <div className="text-center mb-6 space-y-2">
         <h2 className="font-medium text-lg">Feature Flags</h2>
-        <p className="text-[#606060] text-sm">
+        <p className="text-muted-foreground text-sm">
           You don&apos;t have any features yet. Click the button below to
           create one.
         </p>
