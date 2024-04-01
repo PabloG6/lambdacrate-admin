@@ -19,6 +19,16 @@ const steps = [
 
 
 ] as const
+
+
+function stepTransform(step: (typeof steps)[number]) {
+  const stepIndex = steps.indexOf(step);
+  if (stepIndex > -1) {
+    return steps[stepIndex];
+  }
+  return INITIAL_STEP;
+};
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [currentStep, setCurrentStep] = useState<typeof steps[number]>("create-project");
     
