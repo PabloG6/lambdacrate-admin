@@ -1,4 +1,4 @@
-'use server';
+"use server";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -34,6 +34,7 @@ import { useSearchParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { z } from "zod";
 import { MachineLoader } from "./_components/machines/machine-loader";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type OverviewProps = {
   app_id: string;
@@ -58,11 +59,18 @@ const readableStatuses: { [key: string]: string } = {
 };
 
 export async function Overview({ app_id, data }: OverviewProps) {
- 
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   return (
     <div className="w-full h-full space-y-6">
+      <h2 className="text-2xl font-semibold mb-10">Overview</h2>
+      <Tabs className="mb-8" defaultValue="production">
+        <TabsList>
+          <TabsTrigger value="development">Development</TabsTrigger>
+          <TabsTrigger value={"preview"}>Preview</TabsTrigger>
+          <TabsTrigger value={"production"}>Production</TabsTrigger>
+
+        </TabsList>
+      </Tabs>
       <div className="flex flex-col gap-2 space-y-4">
         <div className="text-lg pb-4">Lambdacrate </div>
         <div className="flex flex-col">
@@ -70,7 +78,7 @@ export async function Overview({ app_id, data }: OverviewProps) {
             <p className="text-sm text-muted-foreground">Visit Site</p>
           </div>
           <div className="flex items-center ">
-            <Link href={`https://${app_id}.fly.dev`} passHref={true}>
+            <Link href={`https://${app_id}.lambdacrate.com`} rel="noopener noreferrer" target="_blank">
               <span className="text-xs">{app_id}.lambdacrate.com</span>
             </Link>
             <OpenInNewWindowIcon className="ml-2" />
@@ -79,23 +87,20 @@ export async function Overview({ app_id, data }: OverviewProps) {
         <div className="space-y-2">
           <div className="flex items-center">
             <p className="text-sm text-muted-foreground">Status</p>
-         
-              <Loader className="animate-[spin_2s_ease-in-out_infinite] w-4 h-4 text-muted-foreground ml-2" />
-            
-          </div>
 
-          
-          
+            <Loader className="animate-[spin_1.5s_linear_infinite] w-4 h-4 text-muted-foreground ml-2" />
+          </div>
         </div>
-       
       </div>
       <div className="space-y-4">
-        <MachineLoader app_id={app_id}/>
+        <Suspense fallback='Loading...'>
+        <MachineLoader app_id={app_id} />
+
+        </Suspense>
       </div>
     </div>
   );
 }
-
 
 type Machine = {
   id: string;
@@ -107,20 +112,21 @@ type ServiceProps = {
 };
 function Services({ services }: ServiceProps) {
   // const response = await getDeploymentStatus(app_id);
-  const serviceIcons: { [key: string]: (props: any) => ReactElement<any, any> } = {
-    web: (props) => <PanelTop {...props}/>,
-    api: (props) => <Cable {...props}/>,
-    database: (props) => <Database  {...props}/>,
+  const serviceIcons: {
+    [key: string]: (props: any) => ReactElement<any, any>;
+  } = {
+    web: (props) => <PanelTop {...props} />,
+    api: (props) => <Cable {...props} />,
+    database: (props) => <Database {...props} />,
   };
   console.log("services", []);
 
   return (
     <div className="w-full h-full border rounded-md">
       {services.map((machine: Machine) => {
-      
         console.log(machine, "machine");
         const Icon = serviceIcons[machine.machine_type];
-        console.log(Icon, "icon")
+        console.log(Icon, "icon");
         return (
           <div key={machine.id} className="py-6 px-6 border">
             <div className="space-x-2 pb-4 flex">

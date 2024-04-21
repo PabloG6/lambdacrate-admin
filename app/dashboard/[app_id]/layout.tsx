@@ -1,7 +1,6 @@
 "use client";
 import { Navbar } from "@/components/navbar";
 import { NavLinkProps, SideNav } from "@/components/sidenav";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,41 +9,24 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { SelectIcon } from "@radix-ui/react-select";
-import {
-  Archive,
-  File,
-  ArchiveX,
-  Inbox,
-  Send,
-  Trash2,
-  Flag,
-  Wallet,
-  SatelliteDish,
-  SunMedium,
+
   LayoutDashboard,
-  ChevronsUpDown,
+
   Settings,
   Globe,
-  Paintbrush,
+
   BarChart,
+  Container,
 } from "lucide-react";
 import {
-  useParams,
+
   useSelectedLayoutSegment,
-  useSelectedLayoutSegments,
+
 } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Button } from "react-day-picker";
 
 export default function Layout({
   params: { app_id },
@@ -53,7 +35,7 @@ export default function Layout({
   params: { app_id: string };
   children: React.ReactNode;
 }) {
-  const links = [
+  const links: NavLinkProps[] = [
     {
       title: "Overview",
       href: `/dashboard/${app_id}`,
@@ -62,6 +44,16 @@ export default function Layout({
       variant: "default" as const,
     },
 
+    
+    {
+      title: 'Environment',
+      segment: 'environment',
+      label: '',
+      href: `/dashboard/${app_id}/environment`,
+      icon: Container,
+      variant: 'ghost' as const,
+      
+    },
     {
       title: "Metrics",
       href: `/dashboard/${app_id}/metrics`,
@@ -75,14 +67,43 @@ export default function Layout({
       title: "Domains",
       href: `/dashboard/${app_id}/domains`,
       icon: Globe,
+      
       segment: 'domains',
       variant: "default" as const,
     },
+    
 
     {
       title: "Settings",
       label: "",
       segment: "settings",
+      subLinks: [
+        {
+          title: 'General',
+          segment: 'general',
+          label: '',
+          href: `/dashboard/${app_id}/settings#general`,
+          variant: 'ghost' as const,
+          
+        },
+
+        {
+          title: 'Calls To Action',
+          segment: 'cta',
+          label: '',
+          href: `/dashboard/${app_id}/settings#cta`,
+          variant: 'ghost' as const,
+          
+        },
+        {
+          title: 'Appearance',
+          segment: 'appearance',
+          label: '',
+          href: `/dashboard/${app_id}/settings/#appearance`,
+          variant: 'ghost' as const,
+          
+        }
+      ],
       href: `/dashboard/${app_id}/settings`,
       icon: Settings,
       variant: "ghost" as const,
@@ -140,7 +161,7 @@ export default function Layout({
         </div>
         <div className="w-full h-full">
           <ScrollArea className="w-full h-screen ">
-            <div className="w-full md:p-6 lg:p-8 h-full">{children}</div>
+            <div className="w-full md:p-6 lg:p-12 lg:pl-16 h-full">{children}</div>
           </ScrollArea>
         </div>
       </div>

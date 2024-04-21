@@ -1,47 +1,13 @@
 "use client";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+
 import { Textarea } from "@/components/ui/textarea";
-import { DotsVerticalIcon, PlusIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
 import { createUniqueNameId } from "mnemonic-id";
-import * as z from "zod";
 import { BaseSyntheticEvent, useEffect, useState } from "react";
-import { Righteous } from "next/font/google";
-import { errors } from "undici-types";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import { usePathname, useRouter } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -51,20 +17,7 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { GithubIcon, Package2 } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { AppInfo, AppSchema } from "@/lib/util/types";
-import {
-  Breadcrumb,
-  BreadcrumbEllipsis,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { AppearanceForm } from "@/app/new/components/appearance-form";
-import { FeatureFlagForm } from "@/app/new/components/feature-flag-form";
 import { createNewApp } from "@/app/new/actions";
 
 export default function Page() {
@@ -74,10 +27,9 @@ export default function Page() {
     defaultValues: {
       git_repository: "https://github.com/PabloG6/lambdacrate.git",
       name: "",
-      primary_color: "",
+
       description: "",
-      features: [],
-      app_id: name,
+
     },
   });
 
@@ -87,7 +39,6 @@ export default function Page() {
   useEffect(() => {
     const appId = createUniqueNameId({ adjectives: 2 });
     console.log("use effect called");
-    form.setValue("app_id", appId.toLowerCase());
     setName(appId.toLowerCase());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [path]);
@@ -111,10 +62,14 @@ export default function Page() {
       <div className="flex w-full h-full">
       
 
+
+
+
+
         <Form {...form}>
           <form className="w-full space-y-4 h-full">
-              <div className="space-y-4">
-                <div className=" border-subtle flex w-full rounded-md border p-7 max-w-3xl flex-col bg-card">
+              <div className="space-y-4 max-w-4xl">
+                <div className=" border-subtle flex w-full rounded-md border p-7 flex-col bg-card">
                   <div className="flex">
                    
                     <div>
@@ -177,8 +132,8 @@ export default function Page() {
                     ></FormField>
                   </div>
                 </div>
-
-                <div className="bg-default border-subtle flex w-full rounded-md border p-7 max-w-3xl flex-col bg-card">
+                <section id="cta">
+                <div className="bg-default border-subtle flex w-full rounded-md border p-7 flex-col bg-card">
                   <div className="flex">
                    
                     <div>
@@ -231,8 +186,11 @@ export default function Page() {
                     ></FormField>
                   </div>
                 </div>
+                </section>
+             
 
-                <div className="bg-default border-subtle flex w-full rounded-md border p-7 max-w-3xl flex-col bg-card">
+               <section id="appearance">
+               <div className="bg-default border-subtle flex w-full rounded-md border p-7  flex-col bg-card">
                   <div className="flex">
                   
                     <div>
@@ -248,9 +206,9 @@ export default function Page() {
                   </div>
 
                   <Separator className="my-7 mx-auto" />
-                  <AppearanceForm control={form.control} />
                 </div>
-                <div className="bg-default border-subtle flex w-full rounded-md border p-7 max-w-3xl flex-col bg-card">
+               </section>
+                <div className="bg-default border-subtle flex w-full rounded-md border p-7  flex-col bg-card">
                   <div className="flex">
                    
                     <div>
@@ -266,10 +224,9 @@ export default function Page() {
                   </div>
 
                   <Separator className="my-7 mx-auto" />
-                  <FeatureFlagForm control={form.control} parent={form} />
                 </div>
 
-                <div className="bg-default border-subtle flex w-full rounded-md border p-7 max-w-3xl flex-col bg-card">
+                <div className="bg-default border-subtle flex w-full rounded-md border p-7 flex-col bg-card">
                   <div className="flex">
                     
                     <div>

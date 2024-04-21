@@ -1,9 +1,11 @@
 "use server";
 
-import { endpoint } from "@/app/env";
+import { env } from "@/app/env";
+import { revalidatePath } from "next/cache";
+
 
 export async function getAppMetaData(app_id: string) {
-  const response = await fetch(`${endpoint}/api/apps/${app_id}`, {
+  const response = await fetch(`${env.API_URL}/api/apps/${app_id}`, {
     headers: { "content-type": "application/json" },
     cache: "no-cache",
   });
@@ -13,11 +15,13 @@ export async function getAppMetaData(app_id: string) {
 }
 
 export async function deleteApp(id: string) {
-  const response = await fetch(`${endpoint}/api/apps/${id}`, {
+  const response = await fetch(`${env.API_URL}/api/apps/${id}`, {
     headers: { "content-type": "application/json"},
     method: 'DELETE',
-    cache: 'no-cache'
   });
+
+  revalidatePath('/dashboard');
+
   if(response.ok) {
 
     return true;
