@@ -29,7 +29,7 @@ const onFormSubmit = (data: any, e?: React.BaseSyntheticEvent) => {
 }
   return (
     <Form {...form}>
-          <form onSubmit={form.handleSubmit(onFormSubmit)}>
+          <form onSubmit={form.handleSubmit(onFormSubmit)} className="flex flex-col w-full h-full flex-1">
       {" "}
       <div className="space-y-4">
         <FormField

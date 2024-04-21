@@ -45,25 +45,31 @@ import {
 } from "@radix-ui/react-dialog";
 import { AppItem, AppObject } from "@/components/app-item";
 import App from "next/app";
+import { env } from "../env";
 
 export default async function Component() {
   unstable_noStore();
-  const response = await fetch(`http://127.0.0.1:4000/api/apps`, {cache: 'no-cache'});
+  const response = await fetch(`${env.API_URL}/api/apps`, {
+    cache: "no-cache",
+  });
   const appList = await response.json();
 
   return (
     <div className="flex flex-col w-full min-h-screen">
-
       <main className="flex min-h-[calc(100vh_-_theme(spacing.16))]  flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
         <div className="max-w-6xl w-full mx-auto">
           <div className="flex w-full justify-end py-6">
-            {appList.length > 0 ?  <Button size={"icon"} >
-              <PlusIcon />
-            </Button>: <></>}
+            {appList.length > 0 ? (
+              <Button size={"icon"} asChild>
+                <Link href="/dashboard/create-project/getting-started">
+                  <PlusIcon />
+                </Link>
+              </Button>
+            ) : (
+              <></>
+            )}
           </div>
-          <div className="grid grid-cols-3 gap-7 w-full">
-           
-          </div>
+          <div className="grid grid-cols-3 gap-7 w-full"></div>
           <>
             {appList.length > 0 ? (
               <div className="grid grid-cols-3 gap-5">
@@ -82,7 +88,11 @@ export default async function Component() {
                       start creating your first app.
                     </p>
 
-                    <Button asChild><Link href="/dashboard/create-new">Create an app</Link></Button>
+                    <Button asChild>
+                      <Link href="/dashboard/create-project/getting-started">
+                        Create an app
+                      </Link>
+                    </Button>
                   </div>
                 </div>
               </div>

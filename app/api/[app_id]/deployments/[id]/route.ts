@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { endpoint } from "@/app/env";
+import { env } from "@/app/env";
 import { NextApiRequest } from "next";
 
 import { EventNotifier, getSSEWriter } from "ts-sse";
@@ -68,7 +68,7 @@ export async function GET(
   //todo fix this so that when the app deployment fails it actually tells u the deployment fails.
   const getStatus = async (notifier: SyncEvents) => {
     console.log(`getting status: ${new Date().toISOString()}`);
-    const response = await fetch(`${endpoint}/api/apps/${app_id}/status`, {method: 'GET', cache: 'no-cache'});
+    const response = await fetch(`${env.API_URL}/api/apps/${app_id}/status`, {method: 'GET', cache: 'no-cache'});
     if (response.ok) {
       const results = await response.json();
       const data = deploymentSchema.parse(results);

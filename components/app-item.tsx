@@ -29,6 +29,7 @@ import Link from "next/link";
 import { Input } from "./ui/input";
 import { Label } from "@radix-ui/react-label";
 import { ChangeEvent, useState } from "react";
+import { deleteApp } from "@/app/dashboard/[app_id]/actions";
 
 export interface AppObject {
   id: string;
@@ -39,6 +40,7 @@ export interface AppObject {
 
 export function AppItem({ props }: { props: AppObject }) {
   const [inputText, setInputText] = useState<string>("");
+  const [isOpen, setOpen] = useState<boolean>();
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setInputText(e.target.value);
   }
@@ -62,6 +64,7 @@ export function AppItem({ props }: { props: AppObject }) {
         </div>
         <div>
           <Dialog
+          open={isOpen}
             onOpenChange={(open: boolean) => {
               setInputText("");
             }}
@@ -114,9 +117,13 @@ export function AppItem({ props }: { props: AppObject }) {
                   variant={"destructive"}
                   className="w-full"
                   disabled={!(inputText == props.app_id)}
-                  onClick={async () => {}}
+                  onClick={async () => {
+                    const response = await deleteApp(props.id)
+                    setOpen(false);
+
+                  }}
                 >
-                  Destroy {props.name}
+                  <span >Destroy</span> <code className="pl-3">{`\`${props.name}\``}</code>
                 </Button>
               </DialogFooter>
             </DialogContent>

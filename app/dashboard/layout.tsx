@@ -9,7 +9,6 @@ export default function Layout({
 
 
     return <>
-          <nav className="h-12 flex items-center pl-24 border-b"></nav>
     <Suspense fallback={<Loading/>}>
     {children}
     </Suspense>

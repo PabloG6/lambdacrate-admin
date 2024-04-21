@@ -2,10 +2,16 @@
  * v0 by Vercel.
  * @see https://v0.dev/t/Cce9lmRwLZc
  */
-import Link from "next/link"
-import { CardContent, CardFooter, Card, CardTitle, CardHeader } from "@/components/ui/card"
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import Link from "next/link";
+import {
+  CardContent,
+  CardFooter,
+  Card,
+  CardTitle,
+  CardHeader,
+} from "@/components/ui/card";
+import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 
 export default function Component() {
   return (
@@ -16,16 +22,28 @@ export default function Component() {
           <span className="sr-only">SaaS Inc</span>
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6">
-          <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">
+          <Link
+            className="text-sm font-medium hover:underline underline-offset-4"
+            href="#"
+          >
             Features
           </Link>
-          <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">
+          <Link
+            className="text-sm font-medium hover:underline underline-offset-4"
+            href="#"
+          >
             Pricing
           </Link>
-          <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">
+          <Link
+            className="text-sm font-medium hover:underline underline-offset-4"
+            href="#"
+          >
             Testimonials
           </Link>
-          <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">
+          <Link
+            className="text-sm font-medium hover:underline underline-offset-4"
+            href="#"
+          >
             Contact
           </Link>
         </nav>
@@ -41,18 +59,15 @@ export default function Component() {
               </div>
               <div className="flex flex-col items-start space-y-4">
                 <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-                  Beautifully designed components that you can copy and paste into your apps. Accessible. Customizable.
-                  Open Source.
+                  Beautifully designed components that you can copy and paste
+                  into your apps. Accessible. Customizable. Open Source.
                 </p>
                 <div className="space-x-4">
+                  <Button>
+                 Get Started
+                  </Button>
                   <Link
-                    className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
-                    href="/signup"
-                  >
-                    Get Started
-                  </Link>
-                  <Link
-                    className="inline-flex h-9 items-center justify-center rounded-md border border-gray-200 border-gray-200 bg-white px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-800 dark:border-gray-800 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus-visible:ring-gray-300"
+                    className="inline-flex h-9 items-center justify-center rounded-md border bg-white px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-800 dark:border-gray-800 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus-visible:ring-gray-300"
                     href="#"
                   >
                     Request a Demo
@@ -69,13 +84,15 @@ export default function Component() {
                 <div className="inline-block rounded-lg bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800">
                   Testimonials
                 </div>
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">What our customers say</h2>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+                  What our customers say
+                </h2>
                 <p className="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                  Don&quot;t just take our word for it, see what our customers have to say.
+                  Don&quot;t just take our word for it, see what our customers
+                  have to say.
                 </p>
               </div>
             </div>
-   
           </div>
         </section>
         <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
@@ -85,7 +102,8 @@ export default function Component() {
                 Choose the plan that&apos;s right for you.
               </h2>
               <p className="mx-auto max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                We offer a range of pricing options to suit your needs and budget.
+                We offer a range of pricing options to suit your needs and
+                budget.
               </p>
             </div>
             <div className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -144,7 +162,9 @@ export default function Component() {
         </section>
       </main>
       <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
-        <p className="text-xs text-gray-500 dark:text-gray-400">© 2024 SaaS Inc. All rights reserved.</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400">
+          © 2024 SaaS Inc. All rights reserved.
+        </p>
         <nav className="sm:ml-auto flex gap-4 sm:gap-6">
           <Link className="text-xs hover:underline underline-offset-4" href="#">
             Terms of Service
@@ -155,7 +175,7 @@ export default function Component() {
         </nav>
       </footer>
     </div>
-  )
+  );
 }
 
 function MountainIcon(props: any) {
@@ -174,5 +194,5 @@ function MountainIcon(props: any) {
     >
       <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
     </svg>
-  )
+  );
 }

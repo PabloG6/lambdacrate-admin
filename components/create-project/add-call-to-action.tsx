@@ -36,7 +36,7 @@ export function AddCallToAction({ nextStep }: Props) {
   }
   return (
     <Form {...form}>
-         <form onSubmit={form.handleSubmit(onFormSubmit)}>
+         <form onSubmit={form.handleSubmit(onFormSubmit)} className="w-full h-full flex flex-col flex-1">
       <div className="flex">
         <div>
           <div className="text-base font-semibold">Calls To Action</div>
@@ -86,7 +86,7 @@ export function AddCallToAction({ nextStep }: Props) {
         ></FormField>
       </div>
 
-      <div className="flex justify-end pt-6 gap-3">
+      <div className="flex justify-end pt-6 gap-3 flex-1 items-end">
       <Button size={"sm"} variant={'ghost'} >
             <span>Skip This Step</span>
           </Button>
