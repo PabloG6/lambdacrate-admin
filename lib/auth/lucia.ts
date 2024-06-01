@@ -1,5 +1,6 @@
 import { Lucia } from "lucia";
 import { MyAdapter } from "./adapter";
+import { GitHub } from "arctic";
 
 const adapter = new MyAdapter();
 export const lucia = new Lucia(adapter, {
@@ -17,6 +18,8 @@ export const lucia = new Lucia(adapter, {
 	}
 });
 
+export const github = new GitHub(process.env.GITHUB_CLIENT_ID!, process.env.GITHUB_CLIENT_SECRET!);
+export const sessionCookieName = 'LAMBDACRATE_AUTH';
 declare module "lucia" {
 	interface Register {
 		Lucia: typeof lucia;

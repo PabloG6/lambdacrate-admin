@@ -77,33 +77,7 @@ export default function Layout({
       title: "Settings",
       label: "",
       segment: "settings",
-      subLinks: [
-        {
-          title: 'General',
-          segment: 'general',
-          label: '',
-          href: `/dashboard/${app_id}/settings#general`,
-          variant: 'ghost' as const,
-          
-        },
-
-        {
-          title: 'Calls To Action',
-          segment: 'cta',
-          label: '',
-          href: `/dashboard/${app_id}/settings#cta`,
-          variant: 'ghost' as const,
-          
-        },
-        {
-          title: 'Appearance',
-          segment: 'appearance',
-          label: '',
-          href: `/dashboard/${app_id}/settings/#appearance`,
-          variant: 'ghost' as const,
-          
-        }
-      ],
+    
       href: `/dashboard/${app_id}/settings`,
       icon: Settings,
       variant: "ghost" as const,
@@ -129,11 +103,11 @@ export default function Layout({
   return (
     <>
       <nav className="h-12 border-b w-full flex">
-          <div className=" pl-8 flex items-center border-r lg:max-w-64 w-full h-full">
+          <div className=" pl-8 flex items-center border-r lg:max-w-60 w-full h-full bg-card">
           <div className="text-base">{title}</div>
          
         </div>
-        <Breadcrumb className="pl-8 flex items-center">
+        <Breadcrumb className="pl-8 flex items-center bg-transparent">
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
@@ -151,7 +125,7 @@ export default function Layout({
     </Breadcrumb>
       </nav>
       <div className="w-full h-full flex">
-        <div className="h-screen flex flex-col max-w-64 w-full ">
+        <div className="h-screen flex flex-col max-w-60 w-full ">
           <SideNav
             isCollapsed={false}
             links={links}
@@ -161,7 +135,8 @@ export default function Layout({
         </div>
         <div className="w-full h-full">
           <ScrollArea className="w-full h-screen ">
-            <div className="w-full md:p-6 lg:p-12 lg:pl-16 h-full">{children}</div>
+            <div className="w-full md:p-6 lg:p-12 lg:pl-16 h-full shadow-sm">{children}</div>
+            <div className="gutter py-16"></div>
           </ScrollArea>
         </div>
       </div>

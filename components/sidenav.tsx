@@ -28,7 +28,7 @@ export function SideNav({ links, isCollapsed, className, onChange }: NavProps) {
   return (
     <div
       className={cn(
-        "group flex flex-col gap-4 py-2 lg:max-w-[345px] xl:max-w-[500px] w-full  pt-8 pr-4 border-r h-full",
+        "group flex flex-col gap-4 bg-card py-2 lg:max-w-[300px] xl:max-w-[400px] w-full  pt-8 pr-4 border-r h-full",
         className
       )}
     >
@@ -45,7 +45,7 @@ export function SideNav({ links, isCollapsed, className, onChange }: NavProps) {
                   size: "sm",
                 }),
                 link.segment === segment &&
-                  "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white cursor-pointer",
+                  "dark:bg-background dark:text-white dark:hover:bg-background dark:hover:text-white cursor-pointer",
                 "justify-start"
                 , "w-full"
               )}

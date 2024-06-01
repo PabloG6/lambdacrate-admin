@@ -1,18 +1,4 @@
 "use server";
-import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import {
-  Link1Icon,
-  OpenInNewWindowIcon,
-  PersonIcon,
-} from "@radix-ui/react-icons";
 import {
   AreaChart,
   Cable,
@@ -20,6 +6,7 @@ import {
   Copy,
   Database,
   Globe,
+  LinkIcon,
   Loader,
   LucideIcon,
   MemoryStick,
@@ -35,10 +22,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { z } from "zod";
 import { MachineLoader } from "./_components/machines/machine-loader";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { LandingPage } from "@/components/landing-page";
+import { Button } from "@/components/ui/button";
+import { Code } from "@/components/ui/code";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
-type OverviewProps = {
+type Props = {
   app_id: string;
-  data: AppMetaData;
 };
 
 type AppMetaData = {
@@ -58,46 +50,159 @@ const readableStatuses: { [key: string]: string } = {
   active: "Online",
 };
 
-export async function Overview({ app_id, data }: OverviewProps) {
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+export async function Overview({ app_id }: Props) {
+  const response = await getAppMetaData(app_id);
+  const golangExampleCode = `\`\`\ go
+  package main
+  
+  import (
+    "fmt"
+    "net/http"
+  )
+  
+  func main() {
+    url := "https://${app_id}-dev-api.lambdacrate.dev/api/health"
+    resp, err := http.Get(url)
+    if err != nil {
+        fmt.Println("Error:", err)
+        return
+    }
+    defer resp.Body.Close()
+  
+    if resp.StatusCode == http.StatusOK {
+        fmt.Println("200 OK")
+    } else {
+        fmt.Printf("Status Code: %d\n", resp.StatusCode)
+    }
+  }
+  \`\`\``;
+
+  const pythonExampleCode = `
+  import requests
+
+
+
+url = 'https://${app_id}.lambdacrate.dev/api/health'
+response = requests.get(url)
+  
+if response.status_code == 200:
+   print('200 OK')
+else:
+   print(f'Status Code: {response.status_code}')
+  `;
+
+  const bashExampleCode = `\`\`\ bash
+ $ lambdacrate connect -a ${app_id}
+\`\`\`
+  `;
   return (
-    <div className="w-full h-full space-y-6">
-      <h2 className="text-2xl font-semibold mb-10">Overview</h2>
-      <Tabs className="mb-8" defaultValue="production">
-        <TabsList>
-          <TabsTrigger value="development">Development</TabsTrigger>
-          <TabsTrigger value={"preview"}>Preview</TabsTrigger>
-          <TabsTrigger value={"production"}>Production</TabsTrigger>
+    <div className="space-y-8">
+      <div className="text-xl font-medium text-foreground">
+        {response.name}{" "}
+      </div>
 
-        </TabsList>
-      </Tabs>
-      <div className="flex flex-col gap-2 space-y-4">
-        <div className="text-lg pb-4">Lambdacrate </div>
-        <div className="flex flex-col">
-          <div className="flex gap-2 items-center">
-            <p className="text-sm text-muted-foreground">Visit Site</p>
+      <section className="mb-6">
+        <div className="grid grid-cols-8 gap-16">
+          <div className="col-span-3">
+            <p className="text-base font-medium mb-2">
+              Welcome to your new project
+            </p>
+            <p className="text-muted-foreground text-sm">
+              Your project has been deployed on its own instance, with its own
+              API and dashboard all set up and ready to use.
+            </p>
           </div>
-          <div className="flex items-center ">
-            <Link href={`https://${app_id}.lambdacrate.com`} rel="noopener noreferrer" target="_blank">
-              <span className="text-xs">{app_id}.lambdacrate.com</span>
-            </Link>
-            <OpenInNewWindowIcon className="ml-2" />
+          <div className="col-span-5">
+            <p className="text-base font-medium mb-2">
+              Try one of our examples
+            </p>
+            <div className="space-x-2 pb-3 pt-4">
+              {["golang", "python", "javascript", "ruby", "curl", "java"].map(
+                (val, index) => (
+                  <Badge
+                    variant="secondary"
+                    className="px-4 font-medium rounded-md"
+                    key={index}
+                  >
+                    {val}
+                  </Badge>
+                )
+              )}
+            </div>
+            <Card className="p-0">
+              <Code
+                className="w-[700px] h-[350px]"
+                lang="python"
+                code={pythonExampleCode}
+              ></Code>
+            </Card>
           </div>
         </div>
-        <div className="space-y-2">
-          <div className="flex items-center">
-            <p className="text-sm text-muted-foreground">Status</p>
+      </section>
+      <section className="mb-6 space-y-8">
+        <div className="grid grid-cols-2 gap-8">
+          <div className="space-y-4 max-w-lg">
+            <h3 className="text-base font-medium">
+              Connect to your dev environment
+            </h3>
 
-            <Loader className="animate-[spin_1.5s_linear_infinite] w-4 h-4 text-muted-foreground ml-2" />
+            <p className="text-sm text-muted-foreground">
+              Copy the following command to start developing on your local
+              machine
+            </p>
+            <Card>
+              <Code
+                code={bashExampleCode}
+                lang="bash"
+                className="text-sm"
+              ></Code>
+            </Card>
           </div>
         </div>
-      </div>
-      <div className="space-y-4">
-        <Suspense fallback='Loading...'>
-        <MachineLoader app_id={app_id} />
+      </section>
+      <section>
+        <div className="w-full flex items-center justify-center py-6">
+          <p className="text-lg font-medium">Explore other features of your app</p>
+        </div>
+        <div className="grid grid-cols-4 gap-4">
+          <Card className="px-3 py-3">
+            <p className="text-sm font-medium">Create  a subcription tier</p>
+            <div className="py-4">
+              <p className="text-xs">
+                Add a new subscription tier to test feature limitations for your users.
+              </p>
+            </div>
+          </Card>
+          <Card className="px-3 py-3">
+            <p className="text-sm font-medium">View logs and metrics</p>
+            <div className="py-4">
+              <p className="text-xs">
+                Get a bird&apos;s eye view of customers, usage metrics, churn, and monthly earnings.
+              </p>
+            </div>
+          </Card>{" "}
+          <Card className="px-3 py-3">
+            <div className="flex items-center">
+            <LinkIcon className="mr-2 h-3 w-3"></LinkIcon>
+            <p className="text-sm font-medium">Add a custom domain</p>
 
-        </Suspense>
-      </div>
+            </div>
+            <div className="py-4">
+              <p className="text-xs">
+                Register your domain with lambdacrate to start routing traffic to your application
+              </p>
+            </div>
+          </Card>{" "}
+          <Card className="px-3 py-3">
+            <p className="text-sm font-medium"><span>Explore our documentation</span></p>
+            <div className="py-4">
+              <p className="text-xs">
+                Read the docs to learn more about lambdacrate and its features.{" "}
+              </p>
+            </div>
+          </Card>
+        </div>
+      </section>
     </div>
   );
 }
@@ -107,37 +212,3 @@ type Machine = {
   machine_id: string;
   machine_type: string;
 };
-type ServiceProps = {
-  services: any[];
-};
-function Services({ services }: ServiceProps) {
-  // const response = await getDeploymentStatus(app_id);
-  const serviceIcons: {
-    [key: string]: (props: any) => ReactElement<any, any>;
-  } = {
-    web: (props) => <PanelTop {...props} />,
-    api: (props) => <Cable {...props} />,
-    database: (props) => <Database {...props} />,
-  };
-  console.log("services", []);
-
-  return (
-    <div className="w-full h-full border rounded-md">
-      {services.map((machine: Machine) => {
-        console.log(machine, "machine");
-        const Icon = serviceIcons[machine.machine_type];
-        console.log(Icon, "icon");
-        return (
-          <div key={machine.id} className="py-6 px-6 border">
-            <div className="space-x-2 pb-4 flex">
-              <Icon /> <p className="capitalize">{machine.machine_type}</p>
-            </div>
-            <span className="text-sm text-muted-foreground font-mono">
-              Machine: {machine.machine_id}
-            </span>
-          </div>
-        );
-      })}
-    </div>
-  );
-}

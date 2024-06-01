@@ -12,154 +12,145 @@ import {
 } from "@/components/ui/card";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { PlayCircle } from "lucide-react";
 
-export default function Component() {
+import Image from 'next/image'
+import { MovingBorderContainer } from "@/components/ui/moving-border";
+
+export default function Page() {
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="px-4 lg:px-6 h-16 flex items-center">
+      <div className="px-4 lg:px-6 h-12 flex items-center backdrop-blur bg-background/50 sticky top-0 border-b border/80">
         <Link className="flex items-center justify-center" href="#">
           <MountainIcon className="h-6 w-6" />
-          <span className="sr-only">SaaS Inc</span>
+          <span className="sr-only">Lambdacrate</span>
         </Link>
-        <nav className="ml-auto flex gap-4 sm:gap-6">
+        <nav className="ml-auto flex gap-4 sm:gap-6 justify-center w-full text-foreground/80">
           <Link
-            className="text-sm font-medium hover:underline underline-offset-4"
+            className="text-sm font-medium hover:text-foreground underline-offset-4"
             href="#"
           >
             Features
           </Link>
           <Link
-            className="text-sm font-medium hover:underline underline-offset-4"
+            className="text-sm font-medium hover:text-foreground underline-offset-4"
             href="#"
           >
             Pricing
           </Link>
           <Link
-            className="text-sm font-medium hover:underline underline-offset-4"
+            className="text-sm font-medium hover:text-foreground underline-offset-4"
             href="#"
           >
-            Testimonials
-          </Link>
-          <Link
-            className="text-sm font-medium hover:underline underline-offset-4"
-            href="#"
-          >
-            Contact
+            Documentation
           </Link>
         </nav>
-      </header>
+        <nav>
+          
+          <Button variant={"ghost"} asChild><Link href={'/login'}>Login</Link></Button>
+        </nav>
+
+      </div>
       <main className="flex-1">
-        <section className="w-full pt-12 md:pt-24 lg:pt-32 border-y">
+        <section className="w-full pt-12 md:pt-24 lg:pt-32 ">
           <div className="px-4 md:px-6 space-y-10 xl:space-y-16">
-            <div className="grid max-w-[1300px] mx-auto gap-4 px-4 sm:px-6 md:px-10 md:grid-cols-2 md:gap-16">
+            <div className="flex flex-col items-center justify-center max-w-[1300px] mx-auto gap-4 px-4 sm:px-6 md:px-10 md:grid-cols-2 md:gap-16">
               <div>
-                <h1 className="lg:leading-tighter text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl xl:text-[3.4rem] 2xl:text-[3.75rem]">
-                  The complete platform for building the Web
-                </h1>
-              </div>
-              <div className="flex flex-col items-start space-y-4">
-                <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-                  Beautifully designed components that you can copy and paste
-                  into your apps. Accessible. Customizable. Open Source.
-                </p>
-                <div className="space-x-4">
-                  <Button>
-                 Get Started
-                  </Button>
-                  <Link
-                    className="inline-flex h-9 items-center justify-center rounded-md border bg-white px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:border-gray-800 dark:border-gray-800 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus-visible:ring-gray-300"
-                    href="#"
-                  >
-                    Request a Demo
-                  </Link>
+                <p className=" pb-10 text-xl max-w-3xl text-foreground font-semibold tracking-tighter sm:text-4xl md:text-5xl text-center">
+                  Deploy a commercial rest api from a docker image in minutes.
+                   </p>
+
+                <div className="flex flex-col items-center space-y-4">
+                  <p className="mx-auto max-w-2xl text-muted-foreground text-base dark:text-gray-400 text-center">
+                    Beautifully designed components that you can copy and paste
+                    into your apps. Accessible. Customizable. Open Source.
+                  </p>
+                  <div className="space-x-3">
+                    <Button>Get Started</Button>
+                    <Button asChild variant={"outline"}>
+                      <Link href={""}>
+                        {" "}
+                        <PlayCircle className="h-4 w-4 mr-2" />{" "}
+                        <span>View Demo</span>
+                      </Link>
+                    </Button>
+                  </div>
+
+                  <div className="space-x-4"></div>
                 </div>
               </div>
             </div>
           </div>
+          <div className="container flex items-center justify-center m-auto"></div>
+          <div className=" max-w-[1024px] w-full h-96 m-auto rounded-sm">
+            <Image width={1024} height={384} alt='' src='/image.jpeg'/>
+
+          
+          </div>
+
         </section>
+        <div className="h-24"></div>
         <section className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container space-y-12 px-4 md:px-6">
+          <div className="container space-y-12 px-4 md:px-6 max-w-5xl">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
-                <div className="inline-block rounded-lg bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800">
-                  Testimonials
-                </div>
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                  What our customers say
-                </h2>
-                <p className="max-w-[900px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                  Don&quot;t just take our word for it, see what our customers
-                  have to say.
+                <p className="text-xl font-medium tracking-tighter ">
+                  Features
+                </p>
+                <p className="max-w-2xl text-muted-foreground mx-auto text-center">
+                  At lambdacrate, we build powerful api gateways that give our
+                  customers a secure way to instantly profit
+                </p>
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-4 max-w-5xl">
+              <div className="p-6 border rounded-md">
+                <h3 className="mb-2 font-bold">User Accounts</h3>
+                <p className="text-sm leading-normal text-foreground/70">
+                  Have onboarding
+                </p>
+              </div>
+              <div className="p-6 border rounded-md">
+                <h3 className="mb-2 font-bold">Documentation</h3>
+                <p className="text-sm leading-normal text-foreground/70">
+                  Deploy beautiful documentation using our service and mdx.
+                </p>
+              </div>
+
+              <div className="p-6 border rounded-md">
+                <h3 className="mb-2 font-bold">Collect Payments</h3>
+                <p className="text-sm leading-normal text-foreground/70">
+                  Create subscription tiers, allowing you to seamlessly collect
+                  payments from your users.
+                </p>
+              </div>
+              <div className="p-6 border rounded-md">
+                <h3 className="mb-2 font-bold">Development Environments</h3>
+                <p className="text-sm leading-normal text-foreground/70">
+                  Develop and test your api locally using our cli tool. This
+                  allows
+                </p>
+              </div>
+              <div className="p-6 border rounded-md">
+                <h3 className="mb-2 font-bold">Deep Customization</h3>
+                <p className="text-sm leading-normal text-foreground/70">
+                  Customize color schemes, landing pages, border radius, to give
+                  your website a unique, branded feel
+                </p>
+              </div>
+              <div className="p-6 border rounded-md">
+                <h3 className="mb-2 font-bold">
+                  Custom Domains
+                </h3>
+                <p className="text-sm leading-normal text-foreground/70">
+                  Add your own domain and custom email address to your
+                  application.
                 </p>
               </div>
             </div>
           </div>
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
-          <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6">
-            <div className="space-y-3">
-              <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
-                Choose the plan that&apos;s right for you.
-              </h2>
-              <p className="mx-auto max-w-[600px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                We offer a range of pricing options to suit your needs and
-                budget.
-              </p>
-            </div>
-            <div className="grid w-full grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Basic</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-4xl font-bold">$9.99/mo</div>
-                  <ul className="mt-4 space-y-2 text-sm text-gray-500 dark:text-gray-400">
-                    <li>Feature 1</li>
-                    <li>Feature 2</li>
-                    <li>Feature 3</li>
-                  </ul>
-                </CardContent>
-                <CardFooter className="border-t p-6">
-                  <Button>Choose Plan</Button>
-                </CardFooter>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Pro</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-4xl font-bold">$19.99/mo</div>
-                  <ul className="mt-4 space-y-2 text-sm text-gray-500 dark:text-gray-400">
-                    <li>Feature 1</li>
-                    <li>Feature 2</li>
-                    <li>Feature 3</li>
-                    <li>Feature 4</li>
-                    <li>Feature 5</li>
-                  </ul>
-                </CardContent>
-                <CardFooter className="border-t p-6">
-                  <Button>Choose Plan</Button>
-                </CardFooter>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Enterprise</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-4xl font-bold">Contact Us</div>
-                  <ul className="mt-4 space-y-2 text-sm text-gray-500 dark:text-gray-400">
-                    <li>Custom Features</li>
-                    <li>24/7 Support</li>
-                    <li>Dedicated Account Manager</li>
-                  </ul>
-                </CardContent>
-                <CardFooter className="border-t p-6">
-                  <Button>Contact Sales</Button>
-                </CardFooter>
-              </Card>
-            </div>
-          </div>
-        </section>
+  
       </main>
       <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
         <p className="text-xs text-gray-500 dark:text-gray-400">
