@@ -7,6 +7,7 @@ export const env = createEnv({
     API_URL: z.string().url(),
     GITHUB_CLIENT_SECRET: z.string(),
     GITHUB_URL: z.string().url(),
+    GITHUB_CLIENT_ID: z.string(),
   },
  
   /**
