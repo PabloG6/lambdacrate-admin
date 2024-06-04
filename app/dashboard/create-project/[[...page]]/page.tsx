@@ -42,7 +42,7 @@ export default function Page({
   console.log(path);
   const [configOpts, setConfigOpts] = useState<string[]>([]);
   const router = useRouter();
-
+  
   const checkCurrentStep = (target: (typeof steps)[number]) => {
     const current = stepTransform(path);
   

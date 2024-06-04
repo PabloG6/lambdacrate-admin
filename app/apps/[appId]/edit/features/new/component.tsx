@@ -105,11 +105,9 @@ export default function Component({ params, features }: { params: { appId: strin
   const values = watch();
   const router = useRouter();
   async function onValidSubmit(form: FeatureListType) {
-    console.log("hello world");
     const parsed = FeatureListSchema.safeParse(form);
 
     if (parsed.success) {
-      console.log(parsed.data);
       const response = await upsertFeatures(params.appId, parsed.data);
       if (response.ok) {
         router.replace(`/apps/${params.appId}/edit`)

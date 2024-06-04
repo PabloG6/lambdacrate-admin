@@ -9,7 +9,6 @@ export async function GET(request: Request): Promise<Response> {
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
-  const refresh_token = url.searchParams.get("refresh_token");
   const storedState = cookies().get("github_oauth_state")?.value ?? null;
   if (!code || !state || !storedState || state !== storedState) {
     return new Response(null, {
@@ -27,6 +26,7 @@ export async function GET(request: Request): Promise<Response> {
       username: githubUser.login,
       name: githubUser.name,
       access_token: token.accessToken,
+      avatar_url: githubUser.avatar_url,
       auth_type: "oauth_github",
       external_user_id: githubUser.id,
 

@@ -12,7 +12,7 @@ export default function ErrorPage() {
           Whoops, something went wrong when trying to authenticate your app.
         </div>
         <Button className="text-sm text-center" variant={"outline"} asChild>
-          {" "}
+          
           <Link href="/login">Please try again</Link>
         </Button>
       </div>

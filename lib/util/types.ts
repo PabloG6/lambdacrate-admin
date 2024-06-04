@@ -9,7 +9,7 @@ export const FeatureSchema = z.object({
 export type FeatureType = z.infer<typeof FeatureSchema>;
 export const AppSchema = z.object({
     name: z.string(),
-    git_repository: z.string(),
+    git_repository: z.string().url(),
     description: z.string(),
 
 

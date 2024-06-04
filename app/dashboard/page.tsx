@@ -1,61 +1,27 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  PopoverTrigger,
-  PopoverContent,
-  Popover,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  DropdownMenuTrigger,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenu,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuGroup,
-  DropdownMenuSubContent,
-  DropdownMenuPortal,
-  DropdownMenuSubTrigger,
-  DropdownMenuSub,
-  DropdownMenuLabel,
-} from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { GitHubLogoIcon, PlusIcon } from "@radix-ui/react-icons";
-import { unstable_noStore } from "next/cache";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import {
-  AppWindowMac,
-  ExternalLink,
-  GithubIcon,
-  LayoutGrid,
-  MoreVerticalIcon,
-  TimerResetIcon,
-  Zap,
-} from "lucide-react";
-import { Dialog } from "@/components/ui/dialog";
-import {
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from "@radix-ui/react-dialog";
+
+import { PlusIcon } from "@radix-ui/react-icons";
+import { LayoutGrid } from "lucide-react";
+
 import { AppItem, AppObject } from "@/components/app-item";
-import App from "next/app";
-import { env } from "../env";
+import { env } from "@/app/env";
+import { NavBar } from "@/components/ui/navbar";
+import { getProfile } from "../auth/profile/lib";
+import { Octokit } from "octokit";
 
 export default async function Component() {
-  unstable_noStore();
   const response = await fetch(`${env.API_URL}/api/apps`, {
     cache: "no-cache",
   });
   const appList = await response.json();
-
+  const profile = await getProfile();
+  console.log('profile', profile);
+ 
   return (
     <div className="flex flex-col w-full min-h-screen">
+      <NavBar></NavBar>
       <main className="flex min-h-[calc(100vh_-_theme(spacing.16))]  flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
         <div className="max-w-6xl w-full mx-auto">
           <div className="flex w-full justify-end py-6">

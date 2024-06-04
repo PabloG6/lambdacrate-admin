@@ -19,7 +19,6 @@ export async function upsertFeatures(appId: string, data: FeatureListType) {
     return await response.json();
   }
 
-  console.log(await response.json());
 }
 
 export async function getFeatures(appId: string) {

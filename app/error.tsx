@@ -20,39 +20,6 @@ export default function Error({
 
 
 <div className="flex flex-col min-h-screen">
-  <header className="px-4 lg:px-6 h-14 flex items-center">
-    <a className="flex items-center justify-center" href="#">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        className="h-6 w-6"
-      >
-        <path d="m8 3 4 8 5-5 5 15H2L8 3z"></path>
-      </svg>
-      <span className="sr-only">Acme Inc</span>
-    </a>
-    <nav className="ml-auto flex gap-4 sm:gap-6">
-      <a className="text-sm font-medium hover:underline underline-offset-4" href="#">
-        Features
-      </a>
-      <a className="text-sm font-medium hover:underline underline-offset-4" href="#">
-        Pricing
-      </a>
-      <a className="text-sm font-medium hover:underline underline-offset-4" href="#">
-        About
-      </a>
-      <a className="text-sm font-medium hover:underline underline-offset-4" href="#">
-        Contact
-      </a>
-    </nav>
-  </header>
   <main className="flex-1">
     <section className="w-full py-12 md:py-24 lg:py-32">
       <div className="container px-4 md:px-6">
