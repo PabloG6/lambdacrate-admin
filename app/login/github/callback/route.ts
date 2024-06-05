@@ -9,6 +9,7 @@ export async function GET(request: Request): Promise<Response> {
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
+  console.log(url);
   const storedState = cookies().get("github_oauth_state")?.value ?? null;
   if (!code || !state || !storedState || state !== storedState) {
     return new Response(null, {

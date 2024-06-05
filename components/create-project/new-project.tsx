@@ -1,5 +1,12 @@
 "use client";
-import { CheckIcon, ChevronDown, Loader, Scroll } from "lucide-react";
+import {
+  CheckIcon,
+  ChevronDown,
+  Globe,
+  Loader,
+  Scroll,
+  SquareChevronRight,
+} from "lucide-react";
 import {
   ControllerFieldState,
   ControllerRenderProps,
@@ -60,6 +67,14 @@ import {
   CommandList,
 } from "../ui/command";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { SelectItem } from "@radix-ui/react-select";
 type NewProjectProps = {
   nextStep: (opts?: string[]) => void;
 };
@@ -152,67 +167,46 @@ export default function NewProject({ nextStep }: NewProjectProps) {
                       <FormLabel>Destination Type</FormLabel>
 
                       <FormControl className="flex">
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <Button
-                              variant="outline"
-                              role="combobox"
-                              aria-expanded={openRepository}
-                              className="w-full justify-between"
-                            >
-                              <span className="max-w-[220px] overflow-ellipsis overflow-hidden">
-                                {selectedRepository
-                                  ? repositories?.find(
-                                      (repository) =>
-                                        repository.clone_url?.toLowerCase() ===
-                                        selectedRepository
-                                    )?.full_name
-                                  : "Select a repository"}
-                              </span>
-                              <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                            </Button>
-                          </PopoverTrigger>
-                          <PopoverContent
-                            className="w-[400px] p-0"
-                            align="start"
-                          >
-                            <Command>
-                              <CommandInput
-                                placeholder="Search repositories..."
-                                className="h-9"
-                              />
-                              <CommandList>
-                                <CommandEmpty>
-                                  No repository found.
-                                </CommandEmpty>
-                                <CommandGroup>
-                                  {repositories?.map((repository) => (
-                                    <CommandItem
-                                      key={repository.node_id}
-                                      value={repository.clone_url}
-                                      onSelect={(currentValue) => {
-                                        setOpenRepository(false);
-
-                                        setRepository(currentValue);
-                                        console.log("here we go");
-                                      }}
-                                    >
-                                      {repository.full_name}
-                                      <CheckIcon
-                                        className={cn(
-                                          "ml-auto h-4 w-4",
-                                          repository.clone_url === field.value
-                                            ? "opacity-100"
-                                            : "opacity-0"
-                                        )}
-                                      />
-                                    </CommandItem>
-                                  ))}
-                                </CommandGroup>
-                              </CommandList>
-                            </Command>
-                          </PopoverContent>
-                        </Popover>
+                        <Select>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Destination Types" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value='cli'>
+                            <div className="items-start flex px-3 py-2">
+                              <div className="flex w-full gap-1 flex-col">
+                                <div className="w-full flex gap-2 flex-col">
+                                    <div className="flex gap-2">
+                                    <SquareChevronRight className="w-5 h-5"></SquareChevronRight>
+                                    <span className="text-uppercase">CLI</span>
+                                    </div>
+                                    <span className="text-xs text-muted-foreground">
+                                      Forward events to a local webhook
+                                    </span>
+                      
+                                </div>
+                              </div>
+                            </div>
+                            </SelectItem>
+                            <SelectSeparator/>
+                          <SelectItem value='http' className="relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+                          <div className="items-start flex px-3 py-2">
+                            <div className="flex w-full gap-1 flex-col">
+                                <div className="w-full flex gap-2 flex-col">
+                                    <div className="flex gap-2">
+                                    <Globe className="w-5 h-5"></Globe>
+                                    <span className="uppercase">Http</span>
+                                    </div>
+                                    <span className="text-xs text-muted-foreground">
+                                      Send events to an http endpoint
+                                    </span>
+                      
+                                </div>
+                              </div>
+                            </div>
+                          </SelectItem>
+                          </SelectContent>
+                        </Select>
                       </FormControl>
                     </FormItem>
                   )}
@@ -222,70 +216,10 @@ export default function NewProject({ nextStep }: NewProjectProps) {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="flex flex-col w-full gap-1">
-                      <FormLabel>Destination Url</FormLabel>
+                      <FormLabel>Endpoint Url</FormLabel>
 
                       <FormControl className="flex">
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <Button
-                              variant="outline"
-                              role="combobox"
-                              aria-expanded={openRepository}
-                              className="w-full justify-between"
-                            >
-                              <span className="max-w-[220px] overflow-ellipsis overflow-hidden">
-                                {selectedRepository
-                                  ? repositories?.find(
-                                      (repository) =>
-                                        repository.clone_url?.toLowerCase() ===
-                                        selectedRepository
-                                    )?.full_name
-                                  : "Select a repository"}
-                              </span>
-                              <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                            </Button>
-                          </PopoverTrigger>
-                          <PopoverContent
-                            className="w-[400px] p-0"
-                            align="start"
-                          >
-                            <Command>
-                              <CommandInput
-                                placeholder="Search repositories..."
-                                className="h-9"
-                              />
-                              <CommandList>
-                                <CommandEmpty>
-                                  No repository found.
-                                </CommandEmpty>
-                                <CommandGroup>
-                                  {repositories?.map((repository) => (
-                                    <CommandItem
-                                      key={repository.node_id}
-                                      value={repository.clone_url}
-                                      onSelect={(currentValue) => {
-                                        setOpenRepository(false);
-
-                                        setRepository(currentValue);
-                                        console.log("here we go");
-                                      }}
-                                    >
-                                      {repository.full_name}
-                                      <CheckIcon
-                                        className={cn(
-                                          "ml-auto h-4 w-4",
-                                          repository.clone_url === field.value
-                                            ? "opacity-100"
-                                            : "opacity-0"
-                                        )}
-                                      />
-                                    </CommandItem>
-                                  ))}
-                                </CommandGroup>
-                              </CommandList>
-                            </Command>
-                          </PopoverContent>
-                        </Popover>
+                        <Input {...field} placeholder="https://example.com/webhook"></Input>
                       </FormControl>
                     </FormItem>
                   )}
