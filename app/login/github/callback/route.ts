@@ -4,6 +4,9 @@ import { tokenSchema } from "@/types/auth";
 import { OAuth2RequestError } from "arctic";
 import { cookies } from "next/headers";
 import { Octokit, App } from "octokit";
+import * as fs from 'fs';
+import * as jwt from 'jsonwebtoken';
+
 export async function GET(request: Request): Promise<Response> {
     console.log('request called');
   const url = new URL(request.url);
@@ -47,6 +50,7 @@ export async function GET(request: Request): Promise<Response> {
       },
       body: JSON.stringify(user),
     });
+
 
 
     const parsedResult = tokenSchema.parse(await session.json());

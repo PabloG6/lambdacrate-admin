@@ -20,7 +20,6 @@ import { ReactElement, Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 import { z } from "zod";
-import { MachineLoader } from "./_components/machines/machine-loader";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LandingPage } from "@/components/landing-page";
 import { Button } from "@/components/ui/button";
@@ -28,6 +27,8 @@ import { Code } from "@/components/ui/code";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { setTimeout } from "timers/promises";
+import ConnectTable from "@/components/ConnectTable";
 
 type Props = {
   app_id: string;
@@ -91,14 +92,15 @@ else:
    print(f'Status Code: {response.status_code}')
   `;
 
-  const bashExampleCode = `\`\`\ bash
+  const bashExampleCode = `\`\`\`\ bash
  $ lambdacrate connect -a ${app_id}
 \`\`\`
   `;
+
   return (
     <div className="space-y-8">
       <div className="text-xl font-medium text-foreground">
-        {response.name}{" "}
+        {response.name}{" "} 
       </div>
 
       <section className="mb-6">
@@ -113,29 +115,7 @@ else:
             </p>
           </div>
           <div className="col-span-5">
-            <p className="text-base font-medium mb-2">
-              Try one of our examples
-            </p>
-            <div className="space-x-2 pb-3 pt-4">
-              {["golang", "python", "javascript", "ruby", "curl", "java"].map(
-                (val, index) => (
-                  <Badge
-                    variant="secondary"
-                    className="px-4 font-medium rounded-md"
-                    key={index}
-                  >
-                    {val}
-                  </Badge>
-                )
-              )}
-            </div>
-            <Card className="p-0">
-              <Code
-                className="w-[700px] h-[350px]"
-                lang="python"
-                code={pythonExampleCode}
-              ></Code>
-            </Card>
+            <ConnectTable app_id={app_id}></ConnectTable>
           </div>
         </div>
       </section>

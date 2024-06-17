@@ -1,14 +1,7 @@
 "use client";
 import { Navbar } from "@/components/navbar";
 import { NavLinkProps, SideNav } from "@/components/sidenav";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import {
@@ -20,6 +13,7 @@ import {
 
   BarChart,
   Container,
+  Building2,
 } from "lucide-react";
 import {
 
@@ -44,7 +38,13 @@ export default function Layout({
       variant: "default" as const,
     },
 
-    
+    {
+      title: "Build Logs",
+      href: `/dashboard/${app_id}/build_logs`,
+      icon: Building2,
+      segment: "build_logs",
+      variant: "default" as const,
+    },
     {
       title: 'Environment',
       segment: 'environment',
@@ -102,28 +102,7 @@ export default function Layout({
 
   return (
     <>
-      <nav className="h-12 border-b w-full flex">
-          <div className=" pl-8 flex items-center border-r lg:max-w-60 w-full h-full bg-card">
-          <div className="text-base">{title}</div>
-         
-        </div>
-        <Breadcrumb className="pl-8 flex items-center bg-transparent">
-      <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
-        </BreadcrumbItem>
-     
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbLink href={`/dashboard/${app_id}`}>{app_id}</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbPage>{title}</BreadcrumbPage>
-        </BreadcrumbItem>
-      </BreadcrumbList>
-    </Breadcrumb>
-      </nav>
+   
       <div className="w-full h-full flex">
         <div className="h-screen flex flex-col max-w-60 w-full ">
           <SideNav

@@ -109,7 +109,7 @@ export default function Page({
   useEffect(() => {
     (async () => {
       const response = await fetch(`/github/repos`, {
-        next: { revalidate: 3 * 60 },
+        next: {},
       });
       if (response.ok) {
         setRepositories(await response.json());
