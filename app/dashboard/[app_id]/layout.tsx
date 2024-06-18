@@ -1,8 +1,9 @@
-"use client";
+"use server";
 import { Navbar } from "@/components/navbar";
 import { NavLinkProps, SideNav } from "@/components/sidenav";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { AppStateContextProvider } from "@/contexts/AppStateContextProvider";
 
 import {
 
@@ -21,8 +22,9 @@ import {
 
 } from "next/navigation";
 import { useEffect, useState } from "react";
+import { getAppMetaData } from "./actions";
 
-export default function Layout({
+export  default async function Layout({
   params: { app_id },
   children,
 }: {
@@ -84,33 +86,31 @@ export default function Layout({
     },
   ];
 
-  const layoutSegment = useSelectedLayoutSegment();
+  // const layoutSegment = useSelectedLayoutSegment();
 
-  useEffect(() => {
-    if (layoutSegment == null) {
-      setTitle(links[0].title);
-      return;
-    }
+  // useEffect(() => {
+  //   if (layoutSegment == null) {
+  //     setTitle(links[0].title);
+  //     return;
+  //   }
 
-    const link = links.find((l) => l.segment === layoutSegment);
-    setTitle(link!.title);
+  //   const link = links.find((l) => l.segment === layoutSegment);
+  //   setTitle(link!.title);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [layoutSegment]);
-  const [title, setTitle] = useState("");
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [layoutSegment]);
+  // const [title, setTitle] = useState("");
   const onSideNavChange = (link: NavLinkProps) => {};
+  const metadata = await getAppMetaData(app_id);
+
 
   return (
-    <>
+    <AppStateContextProvider metadata={metadata} >
    
       <div className="w-full h-full flex">
         <div className="h-screen flex flex-col max-w-60 w-full ">
-          <SideNav
-            isCollapsed={false}
-            links={links}
-            className="py-7"
-            onChange={onSideNavChange}
-          />
+       
+    
         </div>
         <div className="w-full h-full">
           <ScrollArea className="w-full h-screen ">
@@ -119,6 +119,6 @@ export default function Layout({
           </ScrollArea>
         </div>
       </div>
-    </>
+    </AppStateContextProvider>
   );
 }

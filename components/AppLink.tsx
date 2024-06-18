@@ -16,7 +16,7 @@ export default function AppLink({ app_id }: { app_id: string }) {
     loading: true,
   });
   useEffect(() => {
-    switch (appState?.status) {
+    switch (appState?.deployment?.status) {
       case "active": {
         setAppLinkState({ text: `${app_id}.lambdacrate.com`, loading: false });
         break;
@@ -28,10 +28,10 @@ export default function AppLink({ app_id }: { app_id: string }) {
   }, [appState, app_id]);
   return (
     <div className="flex items-center ">
-      {appLinkState.loading && appState?.status !== "failed" && (
+      {appLinkState.loading && appState?.deployment?.status !== "failed" && (
         <Skeleton className="w-60 h-4"></Skeleton>
       )}
-      {appState?.status == "active" && (
+      {appState?.deployment?.status == "active" && (
         <>
           <Link
             href={`https://${app_id}.lambdacrate.com`}

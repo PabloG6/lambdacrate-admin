@@ -1,34 +1,18 @@
 "use server";
 import {
-  AreaChart,
-  Cable,
-  CircleDollarSign,
-  Copy,
-  Database,
-  Globe,
+  
   LinkIcon,
-  Loader,
-  LucideIcon,
-  MemoryStick,
-  PanelTop,
-  User,
-  Wallet2,
+
 } from "lucide-react";
-import Link from "next/link";
 import { getAppMetaData } from "./actions";
-import { ReactElement, Suspense, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { Skeleton } from "@/components/ui/skeleton";
+
 import { z } from "zod";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LandingPage } from "@/components/landing-page";
-import { Button } from "@/components/ui/button";
+
 import { Code } from "@/components/ui/code";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { setTimeout } from "timers/promises";
+import { Card } from "@/components/ui/card";
+
 import ConnectTable from "@/components/ConnectTable";
+import OverviewDescription from "@/components/ui/OverviewDescription";
 
 type Props = {
   app_id: string;
@@ -92,7 +76,7 @@ else:
    print(f'Status Code: {response.status_code}')
   `;
 
-  const bashExampleCode = `\`\`\`\ bash
+  const bashExampleCode = `\`\`\ bash
  $ lambdacrate connect -a ${app_id}
 \`\`\`
   `;
@@ -100,20 +84,12 @@ else:
   return (
     <div className="space-y-8">
       <div className="text-xl font-medium text-foreground">
-        {response.name}{" "} 
+        {response?.name}{" "} 
       </div>
 
       <section className="mb-6">
         <div className="grid grid-cols-8 gap-16">
-          <div className="col-span-3">
-            <p className="text-base font-medium mb-2">
-              Welcome to your new project
-            </p>
-            <p className="text-muted-foreground text-sm">
-              Your project has been deployed on its own instance, with its own
-              API and dashboard all set up and ready to use.
-            </p>
-          </div>
+          <OverviewDescription app_id={app_id}></OverviewDescription>
           <div className="col-span-5">
             <ConnectTable app_id={app_id}></ConnectTable>
           </div>
@@ -130,13 +106,7 @@ else:
               Copy the following command to start developing on your local
               machine
             </p>
-            <Card>
-              <Code
-                code={bashExampleCode}
-                lang="bash"
-                className="text-sm"
-              ></Code>
-            </Card>
+           
           </div>
         </div>
       </section>

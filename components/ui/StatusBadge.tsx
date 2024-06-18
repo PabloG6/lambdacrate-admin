@@ -19,7 +19,7 @@ export default function StatusBadge(props: { app_id: string }) {
   
   const [badgeStatus, setBadgeStatus] = useState<BadgeStatus>({text: "Loading...", loading: true});
   useEffect(() => {
-    switch (appState?.status) {
+    switch (appState?.deployment?.status) {
       case "failed": {
         console.log()
         setBadgeStatus({text: "This deployment has failed", loading: false});

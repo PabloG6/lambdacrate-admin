@@ -8,14 +8,10 @@
 import { useState } from "react";
 import {
   Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
+
   CardContent,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Copy } from "lucide-react";
 import { Separator } from "./ui/separator";
 

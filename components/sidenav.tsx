@@ -19,7 +19,7 @@ export interface NavLinkProps {
 interface NavProps {
   isCollapsed: boolean;
   className?: string;
-  onChange: (props: NavLinkProps) => void;
+  onChange?: (props: NavLinkProps) => void;
   links: NavLinkProps[];
 }
 
@@ -38,7 +38,7 @@ export function SideNav({ links, isCollapsed, className, onChange }: NavProps) {
             <Link
           
               href={link.href}
-              onClick={() => onChange(link)}
+              onClick={() => onChange ? onChange(link): null}
               className={cn(
                 buttonVariants({
                   variant: link.segment === segment ? "default" : "ghost",

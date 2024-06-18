@@ -15,7 +15,6 @@ export default async function Page({
   params: { app_id: string };
 }) {
   return (
-    <AppStateContextProvider app_id={app_id} >
       <div className="h-full w-full space-y-6">
         <div className="w-full h-full space-y-6">
           <div className="flex gap-4">
@@ -41,6 +40,5 @@ export default async function Page({
           </Suspense>
         </div>
       </div>
-    </AppStateContextProvider>
   );
 }
