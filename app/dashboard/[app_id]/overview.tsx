@@ -5,12 +5,7 @@ import {
 
 } from "lucide-react";
 import { getAppMetaData } from "./actions";
-
-import { z } from "zod";
-
-import { Code } from "@/components/ui/code";
 import { Card } from "@/components/ui/card";
-
 import ConnectTable from "@/components/ConnectTable";
 import OverviewDescription from "@/components/ui/OverviewDescription";
 

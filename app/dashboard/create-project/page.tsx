@@ -87,6 +87,7 @@ export default function Page({
       git_repository: "",
       
       destination_type: "cli",
+      path: '',
     },
   });
 

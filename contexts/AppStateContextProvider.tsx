@@ -1,7 +1,9 @@
 "use client";
 import { getAppMetaData } from "@/app/dashboard/[app_id]/actions";
+import LogViewer from "@/components/LogViewer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AppInfo, AppInfoSchema, AppStatSchema } from "@/types/apps";
+import { logSchema } from "@/types/logs";
 import { validateHeaderName } from "http";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { z } from "zod";
@@ -22,16 +24,8 @@ export const AppStateContextProvider = ({
 }) => {
   const [appState, setAppState] = useState<AppInfo | undefined>(metadata);
   useEffect(() => {
-    if(metadata != undefined && !validStatuses.includes(metadata.deployment.status)) {
-      let es: EventSource = new EventSource(`/api/apps/${metadata.app_id}/status`)
-      es.onmessage = (event) => {
-        const results = JSON.stringify(event.data)
-        setAppState(AppInfoSchema.parse(results));
-      }
-      return () => {
-        es.close();
-      };
-    }
+    
+    
   
   }, [metadata]);
 
@@ -40,7 +34,7 @@ export const AppStateContextProvider = ({
       {(appState?.deployment?.status == "active" ||
         appState?.deployment?.status == "failed" ? children:(
           <div className="w-full h-full flex items-center justify-center">
-            <Skeleton className="h-4 w-22"></Skeleton>
+            <LogViewer id={appState?.deployment.id!}/>
           </div>
         ) )
         }

@@ -8,7 +8,7 @@ import { getAppMetaData } from "../actions";
 
 export default async function Page(props: { params: { app_id: string }, searchParams: {} }) {
     const response = await getAppMetaData(props.params.app_id);
-    console.log(response);
+  
   return (
     <>
     <div className="text-xl font-medium text-foreground">
