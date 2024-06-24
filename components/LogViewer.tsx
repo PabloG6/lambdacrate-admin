@@ -5,11 +5,15 @@ import { format } from "date-fns";
 import { useContext, useEffect, useRef, useState } from "react";
 import { ScrollArea } from "./ui/scroll-area";
 import EventSourceContextProvider, {useEventStream} from "@/contexts/EventStreamContextProvider";
+export type Props<T> = {
+  level?: string;
+  event_type: string;
+  
 
-export default function LogViewer({ id }: { id: string }) {
-  function isLogEvent(event: LambdaEvent): event is LogEvent {
-    return event.event_type === 'logs';
-  }
+}
+
+
+export default function LogViewer<T>({level, event_type}: Props<T>) {
 
   const scrollToBottomRef = useRef<HTMLTableRowElement | null>(null);
 
@@ -24,7 +28,7 @@ export default function LogViewer({ id }: { id: string }) {
       scrollToBottomRef?.current?.scrollIntoView();
 
     }
-  }, [id, eventStream]);
+  }, [eventStream]);
   return (
 
           <ScrollArea className="m-auto  mt-4 h-[calc(100vh-200px)]">
@@ -51,7 +55,7 @@ export default function LogViewer({ id }: { id: string }) {
         
         <tbody>
           {eventStream
-            .filter((e) => e.event_type == "logs")
+            .filter((e) => e.event_type == event_type)
             .map(l => l as LogEvent).filter(l => l.level != 'ignore')
             .map((log, index) => (
               <tr key={`${log.timestamp}:${index}`}>
