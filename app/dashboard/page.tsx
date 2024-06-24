@@ -5,11 +5,12 @@ import { Input } from "@/components/ui/input";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { LayoutGrid } from "lucide-react";
 
-import { AppItem, AppObject } from "@/components/app-item";
+import { AppItem } from "@/components/app-item";
 import { env } from "@/app/env";
 import { NavBar } from "@/components/ui/navbar";
 import { getProfile } from "../auth/profile/lib";
 import { Octokit } from "octokit";
+import { AppInfo } from "@/types/apps";
 
 export default async function Component() {
   const response = await fetch(`${env.API_URL}/api/apps`, {
@@ -39,7 +40,7 @@ export default async function Component() {
           <>
             {appList.length > 0 ? (
               <div className="grid grid-cols-3 gap-5">
-                {appList.map((item: AppObject) => (
+                {appList.map((item: AppInfo) => (
                   <AppItem props={item} key={item.id} />
                 ))}
               </div>

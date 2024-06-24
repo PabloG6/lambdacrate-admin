@@ -30,15 +30,10 @@ import { Input } from "./ui/input";
 import { Label } from "@radix-ui/react-label";
 import { ChangeEvent, useState } from "react";
 import { deleteApp } from "@/app/dashboard/[app_id]/actions";
+import { AppInfo } from "@/types/apps";
+import { Badge } from "./ui/badge";
 
-export interface AppObject {
-  id: string;
-  name: string;
-  app_id: string;
-  repository: string;
-}
-
-export function AppItem({ props }: { props: AppObject }) {
+export function AppItem({ props }: { props: AppInfo }) {
   const [inputText, setInputText] = useState<string>("");
   const [isOpen, setOpen] = useState<boolean>();
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
@@ -52,9 +47,14 @@ export function AppItem({ props }: { props: AppObject }) {
             <AvatarFallback />
           </Avatar>
 
-          <div>
-            <div className="text-base font-medium text-foreground">
-              {props.name}
+          <div className="flex flex-col gap-1">
+            <div className="flex gap-4">
+              <span className="text-base font-medium text-foreground">
+                {props.name}
+              </span>{" "}
+              <Badge className="font-mono text-xs font-thin" variant={"outline"}>
+                {props.deployment.status}
+              </Badge>
             </div>
             <div className="text-xs flex text-muted-foreground items-center space-x-1">
               <span>{props.app_id}</span>
@@ -64,7 +64,7 @@ export function AppItem({ props }: { props: AppObject }) {
         </div>
         <div>
           <Dialog
-          open={isOpen}
+            open={isOpen}
             onOpenChange={(open: boolean) => {
               setInputText("");
             }}
@@ -118,32 +118,30 @@ export function AppItem({ props }: { props: AppObject }) {
                   className="w-full"
                   disabled={!(inputText == props.app_id)}
                   onClick={async () => {
-                    const response = await deleteApp(props.id)
+                    const response = await deleteApp(props.id);
                     setOpen(false);
-
                   }}
                 >
-                  <span >Destroy</span> <code className="pl-3">{`\`${props.name}\``}</code>
+                  <span>Destroy</span>{" "}
+                  <code className="pl-3">{`\`${props.name}\``}</code>
                 </Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
         </div>
       </div>
-      <div className="py-4 space-x-2 flex items-center">
-     
-      </div>
-      <div className="py-4 space-y-3">
-      
-
-      
-      </div>
+      <div className="py-4 space-x-2 flex items-center"></div>
+      <div className="py-4 space-y-3"></div>
       <div className="flex w-full mt-auto">
-      <Button variant={"outline"} size={"lg"} asChild className="w-full bg-inherit">
-        <Link href={`/dashboard/${props.app_id}`}>More Details</Link>
-      </Button>
+        <Button
+          variant={"outline"}
+          size={"lg"}
+          asChild
+          className="w-full bg-inherit"
+        >
+          <Link href={`/dashboard/${props.app_id}`}>More Details</Link>
+        </Button>
       </div>
-     
     </div>
   );
 }

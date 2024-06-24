@@ -5,7 +5,7 @@ import EventSource from "eventsource";
 import { EventNotifier, getSSEWriter } from "ts-sse";
 import { z } from "zod";
 import { interval } from "date-fns";
-import { Logs, logSchema } from "@/types/logs";
+import { LogEvent, eventSchema, logSchema } from "@/types/events";
 
 export const deploymentSchema = z.object({
   status: z.string(),
@@ -35,7 +35,7 @@ export const statuses: Status[] = [
 ];
 export type SyncEvents = EventNotifier<{
   update: {
-    data: Logs;
+    data: LogEvent;
     comment?: string;
   };
   complete: {
@@ -130,8 +130,11 @@ export async function GET(
   eventSource.onmessage = (event) => {
     console.log('event.data', event.data);
     try {
-      const data = logSchema.parse(JSON.parse(event.data))
-      notifier.update({data: data})
+      const {data, success} = eventSchema.safeParse(JSON.parse(event.data))
+      if(success) {
+        notifier.update({data: data})
+
+      }
 
     } catch(ex) {
       console.log(ex);

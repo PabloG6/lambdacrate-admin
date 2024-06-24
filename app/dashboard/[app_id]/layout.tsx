@@ -113,10 +113,10 @@ export  default async function Layout({
     
         </div>
         <div className="w-full h-full">
-          <ScrollArea className="w-full h-screen ">
+   
             <div className="w-full md:p-6 lg:p-12 lg:pl-16 h-full shadow-sm">{children}</div>
             <div className="gutter py-16"></div>
-          </ScrollArea>
+
         </div>
       </div>
     </AppStateContextProvider>

@@ -85,7 +85,7 @@ export default function Page({
     defaultValues: {
       name: "",
       git_repository: "",
-      
+      dockerfile_path: "",
       destination_type: "cli",
       path: '',
     },
