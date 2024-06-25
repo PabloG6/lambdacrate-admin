@@ -17,21 +17,22 @@ export default function DeploymentStatus() {
   const [currentState, setCurrentState] = useState<string>("build_image");
   const [buildLogsProgress, setBuildProgress] = useState<number>(0);
   useEffect(() => {
-    const interval = setInterval(() => {
-      setBuildProgress((buildProgress) => buildProgress++);
-      console.log('calling set interval');
-      if (buildLogsProgress > 60) {
+    // const interval = setInterval(() => {
+    //   setBuildProgress((buildProgress) => buildProgress++);
+    //   console.log('calling set interval');
+    //   if (buildLogsProgress > 60) {
         
-        clearInterval(interval);
-      }
-    }, 1000);
+    //     clearInterval(interval);
+    //   }
+    // }, 1000);
 
     return () => {
-      clearInterval(interval);
+      // clearInterval(interval);
     };
   }, []);
   useEffect(() => {
     const event = eventStream.findLast((e) => e.event_type === "apps");
+    console.log('event', event);
     if (event) {
       const state = (event as AppInfoEvent).deployment.status;
       setCurrentState(state);
