@@ -51,64 +51,6 @@ export type SyncEvents = EventNotifier<{
 }>;
 
 
-export async function _GET(
-  request: NextRequest,
-
-  { params: { app_id } }: { params: { app_id: string } }
-) {
-  const stream = new TransformStream();
-  const writer = stream.writable.getWriter();
-  const encoder = new TextEncoder();
-  //todo fix this so that when the app deployment fails it actually tells u the deployment fails.
-  const getStatus = async (notifier: SyncEvents) => {
-    console.log(`getting status for ${app_id}: ${new Date().toISOString()}`);
-    const response = await fetch(`${env.API_URL}/api/apps/${app_id}/status`, {
-      method: "GET",
-      cache: "no-cache",
-    });
-    if (response.ok) {
-      const results = await response.json();
-      const data = deploymentSchema.parse(results);
-
-      if (data.status == "failed") {
-        clearInterval(intervalId);
-      }
-      notifier.update({
-        data: results,
-      });
-    } else {
-      console.log(response.status);
-    }
-  };
-  const deploymentStats = async (notifier: SyncEvents) => {
-    await getStatus(notifier);
-  };
-
-  const sseWriter = getSSEWriter(writer, encoder);
-  const intervalId = setInterval(async () => {
-    getStatus(sseWriter);
-  }, 3000);
-
-  request.signal.onabort = (ev) => {
-    console.log("aborted");
-    console.log(ev);
-
-    clearInterval(intervalId);
-  };
-  setInterval(() => {
-    clearInterval(intervalId);
-  }, 60_000 * 3);
-
-  deploymentStats(sseWriter);
-
-  return new NextResponse(stream.readable, {
-    headers: {
-      "Content-Type": "text/event-stream",
-      Connection: "keep-alive",
-      "Cache-Control": "no-cache, no-transform",
-    },
-  });
-}
 
 export async function GET(
   request: NextRequest,
@@ -130,10 +72,12 @@ export async function GET(
   eventSource.onmessage = (event) => {
     console.log('event.data', event.data);
     try {
-      const {data, success} = eventSchema.safeParse(JSON.parse(event.data))
+      const {data, success, error} = eventSchema.safeParse(JSON.parse(event.data))
       if(success) {
         notifier.update({data: data})
 
+      } else {
+        console.log(error);
       }
 
     } catch(ex) {

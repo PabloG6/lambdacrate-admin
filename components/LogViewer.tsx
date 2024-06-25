@@ -31,7 +31,7 @@ export default function LogViewer<T>({level, event_type}: Props<T>) {
   }, [eventStream]);
   return (
 
-          <ScrollArea className="m-auto  mt-4 h-[calc(100vh-200px)]">
+          <ScrollArea className="m-auto  mt-4 h-[300px] min-h-20">
       <table
         className={` text-sm table-fixed w-full font-mono border-spacing-2 border-collapse`}
       >

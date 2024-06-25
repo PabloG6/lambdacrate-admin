@@ -18,13 +18,10 @@ export const progressSchema = z.object({
 
 })
 export const appInfoSchema = z.object({
-    event_type:  z.literal('apps'),
-    id: z.string(),
-    deployment_id: z.string(),
-    state: z.string(),
+    event_type:  z.literal('apps')
     
 
-})
+}).merge(AppInfoSchema)
 
 export const eventSchema = z.discriminatedUnion('event_type', [logSchema, appInfoSchema, progressSchema])
 export type LambdaEvent = z.infer<typeof eventSchema>;

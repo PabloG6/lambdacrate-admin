@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const AppStatSchema = z.object({
-  id: z.string(),
+  id: z.string().optional(),
 
   status: z.enum([
     "failed",
@@ -17,6 +17,7 @@ export const AppStatSchema = z.object({
 export type AppStat = z.infer<typeof AppStatSchema>;
 
 export const AppInfoSchema = z.object({
+
   app_id: z.string(),
   name: z.string(),
   repository: z.string().url(),
