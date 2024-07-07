@@ -34,7 +34,13 @@ import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CaretSortIcon } from "@radix-ui/react-icons";
 
-import { CheckIcon, Globe, Loader, SquareChevronRight } from "lucide-react";
+import {
+  CheckIcon,
+  Globe,
+  Loader,
+  PlusCircleIcon,
+  SquareChevronRight,
+} from "lucide-react";
 
 import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
@@ -49,6 +55,8 @@ import {
   SelectValue,
   SelectTrigger,
 } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import FormContainer from "@/components/FormContainer";
 const steps = [
   "getting-started",
   "configure_cta",
@@ -87,7 +95,7 @@ export default function Page({
       git_repository: "",
       dockerfile_path: "",
       destination_type: "cli",
-      path: '',
+      path: "",
     },
   });
 
@@ -124,7 +132,6 @@ export default function Page({
       if (response.success) {
         redirect(`/dashboard/${response.app_id}/environment`);
       } else {
-
       }
     });
   };
@@ -390,13 +397,37 @@ export default function Page({
                   )}
                 </>
               </div>
-
-              
             </div>
 
-            <div className="flex space-between gap-6">
-              
-            </div>
+            <FormContainer
+              title="Environment Variables"
+              description="Enter your environment variables here. These are encrypted in the database at rest."
+            >
+              <div className="grid gap-4">
+                <div className="grid grid-cols-12 items-center gap-4">
+                  <div className="space-y-2 col-span-5">
+                    <Label htmlFor="variable-name"> Name</Label>
+                    <Input
+                      id="variable-name"
+                      placeholder="Enter variable name"
+                    />
+                  </div>
+                  <div className="space-y-2 col-span-5">
+                    <Label htmlFor="variable-value">Value</Label>
+                    <Input
+                      id="variable-value"
+                      placeholder="Enter variable value"
+                    />
+                  </div>
+                  <div className="flex flex-col items-center justify-center col-span-1 space-y-2">
+                    <Label className="invisible">Hello</Label>
+                      <Button size={"icon"} variant={'ghost'} type="button">
+                        <PlusCircleIcon></PlusCircleIcon>
+                      </Button>
+                  </div>
+                </div>
+              </div>
+            </FormContainer>
 
             <div className="flex justify-end pt-6">
               <Button
