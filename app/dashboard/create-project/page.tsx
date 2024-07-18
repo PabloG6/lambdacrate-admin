@@ -1,10 +1,5 @@
 "use client";
 
-import { AddCallToAction } from "@/components/create-project/add-call-to-action";
-import { Appearance } from "@/components/create-project/appearance";
-import { CreateSubscription } from "@/components/create-project/create-subscriptions";
-import NewProject from "@/components/create-project/new-project";
-import StepCard from "@/components/stepper/stepcard";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -21,6 +16,7 @@ import {
   FormControl,
   Form,
   FormMessage,
+  useFormField,
 } from "@/components/ui/form";
 import {
   Popover,
@@ -38,13 +34,13 @@ import {
   CheckIcon,
   Globe,
   Loader,
-  PlusCircleIcon,
+  MinusCircleIcon,
   SquareChevronRight,
 } from "lucide-react";
 
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { createProject } from "../[app_id]/_actions/projects";
 import { Input } from "@/components/ui/input";
 import {
@@ -55,8 +51,8 @@ import {
   SelectValue,
   SelectTrigger,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
 import FormContainer from "@/components/FormContainer";
+import EnvVarsForm from "@/components/EnvVarForm";
 const steps = [
   "getting-started",
   "configure_cta",
@@ -99,6 +95,13 @@ export default function Page({
     },
   });
 
+  const {  watch } = form;
+
+  const { fields, append, remove } = useFieldArray({
+    name: "secrets",
+    control: form.control,
+  });
+
   const DestinationTypeDisplay = {
     cli: (
       <div className="flex gap-2 items-center">
@@ -128,21 +131,15 @@ export default function Page({
   const onSubmitHandler = (data: AppInfo, e?: React.BaseSyntheticEvent) => {
     e?.preventDefault();
     startTransition(async () => {
+      console.log('createing project');
       const response = await createProject(data);
+      console.log(response);
       if (response.success) {
+
         redirect(`/dashboard/${response.app_id}/environment`);
       } else {
       }
     });
-  };
-
-  const nextStep = (current: stepTransform) => {
-    const index = steps.indexOf(current);
-    if (index > -1) {
-      console.log("index: ", steps[index + 1]);
-      return steps[index + 1];
-    }
-    return INITIAL_STEP;
   };
 
   return (
@@ -401,29 +398,91 @@ export default function Page({
 
             <FormContainer
               title="Environment Variables"
+              className=" border p-4 rounded-md"
               description="Enter your environment variables here. These are encrypted in the database at rest."
             >
               <div className="grid gap-4">
-                <div className="grid grid-cols-12 items-center gap-4">
-                  <div className="space-y-2 col-span-5">
-                    <Label htmlFor="variable-name"> Name</Label>
-                    <Input
-                      id="variable-name"
-                      placeholder="Enter variable name"
-                    />
-                  </div>
-                  <div className="space-y-2 col-span-5">
-                    <Label htmlFor="variable-value">Value</Label>
-                    <Input
-                      id="variable-value"
-                      placeholder="Enter variable value"
-                    />
-                  </div>
-                  <div className="flex flex-col items-center justify-center col-span-1 space-y-2">
-                    <Label className="invisible">Hello</Label>
-                      <Button size={"icon"} variant={'ghost'} type="button">
-                        <PlusCircleIcon></PlusCircleIcon>
-                      </Button>
+                <div className="grid grid-cols-12 items-center gap-2">
+                  <EnvVarsForm
+                    onSubmit={(values, ref) => {
+                      append(values);
+                    }}
+                  />
+                  <div className="col-span-12 px-2">
+                    {fields.length > 0 ? (
+                      <table className="table-fixed w-full">
+                        <thead className="bg-card  w-full">
+                          <tr className="">
+                            <th
+                              colSpan={5}
+                              className="rounded-l-sm rounded-bl-sm h-8 text-left px-4"
+                            >
+                              {" "}
+                              Key
+                            </th>
+                            <th colSpan={5} className="text-left px-4">
+                              Value
+                            </th>
+                            <th
+                              colSpan={1}
+                              className="rounded-r-sm rounded-br-sm"
+                            ></th>
+                          </tr>
+                        </thead>
+                        <tbody className="w-full">
+                          {fields.map((field, index) => (
+                            <tr key={index}>
+                              <td colSpan={5} className="pr-2 py-3">
+                                <FormField
+                                  name={`secrets.${index}.key`}
+                                  render={({ field }) => (
+                                    <>
+                                      <FormItem className="space-y-2 w-full m-0 ">
+                                        <Input
+                                          autoFocus={false}
+                                          placeholder="KEY"
+                                          className="h-9 text-sm"
+                                          {...field}
+                                        />
+                                      </FormItem>
+                                    </>
+                                  )}
+                                ></FormField>
+                              </td>
+                              <td colSpan={5} className="py-2">
+                                <FormField
+                                  name={`secrets.${index}.value`}
+                                  render={({ field }) => (
+                                    <>
+                                      <FormItem className="space-y-2  m-0 w-full">
+                                        <Input
+                                          className=" text-sm h-9"
+                                          {...field}
+                                        />
+                                      </FormItem>
+                                    </>
+                                  )}
+                                ></FormField>
+                              </td>
+                              <td colSpan={1}>
+                                <div className="flex items-center justify-center">
+                                  <Button
+                                    size={"icon"}
+                                    variant={"ghost"}
+                                    type="button"
+                                    onClick={() => remove(index)}
+                                  >
+                                    <MinusCircleIcon className="size-5"></MinusCircleIcon>
+                                  </Button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    ) : (
+                      <></>
+                    )}
                   </div>
                 </div>
               </div>

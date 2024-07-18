@@ -36,6 +36,7 @@ import { Badge } from "./ui/badge";
 export function AppItem({ props }: { props: AppInfo }) {
   const [inputText, setInputText] = useState<string>("");
   const [isOpen, setOpen] = useState<boolean>();
+  console.log(props)
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setInputText(e.target.value);
   }

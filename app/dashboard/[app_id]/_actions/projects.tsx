@@ -39,7 +39,8 @@ export async function createProject(
       };
     } else {
       if(response.status == 422) {
-        console.log(await response.json());
+        const body  = await response.json();
+        console.log(JSON.stringify(body));
       }
       return { success: false, pending: false };
     }

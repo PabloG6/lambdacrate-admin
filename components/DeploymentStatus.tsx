@@ -63,7 +63,7 @@ export default function DeploymentStatus() {
           <LogViewer event_type="progress" />
         </AccordionContent>
       </AccordionItem>
-      <AccordionItem value="setting_env_vars">
+      <AccordionItem value="push_secrets">
         <AccordionTrigger>Setting your environment variables</AccordionTrigger>
         <AccordionContent>
           <LogViewer event_type="logs" />
