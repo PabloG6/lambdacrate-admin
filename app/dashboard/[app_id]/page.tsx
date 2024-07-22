@@ -6,7 +6,6 @@ import { OpenInNewWindowIcon } from "@radix-ui/react-icons";
 
 import ProgressBadge from "@/components/ui/ProgressBadge";
 import StatusBadge from "@/components/ui/StatusBadge";
-import { AppStateContextProvider } from "@/contexts/AppStateContextProvider";
 import AppLink from "@/components/AppLink";
 
 export default async function Page({

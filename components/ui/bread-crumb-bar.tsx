@@ -35,7 +35,7 @@ export default function BreadcrumbBar() {
               const url = listedPaths.slice(0, index + 1).join("");
               return (
                 <BreadcrumbItem key={index}>
-                  <BreadcrumbLink className="capitalize text-xs" asChild>
+                  <BreadcrumbLink className="text-xs" asChild>
                     <Link href={"/" +url}>{path.replace("_", " ")}</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>

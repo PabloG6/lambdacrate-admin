@@ -2,8 +2,6 @@
 import { Navbar } from "@/components/navbar";
 import { NavLinkProps, SideNav } from "@/components/sidenav";
 
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { AppStateContextProvider } from "@/contexts/AppStateContextProvider";
 
 import {
 
@@ -100,12 +98,11 @@ export  default async function Layout({
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [layoutSegment]);
   // const [title, setTitle] = useState("");
-  const onSideNavChange = (link: NavLinkProps) => {};
   const metadata = await getAppMetaData(app_id);
-
+  console.log(metadata);
 
   return (
-    <AppStateContextProvider metadata={metadata} >
+   
    
       <div className="w-full h-full flex">
         <div className="h-screen flex flex-col max-w-60 w-full ">
@@ -119,6 +116,5 @@ export  default async function Layout({
 
         </div>
       </div>
-    </AppStateContextProvider>
   );
 }

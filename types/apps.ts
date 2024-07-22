@@ -9,6 +9,7 @@ export const AppStatSchema = z.object({
     "setting_env_variables",
     "build_image",
     "push_image",
+    "push_secrets",
     "deploying_app",
     "init",
   ]),
