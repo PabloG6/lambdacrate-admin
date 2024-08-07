@@ -65,16 +65,7 @@ const steps = [
   "choose-plan",
 ] as const;
 
-const INITIAL_STEP = steps[0];
-type stepTransform = (typeof steps)[number];
 
-function stepTransform(step: (typeof steps)[number]): stepTransform {
-  const stepIndex = steps.indexOf(step);
-  if (stepIndex > -1) {
-    return steps[stepIndex];
-  }
-  return INITIAL_STEP;
-}
 
 export default function Page({
   params,

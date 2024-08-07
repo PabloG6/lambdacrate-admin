@@ -99,22 +99,12 @@ export  default async function Layout({
   // }, [layoutSegment]);
   // const [title, setTitle] = useState("");
   const metadata = await getAppMetaData(app_id);
-  console.log(metadata);
 
   return (
    
    
-      <div className="w-full h-full flex">
-        <div className="h-screen flex flex-col max-w-60 w-full ">
-       
-    
-        </div>
-        <div className="w-full h-full">
-   
-            <div className="w-full md:p-6 lg:p-12 lg:pl-16 h-full shadow-sm">{children}</div>
-            <div className="gutter py-16"></div>
-
-        </div>
-      </div>
+      <main className="w-full h-full flex px-8 mt-4">
+        {children}
+      </main>
   );
 }

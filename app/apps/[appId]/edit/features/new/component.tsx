@@ -6,7 +6,6 @@ import React, { useEffect } from "react";
 import * as Accordion from "@radix-ui/react-accordion";
 import classNames from "classnames";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
-import { Navbar } from "@/app/new/navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -116,7 +115,7 @@ export default function Component({ params, features }: { params: { appId: strin
   }
   return (
     <>
-      <Navbar />
+
       <main className="w-full h-full flex flex-col items-center p-10">
         <div className="max-w-2xl w-full flex items-center flex-col">
           <div className="w-full min-h-12 flex justify-end">

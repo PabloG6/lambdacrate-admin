@@ -13,17 +13,24 @@ import { Input } from "./input";
 import Link from "next/link";
 import { getProfile } from "@/app/auth/profile/lib";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "./breadcrumb";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "./breadcrumb";
 import BreadcrumbBar from "./bread-crumb-bar";
 
 export async function NavBar() {
   const profile = await getProfile();
 
   return (
-    <header className="sticky top-0 flex h-14 items-center gap-4 border-b bg-background px-4 md:px-6">
-        <nav className="w-full flex">         
-         <BreadcrumbBar></BreadcrumbBar>      
-      </nav>
+    <nav className="sticky top-0 flex h-12 py-1 items-center gap-4 border-b bg-background px-8 md:px-6">
+      <div className="w-full flex">
+        <BreadcrumbBar></BreadcrumbBar>
+      </div>
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="outline" size="icon" className="shrink-0 md:hidden">
@@ -74,12 +81,15 @@ export async function NavBar() {
         <div className="flex-1 "></div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="secondary" size="icon" className="rounded-full self-end">
+            <Button
+              variant="secondary"
+              size="icon"
+              className="rounded-full self-end"
+            >
               {profile?.avatar_url && (
-                <Avatar>
+                <Avatar className='h-9 w-9'>
                   <AvatarImage src={profile.avatar_url}></AvatarImage>
                   <AvatarFallback>
-                    
                     <CircleUser className="h-5 w-5" />
                   </AvatarFallback>
                 </Avatar>
@@ -95,6 +105,6 @@ export async function NavBar() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    </header>
+    </nav>
   );
 }

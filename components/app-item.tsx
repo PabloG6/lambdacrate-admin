@@ -53,7 +53,7 @@ export function AppItem({ props }: { props: AppInfo }) {
               <span className="text-base font-medium text-foreground">
                 {props.name}
               </span>{" "}
-              <Badge className="font-mono text-xs font-thin" variant={"outline"}>
+              <Badge className="font-mono text-xs font-thin h-8" variant={"outline"}>
                 {props.deployment.status}
               </Badge>
             </div>
