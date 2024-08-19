@@ -18,7 +18,6 @@ export default async function Component() {
   });
   const appList = await response.json();
   const profile = await getProfile();
-  console.log('profile', profile);
  
   return (
     <div className="flex flex-col w-full min-h-screen">

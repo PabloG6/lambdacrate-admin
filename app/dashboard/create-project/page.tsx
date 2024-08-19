@@ -41,7 +41,6 @@ import {
 import { redirect } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { createProject } from "../[app_id]/_actions/projects";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -53,6 +52,8 @@ import {
 } from "@/components/ui/select";
 import FormContainer from "@/components/FormContainer";
 import EnvVarsForm from "@/components/EnvVarForm";
+import { trpc } from "@/server/trpc";
+import { createECDH } from "crypto";
 const steps = [
   "getting-started",
   "configure_cta",
@@ -119,11 +120,14 @@ export default function Page({
       }
     })();
   }, []);
+
+
+  const createProject = trpc.apps.create.useMutation();
   const onSubmitHandler = (data: AppInfo, e?: React.BaseSyntheticEvent) => {
     e?.preventDefault();
     startTransition(async () => {
       console.log('createing project');
-      const response = await createProject(data);
+      const response = await createProject.mutateAsync(data);
       console.log(response);
       if (response.success) {
 

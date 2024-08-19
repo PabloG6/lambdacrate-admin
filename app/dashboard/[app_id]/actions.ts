@@ -12,7 +12,6 @@ export const getAppMetaData = cache(async (app_id: string): Promise<AppInfo | un
   });
   if (response.ok) {
     const results = await response.json();
-    console.log(results);
     return AppInfoSchema.parse(results);
   }
 });
@@ -30,7 +29,6 @@ export const getStatus = cache(
 
     if (response.ok) {
       const results = await response.json();
-      console.log(results, 'results being called');
       return AppStatSchema.parse(await response.json());
     }
   }

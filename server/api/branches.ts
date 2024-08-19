@@ -12,14 +12,13 @@ export const branchRouter = router({
     });
 
     const results = await response.json();
-    console.log(results);
+    console.log(BranchOutputSchema.safeParse(results));
     return BranchOutputSchema.parse(results);
   }),
 
   showDetails: authProcedure
     .input(z.object({ slug: z.string() }))
     .query(async ({ input }) => {
-      console.log("hello world hi", input);
       const response = await fetch(
         `${env.API_URL}/api/apps/branches/${input.slug}`,
         {
@@ -27,8 +26,9 @@ export const branchRouter = router({
           method: "GET",
         }
       ).then(async (response) => await response.json());
+      console.log(response);
      const {error} =  BranchOutputSchema.safeParse(response);
-     console.log(error, 'error');
+     console.log(error);
      return BranchOutputSchema.parse(response);
     }),
 });

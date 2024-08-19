@@ -17,20 +17,26 @@ export const AppStatSchema = z.object({
 });
 
 export type AppStat = z.infer<typeof AppStatSchema>;
+export const DeploymentOutputSchema = z.object({
+  id: z.string(),
+  status: z.string(),
+  created_at: z.coerce.date(),
+  updated_at: z.coerce.date(),
+});
 
 export const BranchInputSchema = z.object({
   name: z.string(),
   secrets: z.array(EnvVarsSchema).optional(),
-  deployments: z.array(z.object({id: z.string(), status: z.string(), created_at: z.coerce.date(), updated_at: z.coerce.date(),})).optional(),
+  deployments: z.array(DeploymentOutputSchema).optional(),
   branch_type: z.enum(["staging", "production", "development"]),
   app_id: z.string(),
 });
 
 export const BranchOutputSchema = BranchInputSchema.merge(
   z.object({
-    status: z.string(),
     slug: z.string(),
     id: z.string(),
+    active_deployment: DeploymentOutputSchema.optional(),
     created_at: z.coerce.date(),
     updated_at: z.coerce.date(),
   })

@@ -146,7 +146,6 @@ export default function Component({ params, features }: { params: { appId: strin
             <form
               className="w-full items-center flex flex-col gap-4"
               onSubmit={handleSubmit(onValidSubmit, () => {
-                console.log(formState.errors);
               })}
             >
               <div className="w-full  border-l pl-8 [& > step-item]:step [counter-reset:step] space-y-4 ">
@@ -158,17 +157,14 @@ export default function Component({ params, features }: { params: { appId: strin
                       key={field.key}
                       className="w-full step-item step "
                       onOpenChange={(props) => {
-                        console.log(props);
                       }}
                       defaultValue={fields[0].key}
                     >
                       <CollapsibleTrigger
                         asChild
                         onClick={(props) => {
-                          console.log(props);
                           setSelectedId(field.key);
 
-                          console.log("hello world");
                         }}
                         className="flex flex-1 w-full hover:bg-gray-50 py-3 px-2 tems-center justify-between mb-4"
                       >

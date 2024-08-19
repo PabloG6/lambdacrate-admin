@@ -12,6 +12,7 @@ const t = initTRPC.create({
    * @link https://trpc.io/docs/v11/procedures
    **/
   export const publicProcedure = t.procedure;
+  
   export const authProcedure = t.procedure;
   /**
    * @link https://trpc.io/docs/v11/merging-routers

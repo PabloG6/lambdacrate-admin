@@ -1,9 +1,10 @@
 "use server";
 
-import { endpoint } from "@/app/env";
+import { env } from "@/app/env";
+
 
 export async function createSubscriptionTier(app_id: string, data: any) {
-  const response = await fetch(`${endpoint}/api/tiers`, {
+  const response = await fetch(`${env.API_URL}/api/tiers`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ app_id: app_id, ...data }),
@@ -21,7 +22,7 @@ export async function createSubscriptionTier(app_id: string, data: any) {
 
 export async function getMissingFlagTiers(id: string) {
   const response = await fetch(
-    `${endpoint}/api/tiers_features/${id}/addable-flags`,
+    `${env.API_URL}/api/tiers_features/${id}/addable-flags`,
     {
       method: "GET",
       headers: { "content-type": "application/json" },
@@ -35,7 +36,7 @@ export async function getMissingFlagTiers(id: string) {
 }
 export async function getFeatureFlagTiers(id: string) {
   console.log('get feature flags', id);
-  const response = await fetch(`${endpoint}/api/tiers_features/${id}`, {
+  const response = await fetch(`${env.API_URL}/api/tiers_features/${id}`, {
     method: "GET",
     headers: { "content-type": "application/json" },
     cache: "no-cache",
@@ -54,7 +55,7 @@ export async function getFeatureFlagTiers(id: string) {
 
 export async function removeFeatureFlags(values: any[]) {
   const response = await fetch(
-    `${endpoint}/api/tiers_features`,
+    `${env.API_URL}/api/tiers_features`,
     {
       headers: {
         "content-type": "application/json",
@@ -76,7 +77,7 @@ export async function getSubscriptionTiers(app_id: string) {
   console.log("hello world");
   urlSearchParams.set("app_id", app_id);
   const response = await fetch(
-    `${endpoint}/api/tiers?${urlSearchParams.toString()}`,
+    `${env.API_URL}/api/tiers?${urlSearchParams.toString()}`,
     {
       headers: {
         "content-type": "application/json",
@@ -91,7 +92,7 @@ export async function getSubscriptionTiers(app_id: string) {
 }
 
 export async function addFeatureFlagTiers(id: string, body: any) {
-  const response = await fetch(`${endpoint}/api/tiers_features`, {
+  const response = await fetch(`${env.API_URL}/api/tiers_features`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     cache: "no-cache",
@@ -102,7 +103,7 @@ export async function addFeatureFlagTiers(id: string, body: any) {
   }
 }
 export async function getSubscriptionTier(id: string) {
-  const response = await fetch(`${endpoint}/api/tiers/${id}`, {
+  const response = await fetch(`${env.API_URL}/api/tiers/${id}`, {
     method: "GET",
     headers: { "content-type": "application/json" },
     cache: "no-cache",

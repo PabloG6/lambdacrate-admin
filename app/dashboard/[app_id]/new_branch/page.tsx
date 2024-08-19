@@ -45,7 +45,6 @@ import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import { createProject } from "../_actions/projects";
 import {
   Select,
   SelectContent,
