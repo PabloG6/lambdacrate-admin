@@ -2,8 +2,37 @@ import { BranchInputSchema, BranchOutputSchema } from "@/types/apps";
 import { authProcedure, publicProcedure, router } from "../server";
 import { env } from "@/app/env";
 import { z } from "zod";
-
+;
+import { observable } from "@trpc/server/observable";
+import { Deployment, deploymentSchema } from "@/types/deployment";
 export const branchRouter = router({
+  events: authProcedure
+    .input(z.object({ lastEventId: z.string(), id: z.string().nullish() }))
+    .subscription(function ({ input }) {
+      return observable<Deployment>((emit) => {
+        const intervalID = setInterval(() => {
+          fetch(`${env.API_URL}/api/apps/deployments/${input.id}`, {})
+            .then(async (response) => {
+              const results = await response.json();
+              const schema = deploymentSchema.parse(results);
+              if (schema.status == "failed") {
+                clearInterval(intervalID);
+                emit.next(schema)
+                return;
+              }
+              emit.next(schema);
+            })
+            .catch(() => {});
+        }, 30_000);
+
+        return () => {
+          clearInterval(intervalID);
+        };
+      });
+    }),
+
+    wsEvent: authProcedure.subscription(() => {}),
+
   add: publicProcedure.input(BranchInputSchema).mutation(async ({ input }) => {
     const response = await fetch(`${env.API_URL}/api/apps/branches`, {
       headers: { "content-type": "application/json" },
@@ -12,7 +41,6 @@ export const branchRouter = router({
     });
 
     const results = await response.json();
-    console.log(BranchOutputSchema.safeParse(results));
     return BranchOutputSchema.parse(results);
   }),
 
@@ -26,9 +54,7 @@ export const branchRouter = router({
           method: "GET",
         }
       ).then(async (response) => await response.json());
-      console.log(response);
-     const {error} =  BranchOutputSchema.safeParse(response);
-     console.log(error);
-     return BranchOutputSchema.parse(response);
+      const { error } = BranchOutputSchema.safeParse(response);
+      return BranchOutputSchema.parse(response);
     }),
 });

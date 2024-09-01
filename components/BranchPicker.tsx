@@ -9,6 +9,7 @@ import {
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { GitBranch } from "lucide-react";
+import { ScrollArea } from "./ui/scroll-area";
 type Props = {
   app_id: string;
   branch: string;
@@ -36,6 +37,7 @@ export function BranchPicker({ app_id, name, link, branch }: Props) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 " align="start" alignOffset={32}>
+        <ScrollArea className="h-40">
         {appDetails?.branches?.map((item, index) => (
           <DropdownMenuItem key={index} className="px-4">
             <Link href={["/", link, item.slug].join("")}>
@@ -45,6 +47,7 @@ export function BranchPicker({ app_id, name, link, branch }: Props) {
             </Link>
           </DropdownMenuItem>
         ))}
+        </ScrollArea>
 
         <DropdownMenuItem className="px-4">
           <Link href={`/dashboard/${app_id}/new_branch`}>

@@ -27,31 +27,78 @@ import router, { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import LogViewer from "@/components/LogViewer";
 import DashboardStatus from "@/components/DashboardStatus";
+import { useEffect, useState } from "react";
+import WebSocketContextProvider, {
+  useDeploymentChannel,
+} from "@/contexts/WebsocketContextProvider";
+import { z } from "zod";
+import { BuildEventSchema } from "@/types/events";
 /**
  * design ui that shows status of active deployment
  * - display status of dashboard deployment ()
- * 
- * 
+ *
+ *
  */
+
+type ParamsProps<T> = {
+  params: T;
+};
 type Props = {
   app_id: string;
+  branch: string;
 };
-
-export default function Overview({
+export default function Page({
+  children,
   params,
 }: {
-  params: { app_id: string; branch: string };
+  children: React.ReactNode;
+  params: Props;
 }) {
+  console.log("params: ", params);
+  return (
+    <WebSocketContextProvider>
+      <Overview app_id={params.app_id} branch_slug={params.branch}></Overview>
+    </WebSocketContextProvider>
+  );
+}
+export function Overview({
+  app_id,
+  branch_slug,
+}: {
+  app_id: string;
+  branch_slug: string;
+}) {
+  console.log();
   const { data: branch } = trpc.branches.showDetails.useQuery({
-    slug: params.branch,
+    slug: branch_slug,
   });
 
   const { data: appData } = trpc.apps.showDetails.useQuery({
-    id: params.app_id,
-
-
+    id: app_id,
   });
 
+  const [status, setStatus] = useState<string>();
+
+   useEffect(() => {
+    setStatus(branch?.active_deployment?.status)
+
+    
+   }, [branch?.active_deployment?.status])
+  const [deploymentChannel] = useDeploymentChannel(
+    branch?.active_deployment?.id!
+  );
+  useEffect(() => {
+    console.log("deploymentChannel", deploymentChannel);
+    deploymentChannel?.on("logs", (event) => {
+      console.log(event);
+    });
+
+    deploymentChannel?.on("build_event", (event) => {
+      const buildEvent = BuildEventSchema.parse(event);
+
+      setStatus(buildEvent.deployment.status)
+    });
+  }, [deploymentChannel]);
 
   const router = useRouter();
   return (
@@ -63,22 +110,20 @@ export default function Overview({
           </h3>
           <div className="mt-3 mb-4 space-y-3">
             <div className="flex gap-3 items-center">
-            <h4 className="text-lg font-normal leading-5">{appData?.name}</h4>
-            <Badge variant={"outline"} className="text-sm">
-              {branch?.active_deployment?.status}
-            </Badge>
+              <h4 className="text-lg font-normal leading-5">{appData?.name}</h4>
+              <Badge variant={"outline"} className="text-sm">
+                {status}
+              </Badge>
             </div>
 
-            <h5 className="text-sm font-normal leading-6">
-              {appData?.app_id}
-            </h5>
+            <h5 className="text-sm font-normal leading-6">{appData?.app_id}</h5>
           </div>
         </div>
         <div className="flex flex-col gap-4">
           <h4 className="font-semibold">Your Domain</h4>
           <div className="text-xs gap-2 flex items-center">
             <span className="block max-w-[300px] overflow-ellipsis whitespace-nowrap overflow-hidden">
-              {params.app_id}-{params.branch}.lambdacrate.com{" "}
+              {app_id}-{branch_slug}.lambdacrate.com{" "}
             </span>
             <div className=" py-1 px-2 flex gap-1 items-center rounded-full cursor-pointer">
               <ExternalLinkIcon className="h-4 w-4"></ExternalLinkIcon>
@@ -106,9 +151,7 @@ export default function Overview({
                 branch?.deployments?.map((deployment) => (
                   <TableRow
                     key={deployment.id}
-                    onClick={() =>
-                      router.push(`/${params.app_id}/${branch.slug}`)
-                    }
+                    onClick={() => router.push(`/${app_id}/${branch.slug}`)}
                   >
                     <TableCell colSpan={1}>{deployment.id}</TableCell>
                     <TableCell>{deployment.status}</TableCell>
@@ -129,7 +172,7 @@ export default function Overview({
                         <DropdownMenuTrigger>
                           <MoreVerticalIcon></MoreVerticalIcon>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent>
+                        <DropdownMenuContent >
                           <DropdownMenuSeparator />
                           <DropdownMenuItem>Delete Branch</DropdownMenuItem>
                           <DropdownMenuItem>Billing</DropdownMenuItem>
@@ -204,4 +247,9 @@ export default function Overview({
       </section>
     </div>
   );
+}
+
+
+const updateStatus = (status: 'build_image' | 'push_secrets' | 'push_image' ) => {
+
 }

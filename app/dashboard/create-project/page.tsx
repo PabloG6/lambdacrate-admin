@@ -131,7 +131,8 @@ export default function Page({
       console.log(response);
       if (response.success) {
 
-        redirect(`/dashboard/${response.app_id}/environment`);
+        redirect(`/dashboard/${response.app_id}/branches
+        `);
       } else {
       }
     });

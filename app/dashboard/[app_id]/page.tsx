@@ -28,7 +28,6 @@ export default function Page({
   params: { app_id: string };
 }) {
   const { data: appStatus } = trpc.apps.showDetails.useQuery({ id: app_id });
-  console.log(appStatus);
   const router = useRouter();
   return (
     <div className="h-full w-full space-y-6 px-12 py-6">
@@ -72,21 +71,22 @@ export default function Page({
               appStatus?.branches?.map((branch) => (
                 <TableRow key={branch.id} onClick={() => router.push(`${app_id}/${branch.slug}`)}>
                   <TableCell>{branch.name}</TableCell>
+                  <TableCell>{branch.active_deployment?.status}</TableCell>
+
                   <TableCell>{branch.branch_type}</TableCell>
-                  <TableCell>{branch.status}</TableCell>
                   <TableCell>
-                    {formatDistance(Date.now(), branch.created_at, {
+                    {formatDistance(branch.created_at, Date.now(), {
                       addSuffix: true,
                     })}
                   </TableCell>
 
                   <TableCell>
-                    {formatDistance(Date.now(), branch.created_at, {
+                    {formatDistance(branch.created_at, Date.now(), {
                       addSuffix: true,
                     })}
                   </TableCell>
                   <TableCell className="text-right">
-                    <DropdownMenu>
+                    <DropdownMenu >
                       <DropdownMenuTrigger>
                         <MoreVerticalIcon></MoreVerticalIcon>
                       </DropdownMenuTrigger>
