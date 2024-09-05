@@ -117,6 +117,7 @@ export function AppItem({ props }: { props: AppInfo }) {
                   className="w-full"
                   disabled={!(inputText == props.app_id)}
                   onClick={async () => {
+                    console.log('destroying');
                     const response = await deleteApp(props.id);
                     setOpen(false);
                   }}

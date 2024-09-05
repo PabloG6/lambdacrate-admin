@@ -69,7 +69,10 @@ export default function Page({
           <TableBody>
             {appStatus?.branches?.length ?? 0 > 0 ? (
               appStatus?.branches?.map((branch) => (
-                <TableRow key={branch.id} onClick={() => router.push(`${app_id}/${branch.slug}`)}>
+                <TableRow
+                  key={branch.id}
+                  onClick={() => router.push(`${app_id}/${branch.slug}`)}
+                >
                   <TableCell>{branch.name}</TableCell>
                   <TableCell>{branch.active_deployment?.status}</TableCell>
 
@@ -86,11 +89,11 @@ export default function Page({
                     })}
                   </TableCell>
                   <TableCell className="text-right">
-                    <DropdownMenu >
-                      <DropdownMenuTrigger>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
                         <MoreVerticalIcon></MoreVerticalIcon>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent>
+                      <DropdownMenuContent className="w-56 bg-orange-500">
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>Delete Branch</DropdownMenuItem>
                         <DropdownMenuItem>Billing</DropdownMenuItem>

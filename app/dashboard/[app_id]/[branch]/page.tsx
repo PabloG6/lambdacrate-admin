@@ -3,6 +3,7 @@ import {
   ChevronDownIcon,
   ExternalLinkIcon,
   LinkIcon,
+  Loader2,
   MoreVerticalIcon,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -15,13 +16,7 @@ import {
   TableCell,
   Table,
 } from "@/components/ui/table";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuSeparator,
-  DropdownMenuItem,
-} from "@radix-ui/react-dropdown-menu";
+
 import { formatDistance } from "date-fns";
 import router, { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
@@ -33,6 +28,14 @@ import WebSocketContextProvider, {
 } from "@/contexts/WebsocketContextProvider";
 import { z } from "zod";
 import { BuildEventSchema } from "@/types/events";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 /**
  * design ui that shows status of active deployment
  * - display status of dashboard deployment ()
@@ -77,13 +80,23 @@ export function Overview({
     id: app_id,
   });
 
-  const [status, setStatus] = useState<string>();
+  const [isBuilding, setIsBuilding] = useState<boolean>(true);
 
-   useEffect(() => {
-    setStatus(branch?.active_deployment?.status)
+  useEffect(() => {
 
-    
-   }, [branch?.active_deployment?.status])
+    setStatus(updateStatus(branch?.active_deployment?.status!));
+
+    if (
+      branch?.active_deployment?.status == "done" ||
+      branch?.active_deployment?.status == "failed"
+    ) {
+      setIsBuilding(false);
+    }
+  }, [branch?.active_deployment?.status]);
+  const [status, setStatus] = useState<string>(
+    updateStatus(branch?.active_deployment?.status!)
+  );
+
   const [deploymentChannel] = useDeploymentChannel(
     branch?.active_deployment?.id!
   );
@@ -96,7 +109,7 @@ export function Overview({
     deploymentChannel?.on("build_event", (event) => {
       const buildEvent = BuildEventSchema.parse(event);
 
-      setStatus(buildEvent.deployment.status)
+      setStatus(updateStatus(buildEvent.deployment.status));
     });
   }, [deploymentChannel]);
 
@@ -111,14 +124,18 @@ export function Overview({
           <div className="mt-3 mb-4 space-y-3">
             <div className="flex gap-3 items-center">
               <h4 className="text-lg font-normal leading-5">{appData?.name}</h4>
-              <Badge variant={"outline"} className="text-sm">
-                {status}
+              <Badge variant={"outline"} className="text-sm space-x-2">
+                <span>{status}</span>
+                {isBuilding ? (
+                  <Loader2 className="h-3 w-3 animate-spin" />
+                ) : (
+                  <></>
+                )}
               </Badge>
             </div>
-
-            <h5 className="text-sm font-normal leading-6">{appData?.app_id}</h5>
           </div>
         </div>
+        <div className="flex w-full justify-between lg:max-w-5xl">
         <div className="flex flex-col gap-4">
           <h4 className="font-semibold">Your Domain</h4>
           <div className="text-xs gap-2 flex items-center">
@@ -129,6 +146,8 @@ export function Overview({
               <ExternalLinkIcon className="h-4 w-4"></ExternalLinkIcon>
             </div>
           </div>
+        </div>
+        <Button className="justify-between flex "><span>Redeploy</span><MoreVerticalIcon className="ml-2 w-4 h-4"/></Button>
         </div>
       </div>
 
@@ -172,7 +191,7 @@ export function Overview({
                         <DropdownMenuTrigger>
                           <MoreVerticalIcon></MoreVerticalIcon>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent >
+                        <DropdownMenuContent>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem>Delete Branch</DropdownMenuItem>
                           <DropdownMenuItem>Billing</DropdownMenuItem>
@@ -249,7 +268,31 @@ export function Overview({
   );
 }
 
+const updateStatus = (
+  status:
+    | "build_image"
+    | "push_secrets"
+    | "push_image"
+    | "set_env_vars"
+    | "init_api"
+    | string
+) => {
+  switch (status) {
+    case "init":
+      return "Initializing"
+    case "build_image":
+      return "Building Image";
+    case "push_secrets":
+      return "Setting up your environment";
+    case "push_image":
+      return "Pushing Image";
+    case "set_env_vars":
+    case "init_database":
+      return "Creating Database";
 
-const updateStatus = (status: 'build_image' | 'push_secrets' | 'push_image' ) => {
-
-}
+    case "failed":
+      return "Failed"
+    default:
+      return status;
+  }
+};
