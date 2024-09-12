@@ -10,14 +10,26 @@ import { z } from "zod";
 import React from "react";
 import { AppSchema } from "@/lib/util/types";
 import { createUniqueNameId } from "mnemonic-id";
+import { TRPCError } from "@trpc/server";
 
 export async function showAppDetails({ input }: { input: { id: string } }) {
   const response = await fetch(`${env.API_URL}/api/apps/${input.id}`, {
     headers: { "content-type": "application/json" },
   });
+  console.log('show app details');
   if (response.ok) {
     const results = await response.json();
-    return AppInfoSchema.parse(results);
+    console.log('response is ok');
+    const {data, success, error} = AppInfoSchema.safeParse(results);
+console.log(error)
+    if (success) {
+      return data
+    } 
+
+    console.log("error occurred when parsing return data", error)
+    throw new TRPCError({code: "PARSE_ERROR", })
+  } else {
+    
   }
 }
 

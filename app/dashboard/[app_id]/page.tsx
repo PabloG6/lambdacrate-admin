@@ -74,7 +74,7 @@ export default function Page({
                   onClick={() => router.push(`${app_id}/${branch.slug}`)}
                 >
                   <TableCell>{branch.name}</TableCell>
-                  <TableCell>{branch.active_deployment?.status}</TableCell>
+                  <TableCell className="capitalize">{branch.active_deployment?.status}</TableCell>
 
                   <TableCell>{branch.branch_type}</TableCell>
                   <TableCell>
@@ -93,8 +93,7 @@ export default function Page({
                       <DropdownMenuTrigger asChild>
                         <MoreVerticalIcon></MoreVerticalIcon>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent className="w-56 bg-orange-500">
-                        <DropdownMenuSeparator />
+                      <DropdownMenuContent className="w-56">
                         <DropdownMenuItem>Delete Branch</DropdownMenuItem>
                         <DropdownMenuItem>Billing</DropdownMenuItem>
                         <DropdownMenuItem>Team</DropdownMenuItem>

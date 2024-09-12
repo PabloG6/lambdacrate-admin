@@ -36,7 +36,7 @@ export function DataTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="hover:bg-transparent">
                  {headerGroup.headers.map((header) => {
-                  return <TableHead  key={header.id}>{header.isPlaceholder ? null: flexRender(header.column.columnDef.header, header.getContext())}</TableHead>
+                  return <TableHead   className='text-sm' key={header.id}>{header.isPlaceholder ? null: flexRender(header.column.columnDef.header, header.getContext())}</TableHead>
                   
                   })}
               </TableRow>
@@ -49,6 +49,7 @@ export function DataTable<TData, TValue>({
                   <TableCell
                     key={cell.id}
   
+                    className="text-sm py-2"
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>

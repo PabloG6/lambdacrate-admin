@@ -1,14 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
+
 import EnvVarsForm from "@/components/EnvVarForm";
 
 import {
@@ -18,31 +11,16 @@ import {
   FormControl,
   Form,
   FormMessage,
-  useFormField,
   FormDescription,
 } from "@/components/ui/form";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Textarea } from "@/components/ui/textarea";
-import { AppInfo, AppSchema } from "@/lib/util/types";
+
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CaretSortIcon } from "@radix-ui/react-icons";
 
-import {
-  CheckIcon,
-  Globe,
-  Loader,
-  MinusCircleIcon,
-  SquareChevronRight,
-} from "lucide-react";
+import { Loader, MinusCircleIcon } from "lucide-react";
 
-import { redirect, useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+
 import { useFieldArray, useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import {
@@ -53,10 +31,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Link from "next/link";
-import { z } from "zod";
 import { BranchInputSchema, BranchInputType } from "@/types/apps";
 import { trpc } from "@/server/trpc";
 import FormContainer from "@/components/FormContainer";
+import ComputePicker from "@/components/compute-picker";
+import InvoicePreview from "@/components/invoice-preview";
 
 export default function Page({ params }: { params: { app_id: string } }) {
   const router = useRouter();
@@ -65,6 +44,8 @@ export default function Page({ params }: { params: { app_id: string } }) {
     defaultValues: {
       name: "",
       app_id: params.app_id,
+      machine_size: "",
+      dashboard_size: 'hobby',
       branch_type: "development",
     },
   });
@@ -126,7 +107,7 @@ export default function Page({ params }: { params: { app_id: string } }) {
                 )}
               ></FormField>
             </div>
-            <div className="flex flex-col py-16 gap-6">
+            <div className="flex flex-col py-6 gap-6">
               <FormField
                 control={form.control}
                 name="branch_type"
@@ -138,25 +119,75 @@ export default function Page({ params }: { params: { app_id: string } }) {
                       defaultValue={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger className="w-[300px]">
-                          <SelectValue placeholder="Choose a Branch Type" />
+                        <SelectTrigger className="w-[300px] font-mono">
+                          <SelectValue
+                            placeholder="Choose a Branch Type"
+                        
+                          />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="font-mono">
                         <SelectItem value="development">Staging</SelectItem>
                         <SelectItem value="staging">Development</SelectItem>
                         <SelectItem value="production">Production</SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormDescription>
+                    <FormDescription className="text-xs">
                       Branch types determine determine which users have access
                       to your application.
-                      <Link href="/examples/forms">email settings</Link>.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+            </div>
+
+            <div className="flex flex-col py-6 gap-6">
+              <FormField
+                control={form.control}
+                name="dashboard_size"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Dashboard Size</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-[300px] font-mono">
+                          <SelectValue
+                            placeholder="Choose a Dashboard Size"
+                            className="font-mono"
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="font-mono">
+                        <SelectItem value="hobby">Hobby Plan</SelectItem>
+                        <SelectItem value="starter">Starter Plan</SelectItem>
+                        <SelectItem value="premium">Premium Plan</SelectItem>
+                        <SelectItem value="enterprise">Enterprise Plan</SelectItem>
+
+                      </SelectContent>
+                    </Select>
+                    <FormDescription className="text-xs">
+                      Determine the cpu resources your client dashboard
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex flex-col py-3 gap-6">
+              <FormField
+                render={({ field }) => {
+                  return (
+                    <FormItem className="">
+                      <ComputePicker onValueChange={field.onChange} />
+                    </FormItem>
+                  );
+                }}
+                name={"machine_size"}
+              ></FormField>
             </div>
 
             <FormContainer
@@ -266,6 +297,7 @@ export default function Page({ params }: { params: { app_id: string } }) {
           </div>
         </form>
       </Form>
+      <InvoicePreview className="max-w-lg"/>
     </div>
   );
 }

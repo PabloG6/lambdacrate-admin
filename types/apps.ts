@@ -26,13 +26,18 @@ export const DeploymentOutputSchema = z.object({
 
 export const BranchInputSchema = z.object({
   name: z.string(),
+  machine_size: z.string(),
+  dashboard_size: z.enum(['hobby', 'starter', 'premium', 'enterprise']),
   secrets: z.array(EnvVarsSchema).optional(),
   deployments: z.array(DeploymentOutputSchema).optional(),
   branch_type: z.enum(["staging", "production", "development"]),
   app_id: z.string(),
 });
 
-export const BranchOutputSchema = BranchInputSchema.merge(
+export const BranchOutputSchema = BranchInputSchema.omit({
+  machine_size: true,
+  dashboard_size: true
+}).merge(
   z.object({
     slug: z.string(),
     id: z.string(),
