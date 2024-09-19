@@ -11,29 +11,46 @@ import React from "react";
 import { AppSchema } from "@/lib/util/types";
 import { createUniqueNameId } from "mnemonic-id";
 import { TRPCError } from "@trpc/server";
+import { AuthContext } from "../contexts/auth";
 
-export async function showAppDetails({ input }: { input: { id: string } }) {
+export async function showAppDetails({ ctx, input }: { ctx: AuthContext, input: { id: string } }) {
   const response = await fetch(`${env.API_URL}/api/apps/${input.id}`, {
-    headers: { "content-type": "application/json" },
+    headers: { "content-type": "application/json", 'authorization': `Bearer ${ctx.token}` },
   });
-  console.log('show app details');
   if (response.ok) {
     const results = await response.json();
-    console.log('response is ok');
-    const {data, success, error} = AppInfoSchema.safeParse(results);
-console.log(error)
+    console.log("response is ok");
+    const { data, success, error } = AppInfoSchema.safeParse(results);
+    console.log(error);
     if (success) {
-      return data
-    } 
+      return data;
+    }
 
-    console.log("error occurred when parsing return data", error)
-    throw new TRPCError({code: "PARSE_ERROR", })
+    console.log("error occurred when parsing return data", error);
+    throw new TRPCError({ code: "PARSE_ERROR" });
   } else {
-    
+
+    throw new TRPCError({code: "INTERNAL_SERVER_ERROR"})
   }
 }
 
 export const appsRouter = router({
+  list: authProcedure.query(async ({ ctx }) => {
+    const response = await fetch(`${env.API_URL}/api/apps`, {
+      cache: "no-cache",
+      headers: {
+        authorization: `Bearer ${ctx.token}`,
+      },
+    }).then((r) => r.json());
+
+    console.log('hello world where are u going');
+    const {data, success, error} =  z.array(AppInfoSchema).safeParse(response);
+    if(error != null) {
+      console.error('error parsing data');
+      throw new TRPCError({code: 'PARSE_ERROR'})
+    }
+    return data
+  }),
   create: authProcedure.input(AppSchema).mutation(async ({ ctx, input }) => {
     const appID = createUniqueNameId({ adjectives: 2 });
 
@@ -67,7 +84,7 @@ export const appsRouter = router({
       };
     }
   }),
-  showDetails: publicProcedure
+  showDetails: authProcedure
     .input(z.object({ id: z.string() }))
     .query(React.cache(showAppDetails)),
 });

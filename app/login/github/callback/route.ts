@@ -40,7 +40,7 @@ export async function GET(request: Request): Promise<Response> {
         user.email = primaryEmail!.email;
     }
     const session = await fetch(`${env.API_URL}/api/oauth/user`, {
-      method: "POST",
+    method: "POST",
       headers: {
         'Content-Type': 'application/json'
       },

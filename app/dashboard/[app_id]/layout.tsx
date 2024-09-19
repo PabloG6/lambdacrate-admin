@@ -98,7 +98,6 @@ export  default async function Layout({
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [layoutSegment]);
   // const [title, setTitle] = useState("");
-  const metadata = await getAppMetaData(app_id);
 
   return (
    

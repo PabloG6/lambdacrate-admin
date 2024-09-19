@@ -1,6 +1,6 @@
+"use client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 import { PlusIcon } from "@radix-ui/react-icons";
 import { LayoutGrid } from "lucide-react";
@@ -11,21 +11,37 @@ import { NavBar } from "@/components/ui/navbar";
 import { getProfile } from "../auth/profile/lib";
 import { Octokit } from "octokit";
 import { AppInfo } from "@/types/apps";
+import { trpc } from "@/server/trpc";
+import { z } from "zod";
+import { AppSchema } from "@/lib/util/types";
+import { Skeleton } from "@/components/ui/skeleton";
+import ErrorUI from "@/components/error-ui";
 
-export default async function Component() {
-  const response = await fetch(`${env.API_URL}/api/apps`, {
-    cache: "no-cache",
-  });
-  const appList = await response.json();
-  const profile = await getProfile();
- 
+export default function Component() {
+  const { data, isPending, isError, isSuccess } = trpc.apps.list.useQuery();
+
   return (
     <div className="flex flex-col w-full min-h-screen">
-    
       <main className="flex min-h-[calc(100vh_-_theme(spacing.16))]  flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
-        <div className="lg:max-w-8xl w-full mx-auto">
+        {isPending && (
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="border p-4 rounded-lg">
+                <Skeleton className="h-4 w-1/2 mb-2" />
+                <Skeleton className="h-8 w-full mb-4" />
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-5/6" />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {isError && <ErrorUI />}
+        {isSuccess &&  <div className="lg:max-w-8xl w-full mx-auto">
           <div className="flex w-full justify-end py-1">
-            {appList.length > 0 ? (
+            {data!.length > 0 ? (
               <Button size={"icon"} asChild>
                 <Link href="/dashboard/create-project">
                   <PlusIcon />
@@ -37,9 +53,9 @@ export default async function Component() {
           </div>
           <div className="grid grid-cols-3 gap-7 w-full"></div>
           <>
-            {appList.length > 0 ? (
+            {data!.length > 0 ? (
               <div className="grid grid-cols-3 gap-5">
-                {appList.map((item: AppInfo) => (
+                {data!.map((item: AppInfo) => (
                   <AppItem props={item} key={item.id} />
                 ))}
               </div>
@@ -65,7 +81,8 @@ export default async function Component() {
             )}
           </>
           <div className=" grid grid-cols-3 gap-5 "></div>
-        </div>
+        </div>}
+       
       </main>
     </div>
   );

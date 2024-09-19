@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-
 import EnvVarsForm from "@/components/EnvVarForm";
 
 import {
@@ -19,7 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Loader, MinusCircleIcon } from "lucide-react";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { useFieldArray, useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
@@ -36,16 +35,53 @@ import { trpc } from "@/server/trpc";
 import FormContainer from "@/components/FormContainer";
 import ComputePicker from "@/components/compute-picker";
 import InvoicePreview from "@/components/invoice-preview";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useCallback, useEffect } from "react";
 
 export default function Page({ params }: { params: { app_id: string } }) {
+  const {
+    isFetching,
+    data: branches,
+    isSuccess,
+    isError,
+  } = trpc.branches.git_branches.useQuery(params.app_id, {
+   
+    refetchOnWindowFocus: false,
+  });
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("branch_type", "development");
+    params.set("dashboard_size", "hobby");
+
+    params.set("target_branch", "trunk");
+    router.push(pathname + `?${params.toString()}`, {scroll: false});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const pathname = usePathname();
+
+  const updateQueryParams = useCallback(
+    (key: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(key, value);
+
+      return params.toString();
+    },
+
+    [searchParams]
+  );
+
   const form = useForm<BranchInputType>({
     resolver: zodResolver(BranchInputSchema),
     defaultValues: {
       name: "",
       app_id: params.app_id,
+      target_branch: "trunk",
       machine_size: "",
-      dashboard_size: 'hobby',
+      dashboard_size: "hobby",
       branch_type: "development",
     },
   });
@@ -56,6 +92,7 @@ export default function Page({ params }: { params: { app_id: string } }) {
   });
 
   form.setValue("app_id", params.app_id);
+
   const { mutateAsync, isPending } = trpc.branches.add.useMutation({
     onSuccess: (branch) => {
       console.log("branch");
@@ -73,6 +110,8 @@ export default function Page({ params }: { params: { app_id: string } }) {
     e?.preventDefault();
     await mutateAsync(data);
   };
+
+  //path stuff for invoice
 
   return (
     <div className="w-full space-y-4 h-full flex items-start justify-center pt-8">
@@ -115,20 +154,26 @@ export default function Page({ params }: { params: { app_id: string } }) {
                   <FormItem>
                     <FormLabel>Branch Type</FormLabel>
                     <Select
-                      onValueChange={field.onChange}
+                      onValueChange={(value) => {
+                        const updatedParams = updateQueryParams(
+                          "branch_type",
+                          value
+                        );
+
+                        console.log();
+                        router.push(pathname + `?${updatedParams}`);
+                        field.onChange(value);
+                      }}
                       defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger className="w-[300px] font-mono">
-                          <SelectValue
-                            placeholder="Choose a Branch Type"
-                        
-                          />
+                          <SelectValue placeholder="Choose a Branch Type" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent className="font-mono">
-                        <SelectItem value="development">Staging</SelectItem>
-                        <SelectItem value="staging">Development</SelectItem>
+                        <SelectItem value="development">Development</SelectItem>
+                        <SelectItem value="staging">Staging</SelectItem>
                         <SelectItem value="production">Production</SelectItem>
                       </SelectContent>
                     </Select>
@@ -143,6 +188,65 @@ export default function Page({ params }: { params: { app_id: string } }) {
             </div>
 
             <div className="flex flex-col py-6 gap-6">
+              {isFetching && (
+                <div className="h-[93px] w-[300px] space-y-2">
+                  <Skeleton className="h-3 w-[100px]" />
+                  <Skeleton className="h-7 w-[300px]" />
+                  <Skeleton className="h-4 w-[200px]"></Skeleton>
+                </div>
+              )}
+
+              {isSuccess && (
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="target_branch"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Target Branch</FormLabel>
+                        <Select
+                          onValueChange={(value) => {
+                            const updatedParams = updateQueryParams(
+                              "target_branch",
+                              value
+                            );
+                            field.onChange(value);
+
+                            router.push(pathname + `?${updatedParams}`);
+                          }}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger className="w-[300px] font-mono">
+                              <SelectValue
+                                placeholder="Choose a Target Branch "
+                                className="font-mono"
+                              />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent
+                            className="font-mono"
+                            defaultValue={field.value}
+                          >
+                            {branches.map((branch, idx) => (
+                              <SelectItem key={idx} value={branch.name}>
+                                {branch.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormDescription className="text-xs">
+                          Choose your target branch.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="flex flex-col py-6 gap-6">
               <FormField
                 control={form.control}
                 name="dashboard_size"
@@ -150,7 +254,14 @@ export default function Page({ params }: { params: { app_id: string } }) {
                   <FormItem>
                     <FormLabel>Dashboard Size</FormLabel>
                     <Select
-                      onValueChange={field.onChange}
+                      onValueChange={(value: string) => {
+                        const updatedParams = updateQueryParams(
+                          "dashboard_size",
+                          value
+                        );
+                        field.onChange(value);
+                        router.push(pathname + `?${updatedParams}`);
+                      }}
                       defaultValue={field.value}
                     >
                       <FormControl>
@@ -161,12 +272,16 @@ export default function Page({ params }: { params: { app_id: string } }) {
                           />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="font-mono">
+                      <SelectContent
+                        className="font-mono"
+                        defaultValue={field.value}
+                      >
                         <SelectItem value="hobby">Hobby Plan</SelectItem>
                         <SelectItem value="starter">Starter Plan</SelectItem>
                         <SelectItem value="premium">Premium Plan</SelectItem>
-                        <SelectItem value="enterprise">Enterprise Plan</SelectItem>
-
+                        <SelectItem value="enterprise">
+                          Enterprise Plan
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormDescription className="text-xs">
@@ -182,7 +297,16 @@ export default function Page({ params }: { params: { app_id: string } }) {
                 render={({ field }) => {
                   return (
                     <FormItem className="">
-                      <ComputePicker onValueChange={field.onChange} />
+                      <ComputePicker
+                        onValueChange={(value) => {
+                          const updatedParams = updateQueryParams(
+                            "machine_size",
+                            value
+                          );
+                          field.onChange(value);
+                          router.push(pathname + `?${updatedParams}`);
+                        }}
+                      />
                     </FormItem>
                   );
                 }}
@@ -297,7 +421,7 @@ export default function Page({ params }: { params: { app_id: string } }) {
           </div>
         </form>
       </Form>
-      <InvoicePreview className="max-w-lg"/>
+      <InvoicePreview className="max-w-lg" />
     </div>
   );
 }

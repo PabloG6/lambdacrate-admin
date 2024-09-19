@@ -27,6 +27,7 @@ export const DeploymentOutputSchema = z.object({
 export const BranchInputSchema = z.object({
   name: z.string(),
   machine_size: z.string(),
+  target_branch: z.string(),
   dashboard_size: z.enum(['hobby', 'starter', 'premium', 'enterprise']),
   secrets: z.array(EnvVarsSchema).optional(),
   deployments: z.array(DeploymentOutputSchema).optional(),
@@ -35,6 +36,7 @@ export const BranchInputSchema = z.object({
 });
 
 export const BranchOutputSchema = BranchInputSchema.omit({
+  
   machine_size: true,
   dashboard_size: true
 }).merge(
@@ -60,3 +62,8 @@ export const AppInfoSchema = z.object({
 export type AppInfo = z.infer<typeof AppInfoSchema>;
 
 export type BranchInputType = z.infer<typeof BranchInputSchema>;
+
+
+export const GitBranchSchema = z.object({name: z.string(), protected: z.coerce.boolean()})
+
+export type GitBranchType = z.infer<typeof GitBranchSchema>;

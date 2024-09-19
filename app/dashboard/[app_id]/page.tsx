@@ -28,6 +28,7 @@ export default function Page({
   params: { app_id: string };
 }) {
   const { data: appStatus } = trpc.apps.showDetails.useQuery({ id: app_id });
+  console.log(appStatus);
   const router = useRouter();
   return (
     <div className="h-full w-full space-y-6 px-12 py-6">

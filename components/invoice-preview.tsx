@@ -1,4 +1,5 @@
-import React from "react";
+'use client';
+import React, { useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -16,6 +17,11 @@ import {
 } from "@/components/ui/collapsible";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { z } from "zod";
+import { useSearchParams } from "next/navigation";
+import { SearchParamSchema } from "@/types/invoice";
+import { trpc } from "@/server/trpc";
+// import { trpc } from "@/server/trpc";
 
 const invoiceItems = [
   {
@@ -24,10 +30,8 @@ const invoiceItems = [
     quantity: 1,
     price: 300,
     breakdown: [
-      { description: "UI Design", hours: 4, rate: 50 },
-      { description: "Frontend Development", hours: 6, rate: 60 },
-      { description: "Backend Integration", hours: 3, rate: 70 },
-      { description: "Testing and Revisions", hours: 2, rate: 45 },
+      { description: "Dashboard", hours: 4, rate: 50 },
+      { description: "API", hours: 6, rate: 60 },
     ],
   },
   { id: 2, description: "Hosting (3 months)", quantity: 3, price: 75 },
@@ -39,6 +43,20 @@ type ClassProps = {
   className?: string;
 };
 export default function InvoicePreview({ className }: ClassProps) {
+  const searchParams = useSearchParams();
+
+  const queryParams = Object.fromEntries(searchParams.entries())
+
+const utils = trpc.useUtils();
+const {isFetching, data, isError, isSuccess} = trpc.payments.invoice_preview.useQuery(queryParams);
+  useEffect(() => {
+
+    const queryParams = Object.fromEntries(searchParams.entries())
+    utils.payments.invoice_preview.invalidate();
+    console.log(data);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
   const subtotal = invoiceItems.reduce(
     (acc, item) => acc + item.quantity * item.price,
     0
@@ -58,13 +76,13 @@ export default function InvoicePreview({ className }: ClassProps) {
           <TableHeader>
             <TableRow className="font-mono">
               <TableHead className="w-[50%]">Description</TableHead>
-              <TableHead className="text-right">Qty</TableHead>
+              <TableHead className="text-right">Plan</TableHead>
               <TableHead className="text-right">Price/mo</TableHead>
               <TableHead className="text-right">Amount</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {invoiceItems.map((item) => (
+            {data?.map((item) => (
               <React.Fragment key={item.id}>
                 <TableRow>
                   <TableCell>
@@ -90,12 +108,12 @@ export default function InvoicePreview({ className }: ClassProps) {
                       </Collapsible>
                     )}
                   </TableCell>
-                  <TableCell className="text-right">{item.quantity}</TableCell>
+                  <TableCell className="text-right">1</TableCell>
                   <TableCell className="text-right">
-                    ${item.price.toFixed(2)}
+                    ${item.total.toFixed(2)}
                   </TableCell>
                   <TableCell className="text-right">
-                    ${(item.quantity * item.price).toFixed(2)}
+                    ${item.total}
                   </TableCell>
                 </TableRow>
                 {item.breakdown && (
@@ -125,18 +143,18 @@ export default function InvoicePreview({ className }: ClassProps) {
                               {item.breakdown.map((breakdownItem, index) => (
                                 <TableRow key={index}>
                                   <TableCell>
-                                    {breakdownItem.description}
+                                    {breakdownItem.name}
                                   </TableCell>
                                   <TableCell className="text-right">
-                                    {breakdownItem.hours}
+                                    {breakdownItem.cpu_count}
                                   </TableCell>
                                   <TableCell className="text-right">
-                                    ${breakdownItem.rate.toFixed(2)}
+                                    ${breakdownItem.price_per_hour.toFixed(2)}
                                   </TableCell>
                                   <TableCell className="text-right">
                                     $
                                     {(
-                                      breakdownItem.hours * breakdownItem.rate
+                                      breakdownItem.price_per_hour * 2_688_288
                                     ).toFixed(2)}
                                   </TableCell>
                                 </TableRow>
