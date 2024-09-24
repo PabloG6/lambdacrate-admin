@@ -43,7 +43,7 @@ export const BranchOutputSchema = BranchInputSchema.omit({
   z.object({
     slug: z.string(),
     id: z.string(),
-    active_deployment: DeploymentOutputSchema.optional(),
+    active_deployment: DeploymentOutputSchema.nullish(),
     created_at: z.coerce.date(),
     updated_at: z.coerce.date(),
   })

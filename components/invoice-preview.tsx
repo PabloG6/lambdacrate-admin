@@ -1,6 +1,12 @@
-'use client';
-import React, { useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+"use client";
+import React, { useEffect, useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -21,51 +27,31 @@ import { z } from "zod";
 import { useSearchParams } from "next/navigation";
 import { SearchParamSchema } from "@/types/invoice";
 import { trpc } from "@/server/trpc";
+import { Button } from "./ui/button";
 // import { trpc } from "@/server/trpc";
-
-const invoiceItems = [
-  {
-    id: 1,
-    description: "Dashboard",
-    quantity: 1,
-    price: 300,
-    breakdown: [
-      { description: "Dashboard", hours: 4, rate: 50 },
-      { description: "API", hours: 6, rate: 60 },
-    ],
-  },
-  { id: 2, description: "Hosting (3 months)", quantity: 3, price: 75 },
-  { id: 3, description: "Domain Name (1 year)", quantity: 1, price: 50 },
-];
 
 const taxRate = 0.1; // 10% tax rate
 type ClassProps = {
   className?: string;
+  onCheckout: () => void;
 };
-export default function InvoicePreview({ className }: ClassProps) {
+export default function InvoicePreview({ className, onCheckout }: ClassProps) {
   const searchParams = useSearchParams();
 
-  const queryParams = Object.fromEntries(searchParams.entries())
+  const queryParams = Object.fromEntries(searchParams.entries());
 
-const utils = trpc.useUtils();
-const {isFetching, data, isError, isSuccess} = trpc.payments.invoice_preview.useQuery(queryParams);
+  const utils = trpc.useUtils();
+  const { isFetching, data, isError, isSuccess } =
+    trpc.payments.invoice_preview.useQuery(queryParams);
+
+
   useEffect(() => {
-
-    const queryParams = Object.fromEntries(searchParams.entries())
     utils.payments.invoice_preview.invalidate();
-    console.log(data);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
-  const subtotal = invoiceItems.reduce(
-    (acc, item) => acc + item.quantity * item.price,
-    0
-  );
-  const tax = subtotal * taxRate;
-  const total = subtotal + tax;
 
   const [isBreakdownOpen, setIsBreakdownOpen] = React.useState(false);
-
   return (
     <Card className={cn("w-full max-w-3xl mx-auto", className)}>
       <CardHeader>
@@ -75,18 +61,22 @@ const {isFetching, data, isError, isSuccess} = trpc.payments.invoice_preview.use
         <Table>
           <TableHeader>
             <TableRow className="font-mono">
-              <TableHead className="w-[50%]">Description</TableHead>
+              <TableHead className="">Name</TableHead>
               <TableHead className="text-right">Plan</TableHead>
-              <TableHead className="text-right">Price/mo</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
+              <TableHead className="text-right">
+                Price/<sub>hr</sub>
+              </TableHead>
+              <TableHead className="text-right">
+                Total/<sub>mo</sub>
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data?.map((item) => (
+            {data?.items.map((item) => (
               <React.Fragment key={item.id}>
                 <TableRow>
-                  <TableCell>
-                    {item.description}
+                  <TableCell className="w-[50%]">
+                    <div className="truncate">{item.name}</div>
                     {item.breakdown && (
                       <Collapsible
                         open={isBreakdownOpen}
@@ -95,12 +85,12 @@ const {isFetching, data, isError, isSuccess} = trpc.payments.invoice_preview.use
                         <CollapsibleTrigger className="flex items-center text-sm text-blue-500 hover:underline">
                           {isBreakdownOpen ? (
                             <>
-                              Hide Breakdown{" "}
+                              Hide Breakdown
                               <ChevronUp className="h-4 w-4 ml-1" />
                             </>
                           ) : (
                             <>
-                              Show Breakdown{" "}
+                              Show Breakdown
                               <ChevronDown className="h-4 w-4 ml-1" />
                             </>
                           )}
@@ -108,12 +98,12 @@ const {isFetching, data, isError, isSuccess} = trpc.payments.invoice_preview.use
                       </Collapsible>
                     )}
                   </TableCell>
-                  <TableCell className="text-right">1</TableCell>
+                  <TableCell className="text-right">Hobby</TableCell>
                   <TableCell className="text-right">
-                    ${item.total.toFixed(2)}
+                    ${(item.total * 36_00).toFixed(4)}
                   </TableCell>
                   <TableCell className="text-right">
-                    ${item.total}
+                    ${(item.total * 2_688_288).toFixed(2)}
                   </TableCell>
                 </TableRow>
                 {item.breakdown && (
@@ -127,15 +117,15 @@ const {isFetching, data, isError, isSuccess} = trpc.payments.invoice_preview.use
                           <Table>
                             <TableHeader>
                               <TableRow>
-                                <TableHead>Task</TableHead>
+                                <TableHead>CPU Count</TableHead>
                                 <TableHead className="text-right">
-                                  Hours
+                                  Ram
                                 </TableHead>
                                 <TableHead className="text-right">
-                                  Rate
+                                  Hrly Rate
                                 </TableHead>
                                 <TableHead className="text-right">
-                                  Amount
+                                  Monthly Total
                                 </TableHead>
                               </TableRow>
                             </TableHeader>
@@ -143,13 +133,16 @@ const {isFetching, data, isError, isSuccess} = trpc.payments.invoice_preview.use
                               {item.breakdown.map((breakdownItem, index) => (
                                 <TableRow key={index}>
                                   <TableCell>
-                                    {breakdownItem.name}
-                                  </TableCell>
-                                  <TableCell className="text-right">
                                     {breakdownItem.cpu_count}
                                   </TableCell>
                                   <TableCell className="text-right">
-                                    ${breakdownItem.price_per_hour.toFixed(2)}
+                                    {breakdownItem.ram}
+                                  </TableCell>
+                                  <TableCell className="text-right">
+                                    $
+                                    {(
+                                      breakdownItem.price_per_hour * 36_00
+                                    ).toFixed(5)}
                                   </TableCell>
                                   <TableCell className="text-right">
                                     $
@@ -174,19 +167,22 @@ const {isFetching, data, isError, isSuccess} = trpc.payments.invoice_preview.use
         <div className="mt-6 space-y-2">
           <div className="flex justify-between">
             <span>Subtotal</span>
-            <span>${subtotal.toFixed(2)}</span>
+            <span>${data?.total.toFixed(2)}</span>
           </div>
           <div className="flex justify-between">
             <span>Tax (10%)</span>
-            <span>${tax.toFixed(2)}</span>
+            <span>${(0).toFixed(2)}</span>
           </div>
           <Separator />
           <div className="flex justify-between font-bold">
             <span>Total</span>
-            <span>${total.toFixed(2)}</span>
+            <span>${data?.total.toFixed(2)}</span>
           </div>
         </div>
       </CardContent>
+      <CardFooter className="flex justify-end" onClick={onCheckout}>
+        <Button>Checkout</Button>
+      </CardFooter>
     </Card>
   );
 }

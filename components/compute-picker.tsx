@@ -68,7 +68,7 @@ export default function ComputePicker({ className, onValueChange }: Props) {
                     className="py-2 w-full"
                     key={option.id}
                     onSelect={() => {
-                      onValueChange(option.ext_name);
+                      onValueChange(option.id);
                       setLabel(
                         `${option.cpu_count} CPU, ${
                           option.ram

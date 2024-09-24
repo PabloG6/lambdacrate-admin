@@ -13,7 +13,6 @@ import {
   FormDescription,
 } from "@/components/ui/form";
 
-import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Loader, MinusCircleIcon } from "lucide-react";
@@ -43,7 +42,6 @@ export default function Page({ params }: { params: { app_id: string } }) {
     isFetching,
     data: branches,
     isSuccess,
-    isError,
   } = trpc.branches.git_branches.useQuery(params.app_id, {
    
     refetchOnWindowFocus: false,
@@ -91,9 +89,10 @@ export default function Page({ params }: { params: { app_id: string } }) {
     control: form.control,
   });
 
+
   form.setValue("app_id", params.app_id);
 
-  const { mutateAsync, isPending } = trpc.branches.add.useMutation({
+  const { mutateAsync: createBranch, isPending } = trpc.branches.add.useMutation({
     onSuccess: (branch) => {
       console.log("branch");
       router.replace(`/dashboard/${params.app_id}/${branch.slug}`);
@@ -102,16 +101,21 @@ export default function Page({ params }: { params: { app_id: string } }) {
       console.log(error);
     },
   });
+
+
   const onSubmitHandler = async (
     data: BranchInputType,
     e?: React.BaseSyntheticEvent
   ) => {
     console.log("hello world");
     e?.preventDefault();
-    await mutateAsync(data);
+   const response = await createBranch(data);
+  
+   router.push(`/dashboard/${response.app_id}/branches/${response.slug}`)
   };
 
   //path stuff for invoice
+
 
   return (
     <div className="w-full space-y-4 h-full flex items-start justify-center pt-8">
@@ -421,7 +425,7 @@ export default function Page({ params }: { params: { app_id: string } }) {
           </div>
         </form>
       </Form>
-      <InvoicePreview className="max-w-lg" />
+      <InvoicePreview className="max-w-lg" onCheckout={() => {}} />
     </div>
   );
 }

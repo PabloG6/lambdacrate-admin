@@ -30,6 +30,8 @@ export async function showAppDetails({ ctx, input }: { ctx: AuthContext, input: 
     throw new TRPCError({ code: "PARSE_ERROR" });
   } else {
 
+    console.error('internal server error occurred');
+
     throw new TRPCError({code: "INTERNAL_SERVER_ERROR"})
   }
 }
