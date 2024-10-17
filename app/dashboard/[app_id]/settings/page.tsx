@@ -18,7 +18,6 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { AppInfo, AppSchema } from "@/lib/util/types";
-import { createNewApp } from "@/app/new/actions";
 
 export default function Page() {
   const [name, setName] = useState("");
@@ -38,24 +37,12 @@ export default function Page() {
 
   useEffect(() => {
     const appId = createUniqueNameId({ adjectives: 2 });
-    console.log("use effect called");
     setName(appId.toLowerCase());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [path]);
   const onFormSubmit = async (data: AppInfo, e?: BaseSyntheticEvent) => {
-    console.log("form submit");
-    console.log(data);
 
-    const response: {
-      app: { app_id: string; id: string; name: string };
-      deployment_id: string;
-    } = await createNewApp(data);
-
-    const searchParams = new URLSearchParams();
-    searchParams.set("deployment_id", response.deployment_id);
-    router.replace(
-      `/dashboard/${response.app.app_id}?${searchParams.toString()}`
-    );
+ 
   };
   return (
     <div className="w-full h-full">

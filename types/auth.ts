@@ -6,7 +6,7 @@ export const tokenSchema = z.object({
 })
 
 export const profileSchema = z.object({
-    name: z.string().optional(),
+    name: z.string().optional().nullish(),
     email: z.string(),
     avatar_url: z.string().url().optional(),
     username: z.string(),

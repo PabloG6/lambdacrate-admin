@@ -25,7 +25,6 @@ import {
 } from "../ui/form";
 import { Textarea } from "../ui/textarea";
 import { redirect, usePathname, useRouter } from "next/navigation";
-import { createNewApp } from "@/app/new/actions";
 import { AppInfo, AppSchema } from "@/lib/util/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createUniqueNameId } from "mnemonic-id";

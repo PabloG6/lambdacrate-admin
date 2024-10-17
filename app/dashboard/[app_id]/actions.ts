@@ -7,12 +7,13 @@ import { cache } from "react";
 import { z } from "zod";
 
 export const getAppMetaData = cache(async (app_id: string): Promise<AppInfo | undefined> => {
+  console.log()
   const response = await fetch(`${env.API_URL}/api/apps/${app_id}`, {
     headers: { "content-type": "application/json" },
   });
   if (response.ok) {
+    
     const results = await response.json();
-    console.log(results);
     return AppInfoSchema.parse(results);
   }
 });
@@ -30,7 +31,6 @@ export const getStatus = cache(
 
     if (response.ok) {
       const results = await response.json();
-      console.log(results, 'results being called');
       return AppStatSchema.parse(await response.json());
     }
   }

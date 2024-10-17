@@ -24,10 +24,10 @@ export default function LogViewer<T>({level, event_type}: Props<T>) {
   }
   
   useEffect(() => {
-    if(scrollToBottomRef.current) {
-      scrollToBottomRef?.current?.scrollIntoView();
+    // if(scrollToBottomRef.current) {
+    //   scrollToBottomRef?.current?.scrollIntoView();
 
-    }
+    // }
   }, [eventStream]);
   return (
 

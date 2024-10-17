@@ -8,24 +8,20 @@ import * as fs from 'fs';
 import * as jwt from 'jsonwebtoken';
 
 export async function GET(request: Request): Promise<Response> {
-    console.log('request called');
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
-  console.log(url);
   const storedState = cookies().get("github_oauth_state")?.value ?? null;
   if (!code || !state || !storedState || state !== storedState) {
     return new Response(null, {
       status: 400,
     });
   }
-  console.log(url, code, state)
   try {
     const token = await github.validateAuthorizationCode(code);
     const octokit = new Octokit({ auth: token.accessToken });
     
     const { data: githubUser } = await octokit.rest.users.getAuthenticated();
-    console.log('github user', githubUser);
     const user = {
       username: githubUser.login,
       name: githubUser.name,
@@ -44,7 +40,7 @@ export async function GET(request: Request): Promise<Response> {
         user.email = primaryEmail!.email;
     }
     const session = await fetch(`${env.API_URL}/api/oauth/user`, {
-      method: "POST",
+    method: "POST",
       headers: {
         'Content-Type': 'application/json'
       },

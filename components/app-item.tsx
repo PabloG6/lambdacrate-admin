@@ -53,9 +53,7 @@ export function AppItem({ props }: { props: AppInfo }) {
               <span className="text-base font-medium text-foreground">
                 {props.name}
               </span>{" "}
-              <Badge className="font-mono text-xs font-thin" variant={"outline"}>
-                {props.deployment.status}
-              </Badge>
+           
             </div>
             <div className="text-xs flex text-muted-foreground items-center space-x-1">
               <span>{props.app_id}</span>
@@ -119,6 +117,7 @@ export function AppItem({ props }: { props: AppInfo }) {
                   className="w-full"
                   disabled={!(inputText == props.app_id)}
                   onClick={async () => {
+                    console.log('destroying');
                     const response = await deleteApp(props.id);
                     setOpen(false);
                   }}

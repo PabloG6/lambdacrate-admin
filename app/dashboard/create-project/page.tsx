@@ -41,7 +41,6 @@ import {
 import { redirect } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { createProject } from "../[app_id]/_actions/projects";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -53,6 +52,8 @@ import {
 } from "@/components/ui/select";
 import FormContainer from "@/components/FormContainer";
 import EnvVarsForm from "@/components/EnvVarForm";
+import { trpc } from "@/trpc/client";
+import { createECDH } from "crypto";
 const steps = [
   "getting-started",
   "configure_cta",
@@ -65,16 +66,7 @@ const steps = [
   "choose-plan",
 ] as const;
 
-const INITIAL_STEP = steps[0];
-type stepTransform = (typeof steps)[number];
 
-function stepTransform(step: (typeof steps)[number]): stepTransform {
-  const stepIndex = steps.indexOf(step);
-  if (stepIndex > -1) {
-    return steps[stepIndex];
-  }
-  return INITIAL_STEP;
-}
 
 export default function Page({
   params,
@@ -128,15 +120,19 @@ export default function Page({
       }
     })();
   }, []);
+
+
+  const createProject = trpc.apps.create.useMutation();
   const onSubmitHandler = (data: AppInfo, e?: React.BaseSyntheticEvent) => {
     e?.preventDefault();
     startTransition(async () => {
       console.log('createing project');
-      const response = await createProject(data);
+      const response = await createProject.mutateAsync(data);
       console.log(response);
       if (response.success) {
 
-        redirect(`/dashboard/${response.app_id}/environment`);
+        redirect(`/dashboard/${response.app_id}/branches
+        `);
       } else {
       }
     });

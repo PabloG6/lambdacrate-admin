@@ -35,19 +35,6 @@ export const AppStateContextProvider = ({
   useEffect(() => {}, [metadata]);
 
   return (
-    <AppStateContext.Provider value={appState}>
-      {appState?.deployment?.status == "active" ||
-      appState?.deployment?.status == "failed" ? (
-        children
-      ) : (
-        <EventSourceContextProvider
-          url={`/api/apps/${appState?.deployment.id}/status`}
-        >
-          <div className="w-full h-full flex items-center justify-center">
-            <DeploymentStatus />
-          </div>
-        </EventSourceContextProvider>
-      )}
-    </AppStateContext.Provider>
+    <></>
   );
 };

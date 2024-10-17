@@ -197,7 +197,6 @@ function HeadlineForm() {
 
   async function  onSubmit(values: any, e?: React.BaseSyntheticEvent) {
     e?.preventDefault();
-    console.log("values", values);
     const response = await updateAppDetails(values)
     console.log('update app details', response)
   }
@@ -275,7 +274,6 @@ function FeaturesForm() {
     })
 
     const {app_id}: {app_id: string} = useParams();
-    console.log(app_id);
     const form = useForm<z.infer<typeof featureSchema>>({resolver: zodResolver(featureSchema), defaultValues: {
         features_title: '',
         features_description: '',
@@ -284,7 +282,6 @@ function FeaturesForm() {
 
     async function  onSubmit(values: any, e?: React.BaseSyntheticEvent) {
         e?.preventDefault();
-        console.log("values", values);
         const response = await updateAppDetails(values)
         console.log('update app details', response)
       }
@@ -363,12 +360,9 @@ function PricingForm() {
   
     async function  onSubmit(values: any, e?: React.BaseSyntheticEvent) {
       e?.preventDefault();
-      console.log("values", values);
       const response = await updateAppDetails(values)
-      console.log('update app details', response)
     }
   
-    console.log(form.formState);
     return (
       <section className="space-y-4 py-6">
        
@@ -379,7 +373,7 @@ function PricingForm() {
               className="max-w-[600px] "
           
               onSubmit={
-                form.handleSubmit(onSubmit, (errors) => console.log(errors))
+                form.handleSubmit(onSubmit)
               }
             >
               <div className="py-6">

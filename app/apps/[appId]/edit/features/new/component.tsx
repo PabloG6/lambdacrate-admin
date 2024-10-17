@@ -6,7 +6,6 @@ import React, { useEffect } from "react";
 import * as Accordion from "@radix-ui/react-accordion";
 import classNames from "classnames";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
-import { Navbar } from "@/app/new/navbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -116,7 +115,7 @@ export default function Component({ params, features }: { params: { appId: strin
   }
   return (
     <>
-      <Navbar />
+
       <main className="w-full h-full flex flex-col items-center p-10">
         <div className="max-w-2xl w-full flex items-center flex-col">
           <div className="w-full min-h-12 flex justify-end">
@@ -147,7 +146,6 @@ export default function Component({ params, features }: { params: { appId: strin
             <form
               className="w-full items-center flex flex-col gap-4"
               onSubmit={handleSubmit(onValidSubmit, () => {
-                console.log(formState.errors);
               })}
             >
               <div className="w-full  border-l pl-8 [& > step-item]:step [counter-reset:step] space-y-4 ">
@@ -159,17 +157,14 @@ export default function Component({ params, features }: { params: { appId: strin
                       key={field.key}
                       className="w-full step-item step "
                       onOpenChange={(props) => {
-                        console.log(props);
                       }}
                       defaultValue={fields[0].key}
                     >
                       <CollapsibleTrigger
                         asChild
                         onClick={(props) => {
-                          console.log(props);
                           setSelectedId(field.key);
 
-                          console.log("hello world");
                         }}
                         className="flex flex-1 w-full hover:bg-gray-50 py-3 px-2 tems-center justify-between mb-4"
                       >

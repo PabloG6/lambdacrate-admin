@@ -2,8 +2,6 @@
 import { Navbar } from "@/components/navbar";
 import { NavLinkProps, SideNav } from "@/components/sidenav";
 
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { AppStateContextProvider } from "@/contexts/AppStateContextProvider";
 
 import {
 
@@ -100,25 +98,12 @@ export  default async function Layout({
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [layoutSegment]);
   // const [title, setTitle] = useState("");
-  const onSideNavChange = (link: NavLinkProps) => {};
-  const metadata = await getAppMetaData(app_id);
-
 
   return (
-    <AppStateContextProvider metadata={metadata} >
    
-      <div className="w-full h-full flex">
-        <div className="h-screen flex flex-col max-w-60 w-full ">
-       
-    
-        </div>
-        <div className="w-full h-full">
    
-            <div className="w-full md:p-6 lg:p-12 lg:pl-16 h-full shadow-sm">{children}</div>
-            <div className="gutter py-16"></div>
-
-        </div>
-      </div>
-    </AppStateContextProvider>
+      <main className="w-full h-full flex px-8 mt-4">
+        {children}
+      </main>
   );
 }
