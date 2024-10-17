@@ -17,12 +17,15 @@ export const AppStatSchema = z.object({
 });
 
 export type AppStat = z.infer<typeof AppStatSchema>;
-export const DeploymentOutputSchema = z.object({
+export const getDeploymentSchema = z.object({
   id: z.string(),
   status: z.string(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
 });
+
+
+export type GetDeployment = z.infer<typeof getDeploymentSchema>;
 
 export const BranchInputSchema = z.object({
   name: z.string(),
@@ -30,7 +33,7 @@ export const BranchInputSchema = z.object({
   target_branch: z.string(),
   dashboard_size: z.enum(['hobby', 'starter', 'premium', 'enterprise']),
   secrets: z.array(EnvVarsSchema).optional(),
-  deployments: z.array(DeploymentOutputSchema).optional(),
+  deployments: z.array(getDeploymentSchema).optional(),
   branch_type: z.enum(["staging", "production", "development"]),
   app_id: z.string(),
 });
@@ -43,7 +46,24 @@ export const BranchOutputSchema = BranchInputSchema.omit({
   z.object({
     slug: z.string(),
     id: z.string(),
-    active_deployment: DeploymentOutputSchema.nullish(),
+    active_deployment: getDeploymentSchema.nullish(),
+    created_at: z.coerce.date(),
+    updated_at: z.coerce.date(),
+  })
+);
+
+
+
+export const OnBranchCreatedSchema = BranchInputSchema.omit({
+  
+  machine_size: true,
+  dashboard_size: true
+}).merge(
+  z.object({
+    slug: z.string(),
+    id: z.string(),
+    payment_ticket_id: z.string().uuid(),
+    active_deployment: getDeploymentSchema.nullish(),
     created_at: z.coerce.date(),
     updated_at: z.coerce.date(),
   })
@@ -63,7 +83,7 @@ export type AppInfo = z.infer<typeof AppInfoSchema>;
 
 export type BranchInputType = z.infer<typeof BranchInputSchema>;
 
-
+export type GetBranchType = z.infer<typeof BranchOutputSchema>;
 export const GitBranchSchema = z.object({name: z.string(), protected: z.coerce.boolean()})
 
 export type GitBranchType = z.infer<typeof GitBranchSchema>;

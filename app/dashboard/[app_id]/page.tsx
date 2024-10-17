@@ -1,26 +1,18 @@
 "use client";
 
+import { DataTable } from "@/components/data-table/data-table";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { trpc } from "@/server/trpc";
+
+
+import { branchSearchParams } from "@/trpc/api/branches/types";
+import { trpc } from "@/trpc/client";
+import { ColumnDef } from "@tanstack/react-table";
 import { formatDistance } from "date-fns";
 import { ChevronDownIcon, MoreVerticalIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { branchColumns } from "./_components/branch-columns";
+import { GetBranchType } from "@/types/apps";
 
 export default function Page({
   params: { app_id },
@@ -28,8 +20,9 @@ export default function Page({
   params: { app_id: string };
 }) {
   const { data: appStatus } = trpc.apps.showDetails.useQuery({ id: app_id });
-  console.log(appStatus);
+  const {data: branches} = trpc.branches.allBranches.useQuery({id: app_id})
   const router = useRouter();
+  
   return (
     <div className="h-full w-full space-y-6 px-12 py-6">
       <div className="flex flex-col gap-3">
@@ -54,65 +47,12 @@ export default function Page({
           <Button size="sm">+ New Branch</Button>
         </Link>
       </div>
-      <div className="lg:max-w-5xl w-full border rounded-lg ">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Created At</TableHead>
-              <TableHead>Last Updated</TableHead>
+      <div className="lg:max-w-5xl w-full">
+        
+    <DataTable columns={branchColumns} onRowSelected={((value: GetBranchType) => {
+      router.push(`/dashboard/${app_id}/${value.slug}`)
+    })} data={branches?? []} schema={branchSearchParams}/>
 
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {appStatus?.branches?.length ?? 0 > 0 ? (
-              appStatus?.branches?.map((branch) => (
-                <TableRow
-                  key={branch.id}
-                  onClick={() => router.push(`${app_id}/${branch.slug}`)}
-                >
-                  <TableCell>{branch.name}</TableCell>
-                  <TableCell className="capitalize">{branch.active_deployment?.status}</TableCell>
-
-                  <TableCell>{branch.branch_type}</TableCell>
-                  <TableCell>
-                    {formatDistance(branch.created_at, Date.now(), {
-                      addSuffix: true,
-                    })}
-                  </TableCell>
-
-                  <TableCell>
-                    {formatDistance(branch.created_at, Date.now(), {
-                      addSuffix: true,
-                    })}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <MoreVerticalIcon></MoreVerticalIcon>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="w-56">
-                        <DropdownMenuItem>Delete Branch</DropdownMenuItem>
-                        <DropdownMenuItem>Billing</DropdownMenuItem>
-                        <DropdownMenuItem>Team</DropdownMenuItem>
-                        <DropdownMenuItem>Subscription</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={6} className="text-center">
-                  No Branches found
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
       </div>
     </div>
   );

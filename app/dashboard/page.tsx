@@ -11,7 +11,7 @@ import { NavBar } from "@/components/ui/navbar";
 import { getProfile } from "../auth/profile/lib";
 import { Octokit } from "octokit";
 import { AppInfo } from "@/types/apps";
-import { trpc } from "@/server/trpc";
+import { trpc } from "@/trpc/client";
 import { z } from "zod";
 import { AppSchema } from "@/lib/util/types";
 import { Skeleton } from "@/components/ui/skeleton";

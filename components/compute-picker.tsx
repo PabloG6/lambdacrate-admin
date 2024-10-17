@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 
-import { trpc } from "@/server/trpc";
+import { trpc } from "@/trpc/client";
 import { cn } from "@/lib/utils";
 import {
   Check,

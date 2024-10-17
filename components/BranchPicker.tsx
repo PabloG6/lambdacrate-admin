@@ -1,5 +1,5 @@
 "use client";
-import { trpc } from "@/server/trpc";
+import { trpc } from "@/trpc/client";
 import {
   DropdownMenu,
   DropdownMenuContent,

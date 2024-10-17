@@ -26,14 +26,15 @@ import { cn } from "@/lib/utils";
 import { z } from "zod";
 import { useSearchParams } from "next/navigation";
 import { SearchParamSchema } from "@/types/invoice";
-import { trpc } from "@/server/trpc";
+import { trpc } from "@/trpc/client";
 import { Button } from "./ui/button";
+import { TotalType } from "@/trpc/api/payments/types";
 // import { trpc } from "@/server/trpc";
 
 const taxRate = 0.1; // 10% tax rate
 type ClassProps = {
   className?: string;
-  onCheckout: () => void;
+  onCheckout: (data: TotalType | undefined) => void;
 };
 export default function InvoicePreview({ className, onCheckout }: ClassProps) {
   const searchParams = useSearchParams();
@@ -42,7 +43,7 @@ export default function InvoicePreview({ className, onCheckout }: ClassProps) {
 
   const utils = trpc.useUtils();
   const { isFetching, data, isError, isSuccess } =
-    trpc.payments.invoice_preview.useQuery(queryParams);
+    trpc.payments.invoice_preview.useQuery(queryParams, {refetchOnWindowFocus: false});
 
 
   useEffect(() => {
@@ -100,10 +101,10 @@ export default function InvoicePreview({ className, onCheckout }: ClassProps) {
                   </TableCell>
                   <TableCell className="text-right">Hobby</TableCell>
                   <TableCell className="text-right">
-                    ${(item.total * 36_00).toFixed(4)}
+                    ${(item.total).toFixed(2)}
                   </TableCell>
                   <TableCell className="text-right">
-                    ${(item.total * 2_688_288).toFixed(2)}
+                    ${(item.total).toFixed(2)}
                   </TableCell>
                 </TableRow>
                 {item.breakdown && (
@@ -180,7 +181,7 @@ export default function InvoicePreview({ className, onCheckout }: ClassProps) {
           </div>
         </div>
       </CardContent>
-      <CardFooter className="flex justify-end" onClick={onCheckout}>
+      <CardFooter className="flex justify-end">
         <Button>Checkout</Button>
       </CardFooter>
     </Card>

@@ -52,7 +52,7 @@ import {
 } from "@/components/ui/select";
 import FormContainer from "@/components/FormContainer";
 import EnvVarsForm from "@/components/EnvVarForm";
-import { trpc } from "@/server/trpc";
+import { trpc } from "@/trpc/client";
 import { createECDH } from "crypto";
 const steps = [
   "getting-started",

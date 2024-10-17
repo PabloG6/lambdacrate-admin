@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={cn(`h-full dark ${mono.variable}`, inter.className)}>
+    <html lang="en" className={cn(`h-full ${mono.variable}`, inter.className)}>
       <body className="h-screen">
         <TRPCProvider>
         {children}

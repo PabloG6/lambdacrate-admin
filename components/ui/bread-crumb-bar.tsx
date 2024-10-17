@@ -22,7 +22,7 @@ import {
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 import { DropdownMenuContent, DropdownMenuItem } from "./dropdown-menu";
-import { trpc } from "@/server/trpc";
+import { trpc } from "@/trpc/client";
 import { BranchPicker } from "../BranchPicker";
 
 export default function BreadcrumbBar() {

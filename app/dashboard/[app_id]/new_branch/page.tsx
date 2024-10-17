@@ -30,12 +30,12 @@ import {
 } from "@/components/ui/select";
 import Link from "next/link";
 import { BranchInputSchema, BranchInputType } from "@/types/apps";
-import { trpc } from "@/server/trpc";
 import FormContainer from "@/components/FormContainer";
 import ComputePicker from "@/components/compute-picker";
 import InvoicePreview from "@/components/invoice-preview";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCallback, useEffect } from "react";
+import { trpc } from "@/trpc/client";
 
 export default function Page({ params }: { params: { app_id: string } }) {
   const {
@@ -46,6 +46,12 @@ export default function Page({ params }: { params: { app_id: string } }) {
    
     refetchOnWindowFocus: false,
   });
+
+  const {mutate: createBranch} = trpc.branches.add.useMutation({onSuccess: (data) => {
+    console.log(data);
+    router.push(`/dashboard/${params.app_id}/checkout/${data.payment_ticket_id}`)
+  }});
+
   const router = useRouter();
 
   const searchParams = useSearchParams();
@@ -92,41 +98,23 @@ export default function Page({ params }: { params: { app_id: string } }) {
 
   form.setValue("app_id", params.app_id);
 
-  const { mutateAsync: createBranch, isPending } = trpc.branches.add.useMutation({
-    onSuccess: (branch) => {
-      console.log("branch");
-      router.replace(`/dashboard/${params.app_id}/${branch.slug}`);
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+ 
 
-
-  const onSubmitHandler = async (
-    data: BranchInputType,
-    e?: React.BaseSyntheticEvent
-  ) => {
-    console.log("hello world");
-    e?.preventDefault();
-   const response = await createBranch(data);
-  
-   router.push(`/dashboard/${response.app_id}/branches/${response.slug}`)
-  };
 
   //path stuff for invoice
 
 
   return (
-    <div className="w-full space-y-4 h-full flex items-start justify-center pt-8">
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmitHandler, (error) => {
-            console.log(error);
+        <form 
+          onSubmit={form.handleSubmit((data, e) => {
+            e?.preventDefault()
+            createBranch(data);
           })}
-          className="w-full max-w-3xl m-auto px-4"
+          className="w-full space-y-4 h-full flex items-start justify-center pt-8"
         >
-          <div className="flex w-full flex-col pb-16">
+          <div className="max-w-3xl w-full">
+          <div className="flex w-full flex-col  m-auto pb-16">
             <div className="flex flex-col gap-6">
               <div className="flex">
                 <div>
@@ -165,7 +153,7 @@ export default function Page({ params }: { params: { app_id: string } }) {
                         );
 
                         console.log();
-                        router.push(pathname + `?${updatedParams}`);
+                        router.push(pathname + `?${updatedParams}`, {scroll: false});
                         field.onChange(value);
                       }}
                       defaultValue={field.value}
@@ -216,7 +204,7 @@ export default function Page({ params }: { params: { app_id: string } }) {
                             );
                             field.onChange(value);
 
-                            router.push(pathname + `?${updatedParams}`);
+                            router.push(pathname + `?${updatedParams}`, {scroll: false});
                           }}
                           defaultValue={field.value}
                         >
@@ -264,7 +252,7 @@ export default function Page({ params }: { params: { app_id: string } }) {
                           value
                         );
                         field.onChange(value);
-                        router.push(pathname + `?${updatedParams}`);
+                        router.push(pathname + `?${updatedParams}`, {scroll: false});
                       }}
                       defaultValue={field.value}
                     >
@@ -308,7 +296,7 @@ export default function Page({ params }: { params: { app_id: string } }) {
                             value
                           );
                           field.onChange(value);
-                          router.push(pathname + `?${updatedParams}`);
+                          router.push(pathname + `?${updatedParams}`, {scroll: false});
                         }}
                       />
                     </FormItem>
@@ -409,23 +397,16 @@ export default function Page({ params }: { params: { app_id: string } }) {
                 </div>
               </div>
             </FormContainer>
-            <div className="flex justify-end pt-6">
-              <Button
-                size="sm"
-                className="rounded-sm"
-                disabled={isPending}
-                type="submit"
-              >
-                {isPending && (
-                  <Loader className="animate-spin mr-2 h-4 w-4 duration-1000" />
-                )}
-                <span>+ Create Branch</span>
-              </Button>{" "}
-            </div>
+        
           </div>
+          </div>
+
+          <InvoicePreview className="max-w-lg sticky top-8" onCheckout={() => {}}/>
+
         </form>
+
+
       </Form>
-      <InvoicePreview className="max-w-lg" onCheckout={() => {}} />
-    </div>
+
   );
 }

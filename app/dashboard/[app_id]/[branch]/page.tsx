@@ -7,7 +7,7 @@ import {
   MoreVerticalIcon,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { trpc } from "@/server/trpc";
+import { trpc } from "@/trpc/client";
 import {
   TableHeader,
   TableRow,
@@ -36,6 +36,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/data-table/data-table";
+import { branchSearchParams } from "@/trpc/api/branches/types";
+import { GetBranchType } from "@/types/apps";
+import { Row } from "react-day-picker";
 /**
  * design ui that shows status of active deployment
  * - display status of dashboard deployment ()
@@ -71,7 +75,7 @@ export function Overview({
   app_id: string;
   branch_slug: string;
 }) {
-  console.log();
+
   const { data: branch } = trpc.branches.showDetails.useQuery({
     slug: branch_slug,
   });
@@ -96,6 +100,8 @@ export function Overview({
   const [status, setStatus] = useState<string>(
     updateStatus(branch?.active_deployment?.status!)
   );
+
+
 
   const [deploymentChannel] = useDeploymentChannel(
     branch?.active_deployment?.id!
@@ -151,67 +157,12 @@ export function Overview({
         </div>
       </div>
 
-      <div className="lg:max-w-5xl">
-        <div className="border rounded-lg">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Created At</TableHead>
-                <TableHead>Last Updated</TableHead>
+      <div className="lg:max-w-5xl border">
 
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {branch?.deployments?.length ?? 0 > 0 ? (
-                branch?.deployments?.map((deployment) => (
-                  <TableRow
-                    key={deployment.id}
-                    onClick={() => router.push(`/${app_id}/${branch.slug}`)}
-                  >
-                    <TableCell colSpan={1}>{deployment.id}</TableCell>
-                    <TableCell>{deployment.status}</TableCell>
-                    <TableCell>{branch.branch_type}</TableCell>
-                    <TableCell>
-                      {formatDistance(deployment.created_at, Date.now(), {
-                        addSuffix: true,
-                      })}
-                    </TableCell>
+              <DataTable columns={[]} data={[]} schema={branchSearchParams} onRowSelected={(value: GetBranchType) => {
+                
+              }}/>
 
-                    <TableCell>
-                      {formatDistance(deployment.created_at, Date.now(), {
-                        addSuffix: true,
-                      })}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger>
-                          <MoreVerticalIcon></MoreVerticalIcon>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem>Delete Branch</DropdownMenuItem>
-                          <DropdownMenuItem>Billing</DropdownMenuItem>
-                          <DropdownMenuItem>Team</DropdownMenuItem>
-                          <DropdownMenuItem>Subscription</DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center">
-                    No Branches found
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
       </div>
       <DashboardStatus className="lg:max-w-5xl border rounded-lg"></DashboardStatus>
 
