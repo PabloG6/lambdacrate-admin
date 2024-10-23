@@ -40,6 +40,7 @@ import { z } from "zod";
 import { searchParamsParser } from "@/lib/util/search-params";
 import { useRouter } from "next/navigation";
 import { GetBranchType } from "@/types/apps";
+import { ScrollArea } from "../ui/scroll-area";
 
 export interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -130,12 +131,13 @@ export function DataTable<TData, TValue>({
   return (
     <div className="flex w-full h-full flex-col gap-3 sm:flex-row">
     
-      <div className="flex max-w-full flex-1 flex-col gap-4 overflow-hidden p-1">
+      <div className="flex max-w-full flex-1 flex-col gap-4 p-1">
        
      
         <div className="border">
-          <Table>
-            <TableHeader className="bg-muted/50">
+          <ScrollArea className="h-[470px]">
+          <Table className="h-full">
+            <TableHeader className="bg-muted/50 sticky top-0">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id} className="hover:bg-transparent">
                   {headerGroup.headers.map((header) => {
@@ -183,6 +185,8 @@ export function DataTable<TData, TValue>({
               )}
             </TableBody>
           </Table>
+          </ScrollArea>
+
         </div>
         <DataTablePagination table={table} />
       </div>

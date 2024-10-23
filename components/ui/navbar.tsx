@@ -22,12 +22,15 @@ import {
   BreadcrumbSeparator,
 } from "./breadcrumb";
 import BreadcrumbBar from "./bread-crumb-bar";
+import { SidebarTrigger } from "./sidebar";
 
 export async function NavBar() {
   const profile = await getProfile();
 
   return (
     <nav className="sticky top-0 flex h-12 py-1 items-center gap-4 border-b bg-background px-8 md:px-6">
+            <SidebarTrigger/>
+
       <div className="w-full flex">
         <BreadcrumbBar></BreadcrumbBar>
       </div>

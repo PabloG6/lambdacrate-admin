@@ -1,11 +1,20 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
-import { z } from "zod";
+import { z, ZodError } from "zod";
 import { AuthContext } from "./contexts/auth";
+import { ApiErrorsSchema, apiErrorsSchema } from "@/lib/util/types";
 
 const t = initTRPC.context<AuthContext>().create({
   transformer: superjson,
-  errorFormatter({ shape }) {},
+  errorFormatter(opts) {
+  const {shape, error} = opts
+  if(error.code == 'UNPROCESSABLE_CONTENT') {
+    return {
+      ...shape,
+  
+    }
+  }
+  },
 });
 
 export const createTRPCRouter = t.router;
@@ -35,4 +44,3 @@ export const authProcedure = t.procedure.use(async function isAuthed(opts) {
  * @link https://trpc.io/docs/v11/merging-routers
  */
 export const mergeRouters = t.mergeRouters;
-

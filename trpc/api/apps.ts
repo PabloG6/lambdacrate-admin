@@ -43,7 +43,6 @@ export const appsRouter = createTRPCRouter({
       },
     }).then((r) => r.json());
 
-    console.log('hello world where are u going');
     const {data, success, error} =  z.array(AppInfoSchema).safeParse(response);
     if(error != null) {
       console.error('error parsing data');
