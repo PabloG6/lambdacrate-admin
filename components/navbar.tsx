@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { usePathname, useSelectedLayoutSegment } from "next/navigation";
 import { ScrollArea } from "./ui/scroll-area";
+import { SidebarTrigger } from "./ui/sidebar";
 export type NavLink = { label: string; href: string; segment: string | null }
 type Props = {
   navigation: NavLink[];
@@ -21,7 +22,9 @@ export const Navbar: React.FC<React.PropsWithChildren<Props>> = ({ navigation, c
 
   return (
     <nav className={cn("sticky top-0 d z-20", className)}>
+
       <div className="flex overflow-x-auto items-center w-full pl-1">
+
         <ScrollArea className="border-none">
        <div className="w-full flex items-center py-2">
        {navigation.map(({ label, href, segment }, index) => {

@@ -1,28 +1,19 @@
 "use server";
-import { Navbar } from "@/components/navbar";
 import { NavLinkProps, SideNav } from "@/components/sidenav";
-
+import AppSideBar from "@/components/ui/app-side-bar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 import {
-
   LayoutDashboard,
-
   Settings,
   Globe,
-
   BarChart,
   Container,
   Building2,
 } from "lucide-react";
-import {
+import { useSelectedLayoutSegment } from "next/navigation";
 
-  useSelectedLayoutSegment,
-
-} from "next/navigation";
-import { useEffect, useState } from "react";
-import { getAppMetaData } from "./actions";
-
-export  default async function Layout({
+export default async function Layout({
   params: { app_id },
   children,
 }: {
@@ -46,38 +37,35 @@ export  default async function Layout({
       variant: "default" as const,
     },
     {
-      title: 'Environment',
-      segment: 'environment',
-      label: '',
+      title: "Environment",
+      segment: "environment",
+      label: "",
       href: `/dashboard/${app_id}/environment`,
       icon: Container,
-      variant: 'ghost' as const,
-      
+      variant: "ghost" as const,
     },
     {
       title: "Metrics",
       href: `/dashboard/${app_id}/metrics`,
       icon: BarChart,
-      segment: 'metrics',
+      segment: "metrics",
       variant: "default" as const,
     },
-
 
     {
       title: "Domains",
       href: `/dashboard/${app_id}/domains`,
       icon: Globe,
-      
-      segment: 'domains',
+
+      segment: "domains",
       variant: "default" as const,
     },
-    
 
     {
       title: "Settings",
       label: "",
       segment: "settings",
-    
+
       href: `/dashboard/${app_id}/settings`,
       icon: Settings,
       variant: "ghost" as const,
@@ -100,10 +88,9 @@ export  default async function Layout({
   // const [title, setTitle] = useState("");
 
   return (
-   
-   
-      <main className="w-full h-full flex px-8 mt-4">
-        {children}
-      </main>
+    <SidebarProvider className="h-full">
+      <AppSideBar/>
+      <main className="w-full h-full flex px-8 mt-4">{children}</main>
+    </SidebarProvider>
   );
 }

@@ -20,7 +20,7 @@ import { MovingBorderContainer } from "@/components/ui/moving-border";
 export default function Page() {
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="px-4 lg:px-6 h-12 flex items-center backdrop-blur bg-background/50 sticky top-0 border-b border/80">
+      <div className="px-4 lg:px-6 h-16 flex items-center backdrop-blur bg-background/50 sticky top-0 border-b border/80">
         <Link className="flex items-center justify-center" href="#">
           <MountainIcon className="h-6 w-6" />
           <span className="sr-only">Lambdacrate</span>
@@ -45,9 +45,11 @@ export default function Page() {
             Documentation
           </Link>
         </nav>
-        <nav>
+        <nav className="flex gap-3">
           
           <Button variant={"ghost"} asChild><Link href={'/login'}>Login</Link></Button>
+          <Button variant={'default'} asChild><Link href={'/create-account'}>Create Account</Link></Button>
+
         </nav>
 
       </div>
