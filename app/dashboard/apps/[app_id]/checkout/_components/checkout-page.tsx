@@ -9,7 +9,7 @@ import { Appearance, loadStripe } from "@stripe/stripe-js";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 const stripePromise = loadStripe(
-  "pk_test_51KUOljHuv7zG8s4Ay0s5T2fqRF2PhgKiA2YPT7nvtYmUJIFgexmRGCU3AU77PToQ195AitjgPVIlbl6G84FdnIQ600KQx8KmNb"
+  "pk_test_51KUOljHuv7zG8s4Ay0s5T2fqRF2PhgKiA2YPT7nvtYmUJIFgexmRGCU3AU77PToQ195AitjgPVIlbl6G84FdnIQ600KQx8KmNb",
 );
 
 type Props = {
@@ -21,43 +21,39 @@ export default function CheckoutPage(props: Props) {
     id: props.checkoutID,
   });
 
-
-  
-  const params = useParams()
-  console.log(params);
-  console.log(env);
+  const params = useParams();
   const getReturnUrl = () => {
-    return `${env.PUBLIC_BASE_URL}/dashboard/${props.appID}/${data.branch_slug}`
-  }
+    return `${env.PUBLIC_BASE_URL}/dashboard/${props.appID}`;
+  };
 
-  const appearance: Appearance = { theme: "night", 
+  const appearance: Appearance = {
+    theme: "night",
     labels: "above",
     rules: {
-      '.Input': {
-        boxShadow: 'none'
-      }
-,
-      '.Tab': {
-        boxShadow: 'none'
-      }
+      ".Input": {
+        boxShadow: "none",
+      },
+      ".Tab": {
+        boxShadow: "none",
+      },
     },
     variables: {
-        borderRadius: '6px',
-        colorText: 'hsl(210, 20%, 98%)',
-        gridRowSpacing: '15px'
-        
-        
-    }
-
-   };
+      borderRadius: "6px",
+      colorText: "hsl(210, 20%, 98%)",
+      gridRowSpacing: "15px",
+    },
+  };
   return (
     <div className="w-full h-full lg:max-w-[500px]">
       {query.isFetched ? (
         <Elements
           stripe={stripePromise}
-          options={{ clientSecret: data.client_secret, appearance: appearance }}
+          options={{
+            clientSecret: data.payment_intent,
+            appearance: appearance,
+          }}
         >
-          <CheckoutForm return_url={getReturnUrl()} ></CheckoutForm>
+          <CheckoutForm></CheckoutForm>
         </Elements>
       ) : (
         <>Loading</>
@@ -65,4 +61,3 @@ export default function CheckoutPage(props: Props) {
     </div>
   );
 }
-

@@ -3,37 +3,42 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
+import { loginSchema, LoginSchema } from "@/trpc/api/accounts/types";
+import { trpc } from "@/trpc/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
-import { GithubIcon, Loader, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 export default function Page() {
-  const authSchema = z.object({
-    email: z.string(),
-    password: z.string(),
-  });
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<z.infer<typeof authSchema>>({
-    resolver: zodResolver(authSchema),
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
   });
-  const [isLoading, setLoading] = useState<boolean>();
-  const onSubmit = () => {
-    setLoading(true);
-    
+
+  const router = useRouter();
+  const { mutate: loginMutation, isPending } = trpc.accounts.login.useMutation({
+    onSuccess: () => {
+      router.push("/dashboard");
+    },
+  });
+  const onSubmit = async (
+    data: LoginSchema,
+    e?: React.BaseSyntheticEvent<any>,
+  ) => {
+    e?.preventDefault();
+    loginMutation(data);
   };
   return (
     <main className="w-full h-full flex flex-col items-center justify-center">
-        <div className="text-2xl font-semibold pb-6">Welcome to Lambdacrate</div>
+      <div className="text-2xl font-semibold pb-6">Welcome to Lambdacrate</div>
       <div className="mx-auto lg:max-w-[450px] w-full gap-4 flex flex-col">
-        <form onSubmit={handleSubmit((val, e) => onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-3">
             <div className="grid gap-1">
               <Label className="sr-only" htmlFor="email">
@@ -47,7 +52,7 @@ export default function Page() {
                 autoCapitalize="none"
                 autoComplete="email"
                 autoCorrect="off"
-                disabled={isLoading}
+                disabled={isPending}
               />
 
               <span className="text-red-500 text-xs">
@@ -65,7 +70,7 @@ export default function Page() {
                 {...register("password")}
                 autoCapitalize="none"
                 autoCorrect="off"
-                disabled={isLoading}
+                disabled={isPending}
               />
 
               <span className="text-red-500 text-xs">
@@ -78,8 +83,8 @@ export default function Page() {
                 </p>
               </Link>
             </div>
-            <Button disabled={isLoading}>
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            <Button disabled={isPending}>
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Log in with email
             </Button>
           </div>
@@ -93,20 +98,15 @@ export default function Page() {
           </div>
         </div>
         <Link href="/login/github">
-        <Button
-          variant="outline"
-          type="button"
-          className="w-full"
-          
-        >
-          {isLoading ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <GitHubLogoIcon className="mr-2 h-4 w-4" />
-          )}
-          Log in with Github
-        </Button></Link>
-      
+          <Button variant="outline" type="button" className="w-full">
+            {isPending ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <GitHubLogoIcon className="mr-2 h-4 w-4" />
+            )}
+            Log in with Github
+          </Button>
+        </Link>
       </div>
     </main>
   );

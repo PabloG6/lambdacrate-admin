@@ -4,16 +4,13 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { ApiErrorsSchema } from "@/lib/util/types";
-import { cn } from "@/lib/utils";
 import {
   CreateProfileSchema,
   createProfileSchema,
@@ -30,7 +27,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function Page() {
-
   const router = useRouter();
   const { mutate: createAccount } = trpc.accounts.create.useMutation();
   const form = useForm<createProfileSchema>({
@@ -45,25 +41,26 @@ export default function Page() {
   const onSubmit = (val: createProfileSchema, e?: React.BaseSyntheticEvent) => {
     e?.preventDefault();
     console.log(val);
+
     createAccount(val, {
-      onSuccess: (response) => {
-        router.replace("/create-account/onboarding")
+      onSuccess: (_response) => {
+        router.replace("/dashboard");
       },
       onError: (opts: unknown) => {
         console.log(opts);
         if (opts instanceof TRPCClientError) {
           const { data, success, error } = ApiErrorsSchema.safeParse(
-            JSON.parse(opts.message)
+            JSON.parse(opts.message),
           );
 
           console.log(error);
           if (success) {
             Object.entries(data.errors).forEach(([key, value]) => {
-              console.log('key', key, 'value', value[0])
+              console.log("key", key, "value", value[0]);
               const error = value[0];
               //@ts-ignore
-              
-              setError("email", {type: 'custom', message: error});
+
+              setError("email", { type: "custom", message: error });
             });
           }
         }
@@ -96,7 +93,7 @@ export default function Page() {
                       autoCorrect="off"
                       disabled={isLoading}
                     />
-                 
+
                     <FormMessage />
                   </FormItem>
                 )}
@@ -109,7 +106,6 @@ export default function Page() {
                       Password
                     </FormLabel>
                     <FormControl>
-           
                       <Input
                         id="password"
                         placeholder="*******"

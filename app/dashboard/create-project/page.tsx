@@ -66,8 +66,6 @@ const steps = [
   "choose-plan",
 ] as const;
 
-
-
 export default function Page({
   params,
 }: {
@@ -87,7 +85,7 @@ export default function Page({
     },
   });
 
-  const {  watch } = form;
+  const { watch } = form;
 
   const { fields, append, remove } = useFieldArray({
     name: "secrets",
@@ -121,16 +119,14 @@ export default function Page({
     })();
   }, []);
 
-
   const createProject = trpc.apps.create.useMutation();
   const onSubmitHandler = (data: AppInfo, e?: React.BaseSyntheticEvent) => {
     e?.preventDefault();
     startTransition(async () => {
-      console.log('createing project');
+      console.log("createing project");
       const response = await createProject.mutateAsync(data);
       console.log(response);
       if (response.success) {
-
         redirect(`/dashboard/${response.app_id}/branches
         `);
       } else {
@@ -226,7 +222,7 @@ export default function Page({
                                 ? repositories?.find(
                                     (repository) =>
                                       repository.clone_url?.toLowerCase() ===
-                                      selectedRepository
+                                      selectedRepository,
                                   )?.full_name
                                 : "Select a repository"}
                             </span>
@@ -260,7 +256,7 @@ export default function Page({
                                         "ml-auto h-4 w-4",
                                         repository.clone_url === field.value
                                           ? "opacity-100"
-                                          : "opacity-0"
+                                          : "opacity-0",
                                       )}
                                     />
                                   </CommandItem>

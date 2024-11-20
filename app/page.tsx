@@ -3,19 +3,11 @@
  * @see https://v0.dev/t/Cce9lmRwLZc
  */
 import Link from "next/link";
-import {
-  CardContent,
-  CardFooter,
-  Card,
-  CardTitle,
-  CardHeader,
-} from "@/components/ui/card";
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+
 import { PlayCircle } from "lucide-react";
 
-import Image from 'next/image'
-import { MovingBorderContainer } from "@/components/ui/moving-border";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 export default function Page() {
   return (
@@ -46,12 +38,13 @@ export default function Page() {
           </Link>
         </nav>
         <nav className="flex gap-3">
-          
-          <Button variant={"ghost"} asChild><Link href={'/login'}>Login</Link></Button>
-          <Button variant={'default'} asChild><Link href={'/create-account'}>Create Account</Link></Button>
-
+          <Button variant={"ghost"} asChild>
+            <Link href={"/login"}>Login</Link>
+          </Button>
+          <Button variant={"default"} asChild>
+            <Link href={"/create-account"}>Create Account</Link>
+          </Button>
         </nav>
-
       </div>
       <main className="flex-1">
         <section className="w-full pt-12 md:pt-24 lg:pt-32 ">
@@ -60,7 +53,7 @@ export default function Page() {
               <div>
                 <p className=" pb-10 text-xl max-w-3xl text-foreground font-semibold tracking-tighter sm:text-4xl md:text-5xl text-center">
                   Deploy a commercial rest api from a docker image in minutes.
-                   </p>
+                </p>
 
                 <div className="flex flex-col items-center space-y-4">
                   <p className="mx-auto max-w-2xl text-muted-foreground text-base dark:text-gray-400 text-center">
@@ -85,11 +78,8 @@ export default function Page() {
           </div>
           <div className="container flex items-center justify-center m-auto"></div>
           <div className=" max-w-[1024px] w-full h-96 m-auto rounded-sm">
-            <Image width={1024} height={384} alt='' src='/image.jpeg'/>
-
-          
+            <Image width={1024} height={384} alt="" src="/image.jpeg" />
           </div>
-
         </section>
         <div className="h-24"></div>
         <section className="w-full py-12 md:py-24 lg:py-32">
@@ -141,9 +131,7 @@ export default function Page() {
                 </p>
               </div>
               <div className="p-6 border rounded-md">
-                <h3 className="mb-2 font-bold">
-                  Custom Domains
-                </h3>
+                <h3 className="mb-2 font-bold">Custom Domains</h3>
                 <p className="text-sm leading-normal text-foreground/70">
                   Add your own domain and custom email address to your
                   application.
@@ -152,7 +140,6 @@ export default function Page() {
             </div>
           </div>
         </section>
-  
       </main>
       <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
         <p className="text-xs text-gray-500 dark:text-gray-400">

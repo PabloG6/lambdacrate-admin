@@ -1,9 +1,10 @@
 "use client";
 import { LayoutProps } from "@/lib/util/props";
+import {  basicProfileSchema } from "@/trpc/api/accounts/types";
 import { trpc } from "@/trpc/client";
 import { createContext, useContext } from "react";
 
-const ProfileContext = createContext<any | undefined>(undefined);
+const ProfileContext = createContext<basicProfileSchema | undefined>(undefined);
 const ProfileType = {
 
 }

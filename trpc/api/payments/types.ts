@@ -25,7 +25,8 @@ export const TotalSchema = z.object({
   total: z.coerce.number(),
 });
 
-
+export const clientSecretSchema = z.object({ payment_intent: z.string() });
+export type ClientSecretSchema = z.infer<typeof clientSecretSchema>;
 
 export type BreakdownType = z.infer<typeof BreakdownSchema>;
 export type InvoiceType = z.infer<typeof InvoiceSchema>;

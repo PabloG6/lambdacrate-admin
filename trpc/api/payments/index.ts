@@ -2,7 +2,7 @@ import { z } from "zod";
 import { env } from "@/app/env";
 import { SearchParamSchema } from "@/types/invoice";
 import { TRPCError } from "@trpc/server";
-import { TotalSchema } from "./types";
+import { clientSecretSchema, TotalSchema } from "./types";
 import { authProcedure, createTRPCRouter } from "@/trpc/trpc";
 
 export const RequestedResourceSchema = z.object({
@@ -19,7 +19,7 @@ const retrieveCheckoutCart = authProcedure
         headers: {
           authorization: `Bearer ${ctx.token}`,
         },
-      }
+      },
     ).then((r) => r.json());
     const { success, error, data } = TotalSchema.safeParse(response);
     if (success) {
@@ -36,34 +36,20 @@ const retrieveCheckoutCart = authProcedure
   });
 
 const createClientSecret = authProcedure
-  .input(z.object({id: z.string()}))
+  .input(z.object({ id: z.string(), idempotencyKey: z.string().nullish() }))
   .query(async ({ input, ctx }) => {
-
+    const key = input.idempotencyKey;
     const response = await fetch(
-      `${env.API_URL}/api/payments/checkout/${input.id}`,
+      `${env.API_URL}/api/payments/checkout/${input.id}?idempotency_key=${key}`,
       {
         headers: {
           authorization: `Bearer ${ctx.token}`,
         },
-      }
-    ).then((r) => {
-      return r.json();
-    });
-    const { success, error, data } = z
-      .object({ branch_slug: z.string(), branch_id: z.string().uuid(), client_secret: z.string(), subscription_id: z.string() })
-      .safeParse(response);
-
-    if (success) {
-      return data;
-    }
-
-    if (error) {
-      error.issues.forEach((issue) => {
-        console.log("errors:", issue.path.join("/"));
-      });
-    }
-
-    throw new TRPCError({ code: "PARSE_ERROR" });
+      },
+    );
+    const results = await response.json();
+    console.log(results);
+    return clientSecretSchema.parse(results);
   });
 
 export const paymentsRouter = createTRPCRouter({
@@ -79,10 +65,8 @@ export const paymentsRouter = createTRPCRouter({
           headers: {
             authorization: `Bearer ${ctx.token}`,
           },
-        }
+        },
       ).then((r) => r.json());
-
-      console.log(response);
 
       const { success, error, data } = TotalSchema.safeParse(response);
 

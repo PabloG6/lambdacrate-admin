@@ -1,4 +1,4 @@
-import { FieldArrayWithId, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Button } from "./ui/button";
 import { Form, FormField, FormItem, FormLabel } from "./ui/form";
 import { Input } from "./ui/input";
@@ -6,22 +6,27 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { EnvVarsSchema, EnvVarsType } from "@/lib/util/types";
 import { z } from "zod";
 import { RefObject, useRef } from "react";
-import { AppInfo } from "@/types/apps";
 type Props = {
-    onSubmit: (envVars: EnvVarsType, keyInputRef?: RefObject<HTMLInputElement>) => void
-}
-export default function EnvVarsForm({onSubmit}: Props) {
-    const keyInputRef = useRef<HTMLInputElement>(null);
-      const form = useForm<z.infer<typeof EnvVarsSchema>>({
-
+  onSubmit: (
+    envVars: EnvVarsType,
+    keyInputRef?: RefObject<HTMLInputElement>,
+  ) => void;
+};
+export default function EnvVarsForm({ onSubmit }: Props) {
+  const keyInputRef = useRef<HTMLInputElement>(null);
+  const form = useForm<z.infer<typeof EnvVarsSchema>>({
     resolver: zodResolver(EnvVarsSchema),
     defaultValues: {
-        key: '',
-        value: ''
+      key: "",
+      value: "",
     },
   });
 
-  const {register, formState: {isValid}, getValues, reset} = form;
+  const {
+    formState: { isValid },
+    getValues,
+    reset,
+  } = form;
   return (
     <Form {...form}>
       {" "}
@@ -30,17 +35,17 @@ export default function EnvVarsForm({onSubmit}: Props) {
         <FormLabel className="w-full ml-3 font-light text-sm">Value</FormLabel>
       </div>
       <FormField
-        name={'key'}
+        name={"key"}
         render={({ field }) => (
           <>
             <FormItem className="space-y-2 col-span-5">
-              <Input placeholder="EXAMPLE_KEY"  { ...field }  ref={keyInputRef} />
+              <Input placeholder="EXAMPLE_KEY" {...field} ref={keyInputRef} />
             </FormItem>
           </>
         )}
       ></FormField>
       <FormField
-        name={'value'}
+        name={"value"}
         render={({ field }) => (
           <>
             <FormItem className="space-y-2 col-span-5">
@@ -60,9 +65,10 @@ export default function EnvVarsForm({onSubmit}: Props) {
 
           onSubmit(getValues(), keyInputRef);
           reset();
-       
-          setTimeout(() => {keyInputRef?.current?.focus()}, 20)
-          
+
+          setTimeout(() => {
+            keyInputRef?.current?.focus();
+          }, 20);
         }}
       >
         Add

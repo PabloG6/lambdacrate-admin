@@ -3,7 +3,5 @@ import { TRPCProvider } from "@/contexts/TrpcProvider";
 import { LayoutProps } from "@/lib/util/props";
 
 export default function Layout({ children }: LayoutProps) {
-  return <TRPCProvider>
-    <ProfileProvider>{children}</ProfileProvider>
-  </TRPCProvider>
+  return <TRPCProvider>{children}</TRPCProvider>;
 }

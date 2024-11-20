@@ -6,10 +6,8 @@ import {
 } from "@/types/apps";
 import { env } from "@/app/env";
 import { z } from "zod";
-import { observable } from "@trpc/server/observable";
-import { Deployment, deploymentSchema } from "@/types/deployment";
 import { TRPCError } from "@trpc/server";
-import { buildAuthHeaders } from "../../utils/utils";
+import { buildAuthHeaders } from "../../utils/server-utils";
 import { authProcedure, publicProcedure, createTRPCRouter } from "../../trpc";
 export const branchRouter = createTRPCRouter({
   git_branches: authProcedure
@@ -19,7 +17,7 @@ export const branchRouter = createTRPCRouter({
         `${env.API_URL}/api/apps/branches/git_branches/${input}`,
         {
           headers: { authorization: `Bearer ${ctx.token}` },
-        }
+        },
       ).then((r) => r.json());
 
       console.log(response);
@@ -30,33 +28,7 @@ export const branchRouter = createTRPCRouter({
         return data;
       }
 
-      console.error(error);
       throw new TRPCError({ code: "PARSE_ERROR" });
-    }),
-
-  events: authProcedure
-    .input(z.object({ lastEventId: z.string(), id: z.string().nullish() }))
-    .subscription(function ({ input }) {
-      return observable<Deployment>((emit) => {
-        const intervalID = setInterval(() => {
-          fetch(`${env.API_URL}/api/apps/deployments/${input.id}`, {})
-            .then(async (response) => {
-              const results = await response.json();
-              const schema = deploymentSchema.parse(results);
-              if (schema.status == "failed") {
-                clearInterval(intervalID);
-                emit.next(schema);
-                return;
-              }
-              emit.next(schema);
-            })
-            .catch(() => {});
-        }, 30_000);
-
-        return () => {
-          clearInterval(intervalID);
-        };
-      });
     }),
 
   add: publicProcedure
@@ -93,7 +65,6 @@ export const branchRouter = createTRPCRouter({
         return data;
       }
 
-
       throw new TRPCError({ code: "PARSE_ERROR" });
     }),
   showDetails: authProcedure
@@ -107,7 +78,7 @@ export const branchRouter = createTRPCRouter({
             authorization: `Bearer ${ctx.token}`,
           },
           method: "GET",
-        }
+        },
       ).then(async (response) => await response.json());
       const { success, error, data } = BranchOutputSchema.safeParse(response);
       if (success) {

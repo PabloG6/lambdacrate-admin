@@ -7,13 +7,16 @@ import { ApiErrorsSchema, apiErrorsSchema } from "@/lib/util/types";
 const t = initTRPC.context<AuthContext>().create({
   transformer: superjson,
   errorFormatter(opts) {
-  const {shape, error} = opts
-  if(error.code == 'UNPROCESSABLE_CONTENT') {
-    return {
-      ...shape,
-  
+    const { shape, error } = opts;
+    if (error.code == "UNPROCESSABLE_CONTENT") {
+      return {
+        ...shape,
+      };
     }
-  }
+
+    return {
+      ...opts,
+    };
   },
 });
 
@@ -28,8 +31,10 @@ export const publicProcedure = t.procedure;
 export const authProcedure = t.procedure.use(async function isAuthed(opts) {
   const { ctx } = opts;
   // `ctx.user` is nullable
+
   if (!ctx.token) {
     //     ^?
+    console.log('unauthorized called', ctx);
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
   return opts.next({

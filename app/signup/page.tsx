@@ -28,8 +28,7 @@ export default function Page() {
 
 
   const onFormSubmit = async (data: any, e?: BaseSyntheticEvent) => {
-    console.log("form submit");
-    console.log(data);
+
     
     const response = await createAccount(data);
     
