@@ -26,7 +26,7 @@ export const createGatewaySchema = z.object({
 });
 
 export type CreateGateway = z.infer<typeof createGatewaySchema>;
-export type ProductGateway = z.infer<typeof createProductGatewaySchema>;
+export type CreateProductGateway = z.infer<typeof createProductGatewaySchema>;
 
 export const createGatewayResponse = z.object({
   name: z.string(),
@@ -48,5 +48,5 @@ export const showGatewayResponse = z.object({
   inserted_at: z.coerce.date(),
   updated_at: z.coerce.date(),
 });
-
+export type ShowProduct = z.infer<typeof showProductGatewaySchema>;
 export type CreateGatewayResponse = z.infer<typeof createGatewayResponse>;

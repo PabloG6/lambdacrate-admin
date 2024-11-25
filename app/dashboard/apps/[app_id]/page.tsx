@@ -3,7 +3,6 @@
 import { DataTable } from "@/components/data-table/data-table";
 import { Button } from "@/components/ui/button";
 
-
 import { branchSearchParams } from "@/trpc/api/branches/types";
 import { trpc } from "@/trpc/client";
 import { ColumnDef } from "@tanstack/react-table";
@@ -20,9 +19,9 @@ export default function Page({
   params: { app_id: string };
 }) {
   const { data: appStatus } = trpc.apps.showDetails.useQuery({ id: app_id });
-  const {data: branches} = trpc.branches.allBranches.useQuery({id: app_id})
+  const { data: branches } = trpc.branches.allBranches.useQuery({ id: app_id });
   const router = useRouter();
-  
+
   return (
     <div className="h-full w-full space-y-6 px-12 py-6">
       <div className="flex flex-col gap-3">
@@ -48,11 +47,13 @@ export default function Page({
         </Link>
       </div>
       <div className="lg:max-w-5xl w-full">
-        
-    <DataTable columns={branchColumns} onRowSelected={((value: GetBranchType) => {
-      router.push(`/dashboard/${app_id}/${value.slug}`)
-    })} data={branches?? []} schema={branchSearchParams}/>
-
+        <DataTable
+          columns={branchColumns}
+          onRowSelected={(value: GetBranchType) => {
+            router.push(`/dashboard/${app_id}/${value.slug}`);
+          }}
+          data={branches ?? []}
+        />
       </div>
     </div>
   );

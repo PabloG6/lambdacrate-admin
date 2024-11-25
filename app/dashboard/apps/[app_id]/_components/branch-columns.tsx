@@ -1,12 +1,10 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { BranchColumnSchema } from "./branch-column-schema";
 import type { GetBranchType, GetDeployment } from "@/types/apps";
 import TextWithTooltip from "@/components/custom/text-with-tooltip";
 import { formatDistance } from "date-fns";
 import { formatDate } from "@/lib/format";
-import { useCallback } from "react";
 import { cn } from "@/lib/utils";
 
 export const branchColumns: ColumnDef<GetBranchType>[] = [
@@ -15,7 +13,9 @@ export const branchColumns: ColumnDef<GetBranchType>[] = [
     header: "Name",
     cell: ({ row }) => {
       const text = row.getValue("slug") as string;
-      return <TextWithTooltip className="font-mono max-w-[100px]" text={text} />;
+      return (
+        <TextWithTooltip className="font-mono max-w-[100px]" text={text} />
+      );
     },
   },
 
@@ -29,36 +29,47 @@ export const branchColumns: ColumnDef<GetBranchType>[] = [
     header: "Status",
     cell: ({ row }) => {
       const deployment = row.getValue("active_deployment") as GetDeployment;
-      
+
       if (!deployment) {
-        return <div className="font-mono capitalize text-xs border rounded-sm p-1 text-center text-orange-500 w-28"><span>Not Deployed</span></div>;
+        return (
+          <div className="font-mono capitalize text-xs border rounded-sm p-1 text-center text-orange-500 w-28">
+            <span>Not Deployed</span>
+          </div>
+        );
       }
 
+      const status = deployment.status.replaceAll("_", " ");
 
-
-      const status = deployment.status.replaceAll("_", " ")
-
-      const colorScheme = function(status){
-        if(status == 'active') {
-            return 'text-green-500';
+      const colorScheme = (function (status) {
+        if (status == "active") {
+          return "text-green-500";
         }
 
-        if(status == 'failed') {
-            return 'text-red-500'
+        if (status == "failed") {
+          return "text-red-500";
         }
 
-        return 'text-yellow-500'
-      }(status)
-      return <div className={cn("font-mono capitalize text-xs border rounded-sm p-1 text-center w-28", colorScheme)}><span>{status}</span></div>;
+        return "text-yellow-500";
+      })(status);
+      return (
+        <div
+          className={cn(
+            "font-mono capitalize text-xs border rounded-sm p-1 text-center w-28",
+            colorScheme,
+          )}
+        >
+          <span>{status}</span>
+        </div>
+      );
     },
   },
   {
     accessorKey: "branch_type",
     header: "Environment",
     cell: ({ row }) => {
-        const branchType = row.getValue('branch_type') as string;
-        return <div className='font-mono'>{branchType}</div>
-    }
+      const branchType = row.getValue("branch_type") as string;
+      return <div className="font-mono">{branchType}</div>;
+    },
   },
   {
     accessorKey: "created_at",
