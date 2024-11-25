@@ -46,6 +46,7 @@ export default function Page() {
     defaultValues: {
       name: "",
       description: "",
+      price: "basic",
       products: [],
     },
     resolver: zodResolver(createGatewaySchema),
@@ -79,12 +80,12 @@ export default function Page() {
     const response = await mutateAsync({ ...data });
     const uuid = crypto.randomUUID();
     router.replace(
-      `/apps/gateways/${response.gateway_id}/checkout?ref_id=${uuid}`,
+      `/dashboard/new-gateway/${response.gateway_id}/checkout?ref_id=${uuid}`,
     );
   };
 
   return (
-    <div className="flex flex-col h-screen max-h-screen bg-background">
+    <div className="flex w-full flex-col h-screen max-h-screen bg-background">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

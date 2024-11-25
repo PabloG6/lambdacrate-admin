@@ -1,5 +1,6 @@
 import { createTRPCRouter } from "../trpc";
 import { accountsRouter } from "./accounts/accounts";
+import { rateLimitRouter } from "./accounts/rate_limit";
 import { appsRouter } from "./apps";
 import { branchRouter } from "./branches/branches";
 import { cpuRouter } from "./cpu-selection";
@@ -13,7 +14,7 @@ export const apiRouter = createTRPCRouter({
   apps: appsRouter,
   cpu: cpuRouter,
   gateway: gatewayRouter,
+  rate_limit: rateLimitRouter,
 });
 
 export type AppRouter = typeof apiRouter;
-

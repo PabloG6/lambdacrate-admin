@@ -6,7 +6,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trpc } from "@/trpc/server";
 import { getPriceDetails } from "@/trpc/utils/server-utils";
@@ -39,7 +38,7 @@ export default async function Page({
                 <span className="text-base text-muted-foreground">
                   {gateway.description}
                 </span>
-                <span className="text-base">&ndash;</span>
+                <span className="text-base">&mdash;</span>
                 <span className="capitalize">
                   {getPriceDetails(gateway.price_id)}
                 </span>
@@ -49,7 +48,7 @@ export default async function Page({
 
           <div className="space-y-2">
             <p className="font-medium text-base">Products</p>
-            <Accordion type="single" collapsible>
+            <Accordion type="single" collapsible className="space-y-4">
               {gateway.products.map((product) => (
                 <AccordionItem
                   value={product.id}

@@ -9,7 +9,7 @@ import { buildAuthHeaders, stripePriceIDs } from "@/trpc/utils/server-utils";
 import { TRPCError } from "@trpc/server";
 import { createUniqueNameId } from "mnemonic-id";
 import { z } from "zod";
-import { getTRPCStatusCode } from "@/trpc/utils/server-utils";
+import { getTRPCStatusCode, getPriceDetails } from "@/trpc/utils/server-utils";
 export const gatewayRouter = createTRPCRouter({
   create: authProcedure
     .input(createGatewaySchema)
@@ -41,7 +41,14 @@ export const gatewayRouter = createTRPCRouter({
       method: "GET",
       headers: buildAuthHeaders(ctx),
     });
-    const results = await response.json();
+    const results = await response.json().then((response) => {
+      const price_id = getPriceDetails(response.price_id);
+      response.price_id = price_id;
+      return response;
+    });
+
+    console.log(results);
+
     return showGatewayResponse.parse(results);
   }),
   list: authProcedure.query(async ({ ctx }) => {

@@ -16,40 +16,35 @@ import {
 } from "./sidebar";
 import { UserDropDown } from "./user-dropdown";
 import { DashboardIcon } from "@radix-ui/react-icons";
-import { Settings2 } from "lucide-react";
-import { useSelectedLayoutSegment } from "next/navigation";
+import { UsersIcon, Wallet2Icon } from "lucide-react";
+import { useParams, useSelectedLayoutSegment } from "next/navigation";
 import { useEffect } from "react";
 
 const links = [
   {
-    name: "Dashboard",
-    link: "/dashboard",
+    name: "Accounts",
+    link: "accounts",
+    icon: UsersIcon,
+  },
+  {
+    name: "Products",
+    link: "products",
     icon: DashboardIcon,
   },
   {
-    name: "Settings",
-    link: "/settings",
-    icon: Settings2,
+    name: "Subscriptions",
+    link: "subscriptions",
+    icon: Wallet2Icon,
   },
 ];
 export default function DashboardSideBar() {
-  const {open, setOpen} = useSidebar();
-  const layoutSegment = useSelectedLayoutSegment();
-  useEffect(() => {
-    if(layoutSegment != null) {
-        setOpen(false);
-    } else {
-        setOpen(true)
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [layoutSegment]);
-
+  const params = useParams();
+  const gatewayID = params["gateway_id"];
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar>
       <SidebarHeader>
         <Logo />
         {/*fix this open close to fix the sidebar animation*/}
-        {open ? <div>dashboard</div> : <></>}
       </SidebarHeader>
       <SidebarContent className="pt-6">
         <SidebarGroup>
@@ -57,7 +52,7 @@ export default function DashboardSideBar() {
             {links.map((link) => (
               <SidebarMenuItem key={link.name}>
                 <SidebarMenuButton asChild>
-                  <Link href={link.link}>
+                  <Link href={`/dashboard/gateways/${gatewayID!}/${link.link}`}>
                     <link.icon />
                     <span>{link.name}</span>
                   </Link>

@@ -28,9 +28,7 @@ export async function NavBar() {
   const profile = await getProfile();
 
   return (
-    <nav className="sticky top-0 flex h-12 py-1 items-center gap-4 border-b bg-background px-8 md:px-6">
-            <SidebarTrigger/>
-
+    <nav className="sticky w-full top-0 flex h-12 z-20 py-1 items-center gap-4 border-b bg-background px-8 md:px-6">
       <div className="w-full flex">
         <BreadcrumbBar></BreadcrumbBar>
       </div>
@@ -90,7 +88,7 @@ export async function NavBar() {
               className="rounded-full self-end"
             >
               {profile?.avatar_url && (
-                <Avatar className='h-9 w-9'>
+                <Avatar className="h-9 w-9">
                   <AvatarImage src={profile.avatar_url}></AvatarImage>
                   <AvatarFallback>
                     <CircleUser className="h-5 w-5" />

@@ -10,12 +10,16 @@ import { Skeleton } from "@/components/ui/skeleton";
 import ErrorUI from "@/components/error-ui";
 import { GatewayItem } from "@/components/gateway-item";
 import { CreateGatewayResponse } from "@/trpc/api/gateway/types";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useProfile } from "@/components/ui/profile/profile-provider";
 export default function Component() {
   const { data, isPending, isError, isSuccess } = trpc.gateway.list.useQuery();
 
+  const profile = useProfile();
+
   return (
-    <div className="flex flex-col w-full min-h-screen">
-      <main className="flex min-h-[calc(100vh_-_theme(spacing.16))]  flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
+    <div className="flex flex-col w-full h-screen px-4 pb-8">
+      <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] overflow-hidden  flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
         {isPending && (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {[...Array(6)].map((_, i) => (
@@ -33,48 +37,43 @@ export default function Component() {
 
         {isError && <ErrorUI />}
         {isSuccess && (
-          <div className="lg:max-w-8xl w-full mx-auto">
-            <div className="flex w-full justify-end py-1">
-              {data!.length > 0 ? (
+          <div className="flex flex-col items-center justify-center flex-grow overflow-hidden">
+            {data!.length > 0 ? (
+              <div
+                className="flex w-full  lg:max-w-8xl mx-auto justify-between h-16 items-center
+                px-4 py-1"
+              >
+                <div className="flex flex-col ">
+                  <p className="text-lg font-medium ">
+                    Welcome,{" "}
+                    <span className="font-mono text-sm">
+                      {profile?.email?.split("@")[0]}
+                    </span>
+                  </p>
+                </div>
                 <Button size={"icon"} asChild>
                   <Link href="/dashboard/new-gateway">
                     <PlusIcon />
                   </Link>
                 </Button>
-              ) : (
-                <></>
-              )}
-            </div>
-            <div className="grid grid-cols-3 gap-7 w-full"></div>
-            <>
-              {data!.length > 0 ? (
-                <div className="grid grid-cols-3 gap-5">
+              </div>
+            ) : (
+              <></>
+            )}
+            {data!.length > 0 ? (
+              <ScrollArea
+                className="flex-grow w-full"
+                style={{ maxHeight: "calc(100vh - 8rem)" }}
+              >
+                <div className="grid px-4 mx-auto lg:max-w-8xl grid-cols-4 h-full gap-5">
                   {data!.map((item: CreateGatewayResponse) => (
                     <GatewayItem data={item} key={item.id} />
                   ))}
                 </div>
-              ) : (
-                <div className="w-full flex h-full items-center justify-center">
-                  <div className="flex flex-col items-center w-[330px] gap-6">
-                    <LayoutGrid />
-                    <div className="text-center mb-6 space-y-4">
-                      <h2 className="font-medium text-lg">Your Gateways</h2>
-                      <p className="text-muted-foreground text-sm">
-                        You don&apos;t have any gateways. Click the button below
-                        to start creating your first app.
-                      </p>
-
-                      <Button asChild>
-                        <Link href="/dashboard/new-gateway">
-                          Create a gateway
-                        </Link>
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </>
-            <div className=" grid grid-cols-3 gap-5 "></div>
+              </ScrollArea>
+            ) : (
+              <></>
+            )}
           </div>
         )}
       </main>
