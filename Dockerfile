@@ -8,6 +8,7 @@ LABEL fly_launch_runtime="Next.js"
 
 # Next.js app lives here
 WORKDIR /app
+
 # Set production environment
 ENV NODE_ENV="production"
 
@@ -27,7 +28,19 @@ RUN npm ci --include=dev
 COPY . .
 
 # Build application
-RUN npm run build
+RUN --mount=type=secret,id=API_URL \
+    --mount=type=secret,id=GITHUB_CLIENT_ID \
+    --mount=type=secret,id=NEXT_PUBLIC_BASE_URL \
+    --mount=type=secret,id=NEXT_PUBLIC_SECRET_KEY \
+    --mount=type=secret,id=GITHUB_CLIENT_SECRET \
+    --mount=type=secret,id=GITHUB_URL \
+    API_URL="$(cat /run/secrets/API_URL)" \
+    GITHUB_CLIENT_ID="$(cat /run/secrets/GITHUB_CLIENT_ID)" \
+    NEXT_PUBLIC_BASE_URL="$(cat /run/secrets/NEXT_PUBLIC_BASE_URL)" \
+    NEXT_PUBLIC_SECRET_KEY="$(cat /run/secrets/NEXT_PUBLIC_SECRET_KEY)" \
+    GITHUB_CLIENT_SECRET="$(cat /run/secrets/GITHUB_CLIENT_SECRET)" \
+    GITHUB_URL="$(cat /run/secrets/GITHUB_URL)" \
+    npm run build
 
 # Remove development dependencies
 RUN npm prune --omit=dev
