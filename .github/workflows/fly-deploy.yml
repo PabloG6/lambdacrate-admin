@@ -9,17 +9,22 @@ jobs:
   deploy:
     name: Deploy app
     runs-on: ubuntu-latest
-    concurrency: deploy-group    # optional: ensure only one action runs at a time
+    concurrency: deploy-group # optional: ensure only one action runs at a time
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only
+      - run: | 
+          flyctl deploy --remote-only --build-secret API_URL=$API_URL
+          --build-secret GITHUB_CLIENT_ID=$GITHUB_CLIENT_ID
+          --build-secret GITHUB_CLIENT_SECRET=$GITHUB_CLIENT_SECRET
+          --build-secret GITHUB_URL=$GITHUB_URL
+          --build-secret NEXT_PUBLIC_STRIPE_KEY=$PUBLIC_STRIPE_KEY
+          --build-secret NEXT_PUBLIC_BASE_URL=$PUBLIC_BASE_URL
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
           API_URL: ${{ secrets.API_URL }}
-          GHUB_CLIENT: ${{ secrets.GHUB_CLIENT }}
-          GHUB_URL: ${{ secrets.GHUB_URL }}
-          GHUB_CLIENT_ID: ${{ secrets.GHUB_CLIENT_ID }}
-          GHUB_CLIENT_SECRET: ${{ secrets.GHUB_CLIENT_SECRET }}
+          GITHUB_URL: ${{ secrets.GHUB_URL }}
+          GITHUB_CLIENT_ID: ${{ secrets.GHUB_CLIENT_ID }}
+          GITHUBCLIENT_SECRET: ${{ secrets.GHUB_CLIENT_SECRET }}
           PUBLIC_BASE_URL: ${{ secrets.PUBLIC_BASE_URL }}
           PUBLIC_STRIPE_KEY: ${{ secrets.PUBLIC_STRIPE_KEY }}
