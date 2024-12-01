@@ -16,12 +16,12 @@ jobs:
       - run: "echo API_URL $API_URL"
       - run: "echo NOTHING $NOTHING"
       - run: | 
-          flyctl deploy --remote-only --build-secret API_URL=$API_URL
-          --build-secret GITHUB_CLIENT_ID=$GITHUB_CLIENT_ID
-          --build-secret GITHUB_CLIENT_SECRET=$GITHUB_CLIENT_SECRET
-          --build-secret GITHUB_URL=$GITHUB_URL
-          --build-secret NEXT_PUBLIC_STRIPE_KEY=$PUBLIC_STRIPE_KEY
-          --build-secret NEXT_PUBLIC_BASE_URL=$PUBLIC_BASE_URL
+          flyctl deploy --remote-only --build-secret API_URL=$API_URL \
+          --build-secret GITHUB_CLIENT_ID=$GITHUB_CLIENT_ID \
+          --build-secret GITHUB_CLIENT_SECRET=$GITHUB_CLIENT_SECRET \
+          --build-secret GITHUB_URL=$GITHUB_URL \
+          --build-secret NEXT_PUBLIC_STRIPE_KEY=$PUBLIC_STRIPE_KEY \
+          --build-secret NEXT_PUBLIC_BASE_URL=$PUBLIC_BASE_URL \
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
           API_URL: ${{ secrets.API_URL }}
