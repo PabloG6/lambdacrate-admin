@@ -27,6 +27,6 @@ jobs:
           API_URL: ${{ secrets.API_URL }}
           GITHUB_URL: ${{ secrets.GHUB_URL }}
           GITHUB_CLIENT_ID: ${{ secrets.GHUB_CLIENT_ID }}
-          GITHUBCLIENT_SECRET: ${{ secrets.GHUB_CLIENT_SECRET }}
+          GITHU_CLIENT_SECRET: ${{ secrets.GHUB_CLIENT_SECRET }}
           PUBLIC_BASE_URL: ${{ secrets.PUBLIC_BASE_URL }}
           PUBLIC_STRIPE_KEY: ${{ secrets.PUBLIC_STRIPE_KEY }}
