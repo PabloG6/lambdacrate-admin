@@ -1,8 +1,7 @@
 "use client";
-import { DataTable } from "@/components/data-table";
-import { Button } from "@/components/ui/button";
 
-import { cn } from "@/lib/utils";
+import { DataTable } from "@/components/data-table/data-table";
+import { Button } from "@/components/ui/button";
 import {
   ColumnDef,
   flexRender,
@@ -11,6 +10,7 @@ import {
 } from "@tanstack/react-table";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
+import React from "react";
 
 
 
@@ -78,7 +78,7 @@ export const columns: ColumnDef<FeatureFlag>[] = [
 export function FeatureFlagTable(props: FeatureTableProps) {
   return (
     <div className="border rounded-md mt-4">
-          <DataTable data={props.data} footer="Your feature flags" columns={columns}/>
+          <DataTable data={props.data} columns={columns}/>
 
     </div>
   )

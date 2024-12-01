@@ -51,7 +51,6 @@ import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import { ScrollArea } from "../ui/scroll-area";
 import { Separator } from "../ui/separator";
-import { createProject } from "@/app/dashboard/[app_id]/_actions/projects";
 import ProgressButton from "../ui/progress-button";
 import { start } from "repl";
 import { env } from "@/app/env";
@@ -103,10 +102,10 @@ export default function NewProject({ nextStep }: NewProjectProps) {
   const onSubmitHandler = (data: AppInfo, e?: React.BaseSyntheticEvent) => {
     e?.preventDefault();
     startTransition(async () => {
-      const response = await createProject(data);
-      if (response.success) {
-        redirect(`/dashboard/${response.app_id}/environment`);
-      }
+      // const response = await createProject(data);
+      // if (response.success) {
+      //   redirect(`/dashboard/${response.app_id}/environment`);
+      // }
     });
   };
 

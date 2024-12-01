@@ -3,13 +3,15 @@ import { authProcedure, createTRPCRouter } from "@/trpc/trpc";
 import { buildAuthHeaders } from "@/trpc/utils/server-utils";
 import { z } from "zod";
 import { getRtAccountsSchema } from "./types";
+import { productsGatewayRouter } from "./products";
 
 export const rateLimitRouter = createTRPCRouter({
+  products: productsGatewayRouter,
   createAccount: authProcedure
     .input(z.object({ id: z.string(), payload: z.string().email() }))
     .mutation(async ({ ctx, input }) => {
       const maybeCreateAccount = await fetch(
-        `${env.API_URL}/api/admin/rate-limit/accounts/${input.id}`,
+        `${env.API_URL}/api/admin/rate-limit/${input.id}/accounts`,
         {
           method: "POST",
           body: JSON.stringify({ email: input.payload }),
@@ -21,7 +23,7 @@ export const rateLimitRouter = createTRPCRouter({
       );
 
       const accounts = await maybeCreateAccount.json();
-
+      console.log(accounts);
       return getRtAccountsSchema.parse(accounts);
     }),
 
@@ -30,7 +32,7 @@ export const rateLimitRouter = createTRPCRouter({
     .query(async ({ ctx, input: id }) => {
       console.log(id);
       const maybeAccounts = await fetch(
-        `${env.API_URL}/api/admin/rate-limit/accounts/${id}`,
+        `${env.API_URL}/api/admin/rate-limit/${id}/accounts`,
         {
           headers: buildAuthHeaders(ctx),
         },

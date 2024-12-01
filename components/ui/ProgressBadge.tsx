@@ -1,6 +1,5 @@
 "use server";
 import { Loader2 } from "lucide-react";
-import { getAppMetaData } from "../../app/dashboard/[app_id]/actions";
 import { Badge } from "@/components/ui/badge";
 import { setTimeout } from "timers/promises";
 

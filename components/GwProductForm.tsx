@@ -12,7 +12,7 @@ import { Input } from "./ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RefObject, useRef } from "react";
 import {
-  ProductGateway,
+  CreateProductGateway,
   createProductGatewaySchema,
   productIntervals,
 } from "@/trpc/api/gateway/types";
@@ -27,14 +27,14 @@ import {
 } from "./ui/select";
 type Props = {
   onSubmit: (
-    product: ProductGateway,
+    product: CreateProductGateway,
 
     e?: React.BaseSyntheticEvent<any>,
   ) => void;
 };
 export default function GwProductForm({ onSubmit }: Props) {
   const keyInputRef = useRef<HTMLInputElement>(null);
-  const form = useForm<ProductGateway>({
+  const form = useForm<CreateProductGateway>({
     resolver: zodResolver(createProductGatewaySchema),
     defaultValues: {
       name: "",

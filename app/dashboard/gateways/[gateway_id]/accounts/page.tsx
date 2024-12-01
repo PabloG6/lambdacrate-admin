@@ -8,6 +8,7 @@ import { GetRtAccounts } from "@/trpc/api/accounts/rate_limit/types";
 import { trpc } from "@/trpc/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
+import { useState } from "react";
 
 type ParamProps = {
   gateway_id: string;
@@ -16,13 +17,13 @@ type ParamProps = {
 const accountColumns: ColumnDef<GetRtAccounts>[] = [
   {
     accessorKey: "id",
-    header: "Account ID",
+    header: "ID",
     cell: ({ row }) => {
       return <>{row.getValue("id")}</>;
     },
   },
   {
-    header: "Email address",
+    header: "Email",
     accessorKey: "email",
     cell: ({ row }) => {
       return <>{row.getValue("email")}</>;
@@ -53,20 +54,27 @@ export default function Page({
 }: {
   params: ParamProps;
 }) {
-  const { data: accounts } = trpc.rate_limit.getAccounts.useQuery(gateway_id);
-
+  const { data: accounts, refetch } =
+    trpc.rate_limit.getAccounts.useQuery(gateway_id);
+  const [isDialogOpen, setDialogOpenChange] = useState<boolean>(false);
   return (
     <main className="w-full h-full">
       <div className="h-16 flex flex-col gap-3">
         <h1 className="text-2xl font-semibold">Customers</h1>
       </div>
       <div className="h-12 w-full flex justify-end">
-        <Dialog>
+        <Dialog open={isDialogOpen} onOpenChange={setDialogOpenChange}>
           <DialogTrigger asChild>
             <Button>Create Account</Button>
           </DialogTrigger>
           <DialogContent>
-            <CreateAccount></CreateAccount>
+            <CreateAccount
+              onNotifySubmit={() => {
+                console.log("notifying submit");
+                setDialogOpenChange(false);
+                refetch();
+              }}
+            ></CreateAccount>
           </DialogContent>
         </Dialog>
       </div>

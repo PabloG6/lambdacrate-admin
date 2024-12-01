@@ -34,33 +34,22 @@ type Connection = {
       ws?: WebSocket;
     }
 );
-export class PhoenixWsClient implements TRPCWebSocketClient {
-  ws: WebSocket | undefined;
+// export class PhoenixWsClient implements TRPCWebSocketClient {
+//   ws: WebSocket | undefined;
 
-  constructor(opts: WebSocketClientOptions) {
-    const url = resultOf<string>(opts.url);
-    this.ws = new WebSocket(url);
-    this.ws.onclose = (ev: CloseEvent) => {
+//   constructor(opts: WebSocketClientOptions) {
+//     const url = resultOf<string>(opts.url);
+//     this.ws = new WebSocket(url);
+//     this.ws.onclose = (ev: CloseEvent) => {
      
-    }
+//     }
 
-    this.connection = null;
-  }
-  connection: Connection | null;
+//     this.connection = null;
+//   }
+//   request: (opts: { op: Operation; callbacks: Observer<{ id: JSONRPC2.RequestId; } & (TRPCErrorResponse<any> | TRPCResultMessage<unknown>), TRPCClientError<AnyRouter>>; lastEventId: string | undefined; }) => UnsubscribeFn;
+//   connection: Connection | null;
 
-  close() {}
-  request(
-    op: Operation,
-    callbacks: Observer<
-      { id: JSONRPC2.RequestId } & (
-        | TRPCErrorResponse<any>
-        | TRPCResultMessage<unknown>
-      ),
-      TRPCClientError<AnyRouter>
-    >
-  ) {
-    return () => {};
-  }
+//   close() {}
 
-  reconnect() {}
-}
+//   reconnect() {}
+// }

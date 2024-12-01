@@ -109,7 +109,7 @@ export function DataTableViewOptions<TData>({
                       >
                         <Check className={cn("h-4 w-4")} />
                       </div>
-                      <span>{column.columnDef.meta?.label || column.id}</span>
+                      <span>{ column.id}</span>
                       {enableOrdering && !search ? (
                         <SortableDragHandle
                           variant="ghost"

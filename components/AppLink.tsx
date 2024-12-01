@@ -16,19 +16,19 @@ export default function AppLink({ app_id }: { app_id: string }) {
     loading: true,
   });
   useEffect(() => {
-    switch (appState?.deployment?.status) {
-      case "active": {
-        setAppLinkState({ text: `${app_id}.lambdacrate.com`, loading: false });
-        break;
-      }
-      case "failed": {
-        setAppLinkState({ text: `${app_id}.lambdacrate.com`, loading: false });
-      }
-    }
+    // switch (appState?.?.status) {
+    //   case "active": {
+    //     setAppLinkState({ text: `${app_id}.lambdacrate.com`, loading: false });
+    //     break;
+    //   }
+    //   case "failed": {
+    //     setAppLinkState({ text: `${app_id}.lambdacrate.com`, loading: false });
+    //   }
+    // }
   }, [appState, app_id]);
   return (
     <div className="flex items-center ">
-      {appLinkState.loading && appState?.deployment?.status !== "failed" && (
+      {/* {appLinkState.loading && appState?.deployment?.status !== "failed" && (
         <Skeleton className="w-60 h-4"></Skeleton>
       )}
       {appState?.deployment?.status == "active" && (
@@ -41,8 +41,8 @@ export default function AppLink({ app_id }: { app_id: string }) {
             <span className="text-xs">{appLinkState.text}</span>
           </Link>
           <OpenInNewWindowIcon className="ml-2" />
-        </>
-      )}
+        </> */}
+      {/* )} */}
     </div>
   );
 }

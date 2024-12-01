@@ -1,13 +1,11 @@
 'use server'
-import { endpoint } from "@/app/env";
-import { FeatureSchema } from "./new/page";
-import { unstable_noStore } from "next/cache";
+
+import { env } from "@/app/env";
 
 export async function  createFlag(app_id: string, data: any) {
     console.log('create flag');
-
-        console.log(endpoint);
-      const response = await fetch(`${endpoint}/api/features`, {
+      const response = await fetch(`${env.API_URL}/api/features`, {
+        
         method: 'POST',
         headers: {
             'content-type': 'application/json',
@@ -26,7 +24,7 @@ export async function getFeatureFlags(appId: string) {
 
     const endpoint = "http://127.0.0.1:4000";
     const searchParams = new URLSearchParams({app_id: appId})
-    const response = await fetch(`${endpoint}/api/features?${searchParams}`, {
+    const response = await fetch(`${env.API_URL}/api/features?${searchParams}`, {
         cache: 'no-cache',
       headers: {
         "content-type": "application/json",

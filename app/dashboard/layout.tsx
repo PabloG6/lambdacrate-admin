@@ -3,7 +3,7 @@ import { NavBar } from "@/components/ui/navbar";
 import WebSocketContextProvider from "@/contexts/WebsocketContextProvider";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import ProfileProvider from "@/components/ui/profile/profile-provider";
-import Loading from "./apps/[app_id]/loading";
+import Loading from "./_apps/[app_id]/loading";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

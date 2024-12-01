@@ -8,6 +8,8 @@ const t = initTRPC.context<AuthContext>().create({
   transformer: superjson,
   errorFormatter(opts) {
     const { shape, error } = opts;
+    //TODO: make errors mor comprehensive and easier to read.
+
     if (error.code == "UNPROCESSABLE_CONTENT") {
       return {
         ...shape,
@@ -34,7 +36,7 @@ export const authProcedure = t.procedure.use(async function isAuthed(opts) {
 
   if (!ctx.token) {
     //     ^?
-    console.log('unauthorized called', ctx);
+    console.log("unauthorized called", ctx);
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
   return opts.next({

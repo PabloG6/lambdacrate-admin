@@ -7,7 +7,7 @@ export default function OverviewDescription({app_id} : {app_id: string}) {
     const appState = useAppState();
     console.log(appState);
     return <>
-    {appState?.status == 'active'} 
+
     <div className="col-span-3">
             <p className="text-base font-medium mb-2">
               Welcome to your new project

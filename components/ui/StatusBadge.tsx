@@ -1,9 +1,7 @@
 "use client";
 import { Loader2, LoaderCircle } from "lucide-react";
-import {
-  getAppMetaData,
-  getStatus,
-} from "../../app/dashboard/[app_id]/actions";
+
+
 import { Badge } from "@/components/ui/badge";
 import { setTimeout } from "timers/promises";
 import { useEffect, useState } from "react";
@@ -19,28 +17,28 @@ export default function StatusBadge(props: { app_id: string }) {
   
   const [badgeStatus, setBadgeStatus] = useState<BadgeStatus>({text: "Loading...", loading: true});
   useEffect(() => {
-    switch (appState?.deployment?.status) {
-      case "failed": {
-        console.log()
-        setBadgeStatus({text: "This deployment has failed", loading: false});
-        break;
-      }
+    // switch (appState?.deployment?.status) {
+    //   case "failed": {
+    //     console.log()
+    //     setBadgeStatus({text: "This deployment has failed", loading: false});
+    //     break;
+    //   }
 
-      case "active": {
-        setBadgeStatus({loading: false, text: "Your project is ready"});
-        break;
-      }
+    //   case "active": {
+    //     setBadgeStatus({loading: false, text: "Your project is ready"});
+    //     break;
+    //   }
 
-      case undefined: {
-        setBadgeStatus({loading: true, text: "Retrieving deployment status"})
-        break;
-      }
-      default: {
-        console.log(appState);
-        setBadgeStatus({text: "Status unknown", loading: true});
+    //   case undefined: {
+    //     setBadgeStatus({loading: true, text: "Retrieving deployment status"})
+    //     break;
+    //   }
+    //   default: {
+    //     console.log(appState);
+    //     setBadgeStatus({text: "Status unknown", loading: true});
 
-      }
-    }
+    //   }
+    // }
   }, [appState]);
 
   return (

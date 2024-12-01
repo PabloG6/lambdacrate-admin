@@ -24,6 +24,7 @@ export default async function Page({
   searchParams: SearchParamProps;
 }) {
   const gateway = await trpc.gateway.show(gateway_id);
+  const products = await trpc.gateway.products.index(gateway_id);
   return (
     <div className="grid grid-cols-5 gap-6  w-full px-8 py-4 h-full">
       <div className="col-span-2">
@@ -49,7 +50,7 @@ export default async function Page({
           <div className="space-y-2">
             <p className="font-medium text-base">Products</p>
             <Accordion type="single" collapsible className="space-y-4">
-              {gateway.products.map((product) => (
+              {products.map((product) => (
                 <AccordionItem
                   value={product.id}
                   className="border rounded-md"

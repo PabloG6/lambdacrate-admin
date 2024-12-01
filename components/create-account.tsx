@@ -15,12 +15,16 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { trpc } from "@/trpc/client";
 import { useParams } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 const createAccountSchema = z.object({
   email: z.string().email(),
 });
 type CreateAccount = z.infer<typeof createAccountSchema>;
-export default function CreateAccount() {
+type Props = {
+  onNotifySubmit?: () => void;
+};
+export default function CreateAccount({ onNotifySubmit }: Props) {
   const params = useParams();
   const gatewayID = params["gateway_id"] as string;
   const form = useForm<CreateAccount>({
@@ -34,6 +38,7 @@ export default function CreateAccount() {
   const onSubmit = async (data: CreateAccount) => {
     try {
       const result = await mutateAsync({ id: gatewayID!, payload: data.email });
+      onNotifySubmit?.();
     } catch (error) {}
   };
 
@@ -58,6 +63,7 @@ export default function CreateAccount() {
           )}
         />
         <Button type="submit" className="w-full mt-3" disabled={isPending}>
+          {isPending ?? <Loader2 />}{" "}
           {isPending ? "Creating..." : "Create account"}
         </Button>
       </form>

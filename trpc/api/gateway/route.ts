@@ -10,6 +10,8 @@ import { TRPCError } from "@trpc/server";
 import { createUniqueNameId } from "mnemonic-id";
 import { z } from "zod";
 import { getTRPCStatusCode, getPriceDetails } from "@/trpc/utils/server-utils";
+import { gwProductsRouter } from "./products/route";
+import { subscriptionRouter } from "./subscriptions/route";
 export const gatewayRouter = createTRPCRouter({
   create: authProcedure
     .input(createGatewaySchema)
@@ -28,11 +30,13 @@ export const gatewayRouter = createTRPCRouter({
         }),
       });
 
+      console.log("hello world this has been called");
       if (response.ok) {
         const results = await response.json();
-
+        console.log("hello world", results);
         return createGatewayResponse.parse(results);
       }
+      console.log("hello world, this failed");
 
       throw new TRPCError({ code: getTRPCStatusCode(response.status) });
     }),
@@ -51,13 +55,14 @@ export const gatewayRouter = createTRPCRouter({
 
     return showGatewayResponse.parse(results);
   }),
+  products: gwProductsRouter,
+  subscriptions: subscriptionRouter,
   list: authProcedure.query(async ({ ctx }) => {
     const response = await fetch(`${env.API_URL}/api/apps/gateways`, {
       headers: buildAuthHeaders(ctx, { "content-type": "application/json" }),
     });
 
     const results = await response.json();
-
     return z.array(showGatewayResponse).parse(results);
   }),
 });

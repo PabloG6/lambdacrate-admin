@@ -1,10 +1,11 @@
 "use server";
 
 import { lucia } from "@/lib/auth/lucia";
-import { endpoint } from "../env";
+import { env } from "../env";
 
 export async function createAccount(data: any) {
-  const response = await fetch(`${endpoint}/api/auth/signup`, {
+  const response = await fetch(`${env.API_URL}/api/auth/signup`, {
+    
     method: "POST",
     body: JSON.stringify(data),
     headers: { "content-type": "application/json" },
@@ -17,7 +18,7 @@ export async function createAccount(data: any) {
 
 
 export async function login(data: any) {
-    const response = await fetch(`${endpoint}/api/auth/login`, {
+    const response = await fetch(`${env.API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           'content-type': 'application/json'
@@ -30,7 +31,7 @@ export async function login(data: any) {
 
 export async function cliLogin(data: any) {
     console.log(data);
-    const response = await fetch(`${endpoint}/api/auth/cli/login`, {
+    const response = await fetch(`${env.API_URL}/api/auth/cli/login`, {
         method: "POST",
         body: JSON.stringify(data),
         headers: { "content-type": "application/json" },

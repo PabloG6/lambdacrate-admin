@@ -35,8 +35,7 @@ export default function DeploymentStatus() {
     const event = eventStream.findLast((e) => e.event_type === "apps");
     console.log('event', event);
     if (event) {
-      const state = (event as AppInfoEvent).deployment.status;
-      setCurrentState(state);
+   
     }
   }, [eventStream]);
   return (

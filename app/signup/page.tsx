@@ -1,7 +1,6 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-export {createAccount} from './actions'
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import {

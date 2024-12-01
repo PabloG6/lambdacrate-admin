@@ -12,9 +12,12 @@ import { GatewayItem } from "@/components/gateway-item";
 import { CreateGatewayResponse } from "@/trpc/api/gateway/types";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useProfile } from "@/components/ui/profile/profile-provider";
+import { useEffect } from "react";
 export default function Component() {
   const { data, isPending, isError, isSuccess } = trpc.gateway.list.useQuery();
-
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
   const profile = useProfile();
 
   return (
@@ -38,39 +41,51 @@ export default function Component() {
         {isError && <ErrorUI />}
         {isSuccess && (
           <div className="flex flex-col items-center justify-center flex-grow overflow-hidden">
-            {data!.length > 0 ? (
-              <div
-                className="flex w-full  lg:max-w-8xl mx-auto justify-between h-16 items-center
-                px-4 py-1"
-              >
-                <div className="flex flex-col ">
-                  <p className="text-lg font-medium ">
-                    Welcome,{" "}
-                    <span className="font-mono text-sm">
-                      {profile?.email?.split("@")[0]}
-                    </span>
-                  </p>
+            {data!.length == 0 && (
+              <div className="flex w-full h-full items-center justify-center">
+                <div className="flex flex-col gap-3 items-center justify-center">
+                  <div className="text-lg text-balance max-w-30 text-sm text-muted-foreground">
+                    You don&apos;t have any gateways yet.{" "}
+                  </div>
+                  <LayoutGrid className="h-8 w-8"></LayoutGrid>
+                  <Button asChild>
+                    <Link href="/dashboard/new-gateway">Create a Gateway</Link>
+                  </Button>
                 </div>
-                <Button size={"icon"} asChild>
-                  <Link href="/dashboard/new-gateway">
-                    <PlusIcon />
-                  </Link>
-                </Button>
               </div>
-            ) : (
-              <></>
             )}
             {data!.length > 0 ? (
-              <ScrollArea
-                className="flex-grow w-full"
-                style={{ maxHeight: "calc(100vh - 8rem)" }}
-              >
-                <div className="grid px-4 mx-auto lg:max-w-8xl grid-cols-4 h-full gap-5">
-                  {data!.map((item: CreateGatewayResponse) => (
-                    <GatewayItem data={item} key={item.id} />
-                  ))}
+              <>
+                <div
+                  className="flex w-full  lg:max-w-8xl mx-auto justify-between h-16 items-center
+                px-9 py-1"
+                >
+                  <div className="flex flex-col ">
+                    <p className="text-lg font-medium ">
+                      Welcome,{" "}
+                      <span className="font-mono text-sm">
+                        {profile?.email?.split("@")[0]}
+                      </span>
+                    </p>
+                  </div>
+                  <Button size={"icon"} asChild>
+                    <Link href="/dashboard/new-gateway">
+                      <PlusIcon />
+                    </Link>
+                  </Button>
                 </div>
-              </ScrollArea>
+
+                <ScrollArea
+                  className="flex-grow w-full"
+                  style={{ maxHeight: "calc(100vh - 8rem)" }}
+                >
+                  <div className="grid mt-6 px-8 mx-auto lg:max-w-8xl grid-cols-4 h-full gap-5">
+                    {data!.map((item: CreateGatewayResponse) => (
+                      <GatewayItem data={item} key={item.id} />
+                    ))}
+                  </div>
+                </ScrollArea>
+              </>
             ) : (
               <></>
             )}

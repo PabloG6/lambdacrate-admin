@@ -29,9 +29,9 @@ import Link from "next/link";
 import { Input } from "./ui/input";
 import { Label } from "@radix-ui/react-label";
 import { ChangeEvent, useState } from "react";
-import { deleteApp } from "@/app/dashboard/[app_id]/actions";
 import { AppInfo } from "@/types/apps";
 import { Badge } from "./ui/badge";
+import { deleteApp } from "@/app/dashboard/_apps/[app_id]/actions";
 
 export function AppItem({ props }: { props: AppInfo }) {
   const [inputText, setInputText] = useState<string>("");
