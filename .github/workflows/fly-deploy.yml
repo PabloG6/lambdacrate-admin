@@ -16,3 +16,10 @@ jobs:
       - run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          API_URL: ${{ secrets.API_URL }}
+          GHUB_CLIENT: ${{ secrets.GHUB_CLIENT }}
+          GHUB_URL: ${{ secrets.GHUB_URL }}
+          GHUB_CLIENT_ID: ${{ secrets.GHUB_CLIENT_ID }}
+          GHUB_CLIENT_SECRET: ${{ secrets.GHUB_CLIENT_SECRET }}
+          PUBLIC_BASE_URL: ${{ secrets.PUBLIC_BASE_URL }}
+          PUBLIC_STRIPE_KEY: ${{ secrets.PUBLIC_STRIPE_KEY }}

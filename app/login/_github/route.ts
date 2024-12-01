@@ -2,7 +2,7 @@ import { github } from "@/lib/auth/lucia";
 import { generateState } from "arctic";
 import { cookies } from "next/headers";
 
-export async function GET(): Promise<Response> {
+export async function GET() {
     const state = generateState();
     const url = await github.createAuthorizationURL(state, {scopes: ["user:email"]})
     
