@@ -1,25 +1,12 @@
 "use client";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 
 import { z } from "zod";
 import { useForm } from "react-hook-form";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
-import { BaseSyntheticEvent } from "react";
-import { cliLogin } from "@/app/signup/actions";
-import { useSearchParams } from "next/navigation";
 const signUpForm = z.object({
   email: z.string().email(),
   password: z.string().min(6),
 });
 export default function Page() {
-  // const searchParams = useSearchParams();
   const form = useForm<z.infer<typeof signUpForm>>({
     defaultValues: {
       email: "",
@@ -27,16 +14,6 @@ export default function Page() {
     },
   });
 
-
-
-  // const onFormSubmit = async (data: any, e?: BaseSyntheticEvent) => {
-  //   console.log("form submit");
-  //   console.log(data);
-    
-  //   // const response = await cliLogin({...data, token: searchParams.get('t')});
-  //   console.log(response);
-    
-  // };
   return (
     <div className="mx-auto max-w-sm space-y-4">
       <div className="space-y-2 text-center">
