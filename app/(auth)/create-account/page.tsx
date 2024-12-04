@@ -28,7 +28,7 @@ import { useForm } from "react-hook-form";
 
 export default function Page() {
   const router = useRouter();
-  const { mutate: createAccount } = trpc.accounts.create.useMutation();
+  const { mutate: createAccount, isPending } = trpc.accounts.create.useMutation();
   const form = useForm<createProfileSchema>({
     resolver: zodResolver(CreateProfileSchema),
     defaultValues: {
@@ -37,7 +37,6 @@ export default function Page() {
     },
   });
   const { handleSubmit, setError } = form;
-  const [isLoading, setLoading] = useState<boolean>();
   const onSubmit = (val: createProfileSchema, e?: React.BaseSyntheticEvent) => {
     e?.preventDefault();
     console.log(val);
@@ -91,7 +90,7 @@ export default function Page() {
                       autoCapitalize="none"
                       autoComplete="email"
                       autoCorrect="off"
-                      disabled={isLoading}
+                      disabled={isPending}
                     />
 
                     <FormMessage />
@@ -113,7 +112,7 @@ export default function Page() {
                         {...field}
                         autoCapitalize="none"
                         autoCorrect="off"
-                        disabled={isLoading}
+                        disabled={isPending}
                       />
                     </FormControl>
 
@@ -127,8 +126,8 @@ export default function Page() {
                   </FormItem>
                 )}
               ></FormField>
-              <Button disabled={isLoading}>
-                {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              <Button disabled={isPending}>
+                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Sign up with email
               </Button>
             </div>
@@ -144,7 +143,7 @@ export default function Page() {
         </div>
         <Link href="/login/github">
           <Button variant="outline" type="button" className="w-full">
-            {isLoading ? (
+            {isPending ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
               <GitHubLogoIcon className="mr-2 h-4 w-4" />

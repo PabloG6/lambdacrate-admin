@@ -35,7 +35,7 @@ export function GatewayItem({ data }: Props) {
     setInputText(e.target.value);
   }
   return (
-    <div className="flex  flex-col p-3  border rounded-sm bg-card h-42">
+    <div className="flex  flex-col p-3  border rounded-md bg-card">
       <div className="flex gap-2 w-full">
         <div className="flex w-full space-x-2">
           <Avatar>

@@ -23,7 +23,9 @@ export default function CheckoutForm(props: Props) {
           return_url: `http://localhost:3000/dashboard/gateways/${gatewayId}`,
         },
       });
-    } catch (error) {}
+    } catch (error) {
+      console.error("stripe error has occurred", error);
+    }
   };
   return (
     <div className="max-w-lg h-full flex flex-col gap-4">

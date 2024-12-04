@@ -22,19 +22,9 @@ import { useEffect } from "react";
 
 const links = [
   {
-    name: "Accounts",
-    link: "accounts",
+    name: "Dashboard",
+    link: "/dashboard",
     icon: UsersIcon,
-  },
-  {
-    name: "Products",
-    link: "products",
-    icon: DashboardIcon,
-  },
-  {
-    name: "Subscriptions",
-    link: "subscriptions",
-    icon: Wallet2Icon,
   },
 ];
 export default function DashboardSideBar() {
@@ -52,7 +42,7 @@ export default function DashboardSideBar() {
             {links.map((link) => (
               <SidebarMenuItem key={link.name}>
                 <SidebarMenuButton asChild>
-                  <Link href={`/dashboard/gateways/${gatewayID!}/${link.link}`}>
+                  <Link href={`${link.link}`}>
                     <link.icon />
                     <span>{link.name}</span>
                   </Link>

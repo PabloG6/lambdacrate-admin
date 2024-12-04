@@ -1,4 +1,5 @@
 "use client";
+import { env } from "@/app/env";
 import { trpc } from "@/trpc/client";
 import { createQueryClient } from "@/trpc/query-client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -29,7 +30,7 @@ export function TRPCProvider({
   children: React.ReactNode;
 }): JSX.Element {
   const queryClient = getQueryClient();
-
+  console.log(getBaseURL());
   const [client] = useState(() =>
     trpc.createClient({
       links: [
@@ -44,7 +45,7 @@ export function TRPCProvider({
           }),
           false: unstable_httpBatchStreamLink({
             transformer: SuperJSON,
-            url: "http://localhost:3000/api/trpc",
+            url: getBaseURL() + "/api/trpc",
           }),
         }),
       ],
@@ -57,4 +58,9 @@ export function TRPCProvider({
       </trpc.Provider>
     </QueryClientProvider>
   );
+}
+
+function getBaseURL() {
+  if (env.PUBLIC_BASE_URL) return `${env.PUBLIC_BASE_URL}`;
+  return `http://localhost:${env.PUBLIC_PORT ?? 3000}`;
 }

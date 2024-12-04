@@ -13,7 +13,7 @@ import { CreateGatewayResponse } from "@/trpc/api/gateway/types";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useProfile } from "@/components/ui/profile/profile-provider";
 import { useEffect } from "react";
-export default function Component() {
+export default function Dashboard() {
   const { data, isPending, isError, isSuccess } = trpc.gateway.list.useQuery();
   useEffect(() => {
     console.log(data);
@@ -21,11 +21,11 @@ export default function Component() {
   const profile = useProfile();
 
   return (
-    <div className="flex flex-col w-full h-screen px-4 pb-8">
-      <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] overflow-hidden  flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10">
+    <div className="flex flex-col w-full h-screen">
+      <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] overflow-hidden  flex-1 flex-col gap-4 px-4 md:gap-8 ">
         {isPending && (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {[...Array(6)].map((_, i) => (
+            {[...Array(10)].map((_, i) => (
               <div key={i} className="border p-4 rounded-lg">
                 <Skeleton className="h-4 w-1/2 mb-2" />
                 <Skeleton className="h-8 w-full mb-4" />
@@ -56,30 +56,11 @@ export default function Component() {
             )}
             {data!.length > 0 ? (
               <>
-                <div
-                  className="flex w-full  lg:max-w-8xl mx-auto justify-between h-16 items-center
-                px-9 py-1"
-                >
-                  <div className="flex flex-col ">
-                    <p className="text-lg font-medium ">
-                      Welcome,{" "}
-                      <span className="font-mono text-sm">
-                        {profile?.email?.split("@")[0]}
-                      </span>
-                    </p>
-                  </div>
-                  <Button size={"icon"} asChild>
-                    <Link href="/dashboard/new-gateway">
-                      <PlusIcon />
-                    </Link>
-                  </Button>
-                </div>
-
                 <ScrollArea
-                  className="flex-grow w-full"
-                  style={{ maxHeight: "calc(100vh - 8rem)" }}
+                  className="w-full pr-8"
+                  style={{ maxHeight: "calc(100% - 4rem)" }}
                 >
-                  <div className="grid mt-6 px-8 mx-auto lg:max-w-8xl grid-cols-4 h-full gap-5">
+                  <div className="grid mx-auto lg:max-w-8xl grid-cols-3 grid-rows-2 gap-5">
                     {data!.map((item: CreateGatewayResponse) => (
                       <GatewayItem data={item} key={item.id} />
                     ))}
