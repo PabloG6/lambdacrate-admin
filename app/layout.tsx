@@ -16,6 +16,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={cn(`h-full ${mono.variable}`, inter.className)}>
+      <head>
+        <meta property="og:title" content="Lambdacrate" />
+        <meta
+          property="og:description"
+          content="Granular security for your web APIs"
+        />
+        <meta property="og:type" content="website" />
+      </head>
       <body className="h-screen">
         <TRPCProvider>{children}</TRPCProvider>
       </body>
