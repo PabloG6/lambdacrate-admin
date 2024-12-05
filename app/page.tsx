@@ -7,7 +7,12 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import BackgroundWrapper from "@/components/ui/background-wrapper";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import type { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "Lambdacrate",
+  description: "Granular security for your apis",
+};
 export default function Page() {
   return (
     <div className="flex flex-col min-h-screen">
