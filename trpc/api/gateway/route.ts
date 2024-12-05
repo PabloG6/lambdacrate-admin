@@ -30,13 +30,11 @@ export const gatewayRouter = createTRPCRouter({
         }),
       });
 
-      console.log("hello world this has been called");
       if (response.ok) {
         const results = await response.json();
         console.log("hello world", results);
         return createGatewayResponse.parse(results);
       }
-      console.log("hello world, this failed");
 
       throw new TRPCError({ code: getTRPCStatusCode(response.status) });
     }),
@@ -51,7 +49,7 @@ export const gatewayRouter = createTRPCRouter({
       return response;
     });
 
-    console.log(results);
+    console.log("results", results);
 
     return showGatewayResponse.parse(results);
   }),

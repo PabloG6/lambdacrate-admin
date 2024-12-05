@@ -266,11 +266,11 @@ export default function NewGateway({ onOpenChange }: Props) {
           </ScrollArea>
           <div className="flex-none h-16 p-4 border-t bg-background">
             <div className="max-w-3xl mx-auto">
-              {isPending && (
-                <Loader2 className="w-4 w-4 animate-spin"></Loader2>
-              )}
               <Button type="submit" className="w-full">
-                Create Gateway
+                {isPending && (
+                  <Loader2 className="w-4 w-4 animate-spin"></Loader2>
+                )}
+                <span>Create Gateway</span>
               </Button>
             </div>
           </div>
