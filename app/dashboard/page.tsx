@@ -24,7 +24,7 @@ export default function Dashboard() {
     <div className="flex flex-col w-full h-screen">
       <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] overflow-hidden  flex-1 flex-col gap-4 px-4 md:gap-8 ">
         {isPending && (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-2 pt-4 lg:grid-cols-3">
             {[...Array(10)].map((_, i) => (
               <div key={i} className="border p-4 rounded-lg">
                 <Skeleton className="h-4 w-1/2 mb-2" />
@@ -48,17 +48,14 @@ export default function Dashboard() {
                     You don&apos;t have any gateways yet.{" "}
                   </div>
                   <LayoutGrid className="h-8 w-8"></LayoutGrid>
-                  <Button asChild>
-                    <Link href="/dashboard/new-gateway">Create a Gateway</Link>
-                  </Button>
                 </div>
               </div>
             )}
             {data!.length > 0 ? (
               <>
                 <ScrollArea
-                  className="w-full pr-8"
-                  style={{ maxHeight: "calc(100% - 4rem)" }}
+                  className="w-full pr-8 h-full"
+                  style={{ maxHeight: "calc(100% - 2rem)" }}
                 >
                   <div className="grid mx-auto lg:max-w-8xl grid-cols-3 grid-rows-2 gap-5">
                     {data!.map((item: CreateGatewayResponse) => (
