@@ -8,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import BackgroundWrapper from "@/components/ui/background-wrapper";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { Metadata } from "next";
-
+import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import Image from "next/image";
 export const metadata: Metadata = {
   title: "Lambdacrate",
   description: "Granular security for your apis",
@@ -18,10 +19,16 @@ export default function Page() {
     <div className="flex flex-col min-h-screen">
       <div className="px-4 lg:px-6 h-16 flex items-center backdrop-blur bg-background/50 sticky top-0 border-b border/80">
         <nav className="flex flex-1">
-          <Link className="flex items-center justify-center" href="#">
-            <MountainIcon className="h-6 w-6" />
+          <Link
+            className="md:flex md:items-center md:justify-center hidden"
+            href="#"
+          >
+            <Image width={120} height={80} src={"/logo.png"} alt={"Logo"} />
             <span className="sr-only">Lambdacrate</span>
           </Link>
+          <Button size="icon" variant={"ghost"} className="md:hidden">
+            <HamburgerMenuIcon></HamburgerMenuIcon>
+          </Button>
         </nav>
         <nav className="hidden ml-auto flex-1 md:flex gap-4 sm:gap-6 justify-center w-full text-foreground/80">
           <Link
