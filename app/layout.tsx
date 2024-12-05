@@ -3,14 +3,11 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { TRPCProvider } from "@/contexts/TrpcProvider";
-import { SidebarProvider } from "@/components/ui/sidebar";
 const inter = Inter({ subsets: ["latin"] });
 const mono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains",
 });
-
-
 
 export default function RootLayout({
   children,
@@ -20,19 +17,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn(`h-full ${mono.variable}`, inter.className)}>
       <body className="h-screen">
-
-        <TRPCProvider>
-        {children}
-
-        </TRPCProvider>
-
-        
-
- 
-       
+        <TRPCProvider>{children}</TRPCProvider>
       </body>
     </html>
   );
-
 }
-
