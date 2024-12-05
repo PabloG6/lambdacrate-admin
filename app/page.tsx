@@ -23,7 +23,7 @@ export default function Page() {
             <span className="sr-only">Lambdacrate</span>
           </Link>
         </nav>
-        <nav className="ml-auto flex-1 flex gap-4 sm:gap-6 justify-center w-full text-foreground/80">
+        <nav className="hidden ml-auto flex-1 md:flex gap-4 sm:gap-6 justify-center w-full text-foreground/80">
           <Link
             className="text-sm font-medium hover:text-foreground underline-offset-4"
             href="#"
@@ -68,7 +68,7 @@ export default function Page() {
                         Limit customer access to your api&apos;s through user
                         accounts, subscriptions and unique api keys.
                       </p>
-                      <div className="space-x-3">
+                      <div className="flex flex-col gap-2 md:gap-1 md:flex-row items-center">
                         <Button asChild className="w-36">
                           <Link href="/create-account">Get Started</Link>
                         </Button>
@@ -101,7 +101,7 @@ export default function Page() {
                     </p>
                   </div>
                 </div>
-                <div className="grid grid-cols-3 gap-4 max-w-5xl">
+                <div className="flex flex-col gap-3 md:grid lg:grid-cols-3 md:grid-cols-2 md:gap-4 max-w-5xl">
                   <div className="p-6 border rounded-md">
                     <h3 className="mb-2 font-bold">User Accounts</h3>
                     <p className="text-sm leading-normal text-foreground/70">
