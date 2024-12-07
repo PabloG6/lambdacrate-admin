@@ -10,10 +10,111 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import type { Metadata } from "next";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
+import { Table } from "@/components/custom/table";
+import {
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { CheckIcon, MinusIcon } from "lucide-react";
 export const metadata: Metadata = {
   title: "Lambdacrate",
   description: "Granular security for your apis",
 };
+interface PlanFeature {
+  type: string;
+  features: {
+    name: string;
+    free: boolean;
+    startup: boolean;
+    team: boolean;
+    enterprise: boolean;
+  }[];
+}
+
+const planFeatures: PlanFeature[] = [
+  {
+    type: "Financial data",
+    features: [
+      {
+        name: "Open/High/Low/Close",
+        free: true,
+        startup: true,
+        team: true,
+        enterprise: true,
+      },
+      {
+        name: "Price-volume difference indicator	",
+        free: true,
+        startup: true,
+        team: true,
+        enterprise: true,
+      },
+    ],
+  },
+  {
+    type: "On-chain data",
+    features: [
+      {
+        name: "Network growth",
+        free: true,
+        startup: false,
+        team: true,
+        enterprise: true,
+      },
+      {
+        name: "Average token age consumed",
+        free: true,
+        startup: false,
+        team: true,
+        enterprise: true,
+      },
+      {
+        name: "Exchange flow",
+        free: false,
+        startup: false,
+        team: true,
+        enterprise: true,
+      },
+      {
+        name: "Total ERC20 exchange funds flow",
+        free: false,
+        startup: false,
+        team: true,
+        enterprise: true,
+      },
+    ],
+  },
+  {
+    type: "Social data",
+    features: [
+      {
+        name: "Dev activity",
+        free: false,
+        startup: true,
+        team: false,
+        enterprise: true,
+      },
+      {
+        name: "Topic search",
+        free: true,
+        startup: true,
+        team: true,
+        enterprise: true,
+      },
+      {
+        name: "Relative social dominance",
+        free: true,
+        startup: true,
+        team: false,
+        enterprise: true,
+      },
+    ],
+  },
+];
+
 export default function Page() {
   return (
     <div className="flex flex-col min-h-screen">
@@ -153,10 +254,251 @@ export default function Page() {
                 </div>
               </div>
             </section>
+            <section className="px-8">
+              <Table className="hidden lg:table">
+                <TableHeader>
+                  <TableRow className="bg-muted hover:bg-muted">
+                    <TableHead className="w-3/12 text-primary">Plans</TableHead>
+                    <TableHead className="w-2/12 text-primary text-lg font-medium text-center">
+                      Free
+                    </TableHead>
+                    <TableHead className="w-2/12 text-primary text-lg font-medium text-center">
+                      Startup
+                    </TableHead>
+                    <TableHead className="w-2/12 text-primary text-lg font-medium text-center">
+                      Team
+                    </TableHead>
+                    <TableHead className="w-2/12 text-primary text-lg font-medium text-center">
+                      Enterprise
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {planFeatures.map((featureType) => (
+                    <>
+                      <TableRow className="bg-muted/50" key={featureType.type}>
+                        <TableCell colSpan={5} className="font-bold">
+                          {featureType.type}
+                        </TableCell>
+                      </TableRow>
+                      {featureType.features.map((feature) => (
+                        <TableRow
+                          key={feature.name}
+                          className="text-muted-foreground"
+                        >
+                          <TableCell>{feature.name}</TableCell>
+                          <TableCell>
+                            <div className="mx-auto w-min">
+                              {feature.free ? (
+                                <CheckIcon className="h-5 w-5" />
+                              ) : (
+                                <MinusIcon className="h-5 w-5" />
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="mx-auto w-min">
+                              {feature.startup ? (
+                                <CheckIcon className="h-5 w-5" />
+                              ) : (
+                                <MinusIcon className="h-5 w-5" />
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="mx-auto w-min">
+                              {feature.team ? (
+                                <CheckIcon className="h-5 w-5" />
+                              ) : (
+                                <MinusIcon className="h-5 w-5" />
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <div className="mx-auto w-min">
+                              {feature.enterprise ? (
+                                <CheckIcon className="h-5 w-5" />
+                              ) : (
+                                <MinusIcon className="h-5 w-5" />
+                              )}
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </>
+                  ))}
+                </TableBody>
+              </Table>
+
+              <div className="space-y-24 lg:hidden">
+                <section>
+                  <div className="mb-4">
+                    <h4 className="text-xl font-medium">Free</h4>
+                  </div>
+                  <Table>
+                  <TableBody>
+                  {planFeatures.map((featureType) => (
+                      <>
+                        <TableRow
+                          key={featureType.type}
+                          className="bg-muted hover:bg-muted"
+                        >
+                          <TableCell
+                            colSpan={2}
+                            className="w-10/12 text-primary font-bold"
+                          >
+                            {featureType.type}
+                          </TableCell>
+                        </TableRow>
+                        {featureType.features.map((feature) => (
+                          <TableRow
+                            className="text-muted-foreground"
+                            key={feature.name}
+                          >
+                            <TableCell className="w-11/12">
+                              {feature.name}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              {feature.enterprise ? (
+                                <CheckIcon className="h-5 w-5" />
+                              ) : (
+                                <MinusIcon className="h-5 w-5" />
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </>
+                    ))}
+                  </TableBody>
+                  </Table>
+                </section>
+                <section>
+                  <div className="mb-4">
+                    <h4 className="text-xl font-medium">Startup</h4>
+                  </div>
+                  <Table>
+                    <TableBody>   {planFeatures.map((featureType) => (
+                      <>
+                        <TableRow
+                          key={featureType.type}
+                          className="bg-muted hover:bg-muted"
+                        >
+                          <TableCell
+                            colSpan={2}
+                            className="w-10/12 text-primary font-bold"
+                          >
+                            {featureType.type}
+                          </TableCell>
+                        </TableRow>
+                        {featureType.features.map((feature) => (
+                          <TableRow
+                            className="text-muted-foreground"
+                            key={feature.name}
+                          >
+                            <TableCell className="w-11/12">
+                              {feature.name}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              {feature.startup ? (
+                                <CheckIcon className="h-5 w-5" />
+                              ) : (
+                                <MinusIcon className="h-5 w-5" />
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </>
+                    ))}</TableBody>
+                 
+                  </Table>
+                </section>
+                <section>
+                  <div className="mb-4">
+                    <h4 className="text-xl font-medium">Team</h4>
+                  </div>
+                  <Table>
+                  <TableBody>
+                  {planFeatures.map((featureType) => (
+                      <>
+                        <TableRow
+                          key={featureType.type}
+                          className="bg-muted hover:bg-muted"
+                        >
+                          <TableCell
+                            colSpan={2}
+                            className="w-10/12 text-primary font-bold"
+                          >
+                            {featureType.type}
+                          </TableCell>
+                        </TableRow>
+                        {featureType.features.map((feature) => (
+                          <TableRow
+                            className="text-muted-foreground"
+                            key={feature.name}
+                          >
+                            <TableCell className="w-11/12">
+                              {feature.name}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              {feature.team ? (
+                                <CheckIcon className="h-5 w-5" />
+                              ) : (
+                                <MinusIcon className="h-5 w-5" />
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </>
+                    ))}
+                  </TableBody>
+                  </Table>
+                </section>
+                <section>
+                  <div className="mb-4">
+                    <h4 className="text-xl font-medium">Enterprise</h4>
+                  </div>
+                  <Table>
+                      <TableBody>
+                      {planFeatures.map((featureType) => (
+                      <>
+                        <TableRow
+                          key={featureType.type}
+                          className="bg-muted hover:bg-muted"
+                        >
+                          <TableCell
+                            colSpan={2}
+                            className="w-10/12 text-primary font-bold"
+                          >
+                            {featureType.type}
+                          </TableCell>
+                        </TableRow>
+                        {featureType.features.map((feature) => (
+                          <TableRow
+                            className="text-muted-foreground"
+                            key={feature.name}
+                          >
+                            <TableCell className="w-11/12">
+                              {feature.name}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              {feature.enterprise ? (
+                                <CheckIcon className="h-5 w-5" />
+                              ) : (
+                                <MinusIcon className="h-5 w-5" />
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </>
+                    ))}
+                      </TableBody>
+                  </Table>
+                </section>
+              </div>
+              {/* End xs to lg */}
+            </section>
           </main>
-        </ScrollArea>
-      </BackgroundWrapper>
-      <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
+          <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
         <p className="text-xs text-gray-500 dark:text-gray-400">
           © 2024 SaaS Inc. All rights reserved.
         </p>
@@ -169,6 +511,9 @@ export default function Page() {
           </Link>
         </nav>
       </footer>
+        </ScrollArea>
+      </BackgroundWrapper>
+
     </div>
   );
 }

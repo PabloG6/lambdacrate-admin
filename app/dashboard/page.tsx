@@ -54,7 +54,7 @@ export default function Dashboard() {
             {data!.length > 0 ? (
               <>
                 <ScrollArea
-                  className="w-full pr-8 h-full"
+                  className="w-full p-4  h-full"
                   style={{ maxHeight: "calc(100% - 2rem)" }}
                 >
                   <div className="grid mx-auto lg:max-w-8xl grid-cols-3 grid-rows-2 gap-5">
