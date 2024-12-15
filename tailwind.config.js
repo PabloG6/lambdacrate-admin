@@ -20,9 +20,17 @@ module.exports = {
   	},
   	extend: {
   		fontFamily: {
-  			mono: ["var(--font-jetbrains)"],
-  			heading: ["var(--font-heading)", ...fontFamily.sans],
-  			body: ["var(--font-body)", ...fontFamily.sans]
+  			mono: [
+  				'var(--font-jetbrains)'
+  			],
+  			heading: [
+  				'var(--font-heading)',
+                    ...fontFamily.sans
+                ],
+  			body: [
+  				'var(--font-body)',
+                    ...fontFamily.sans
+                ]
   		},
   		colors: {
   			border: 'hsl(var(--border))',

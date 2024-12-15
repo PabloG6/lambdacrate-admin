@@ -6,6 +6,7 @@ import { Input } from "./ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import NewGateway from "./ui/new-gateway";
 import { useState } from "react";
+import { SettingsDropdown } from "./settings-dropdown";
 
 export function TopBar() {
   const [isOpen, onOpenChange] = useState<boolean>();
@@ -19,9 +20,7 @@ export function TopBar() {
         ></Input>
         <div className="flex-grow"></div>
         <div className="flex items-center gap-3 justify-center">
-          <Button variant={"ghost"} size="icon">
-            <SettingsIcon />
-          </Button>
+          <SettingsDropdown></SettingsDropdown>
           <Sheet open={isOpen} onOpenChange={onOpenChange}>
             <SheetTrigger asChild>
               <Button

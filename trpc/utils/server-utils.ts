@@ -8,6 +8,10 @@ export const stripePriceIDs = {
 };
 
 export function getPriceDetails(id: string) {
+  const keys = Object.keys(stripePriceIDs).find((key) => {
+    console.log(stripePriceIDs[key as keyof typeof stripePriceIDs]);
+  });
+  console.log("keys: ", keys);
   return Object.keys(stripePriceIDs).find(
     (key) => stripePriceIDs[key as keyof typeof stripePriceIDs] == id,
   );

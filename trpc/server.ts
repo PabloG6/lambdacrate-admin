@@ -5,7 +5,6 @@ import { cookies, headers } from "next/headers";
 import { cache } from "react";
 
 import { createQueryClient } from "./query-client";
-import { sessionCookieName } from "@/lib/auth/lucia";
 
 import { createCallerFactory } from "./trpc";
 import { apiRouter, AppRouter } from "./api/root";

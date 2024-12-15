@@ -44,8 +44,6 @@ export const gatewayRouter = createTRPCRouter({
       headers: buildAuthHeaders(ctx),
     });
     const results = await response.json().then((response) => {
-      const price_id = getPriceDetails(response.price_id);
-      response.price_id = price_id;
       return response;
     });
 

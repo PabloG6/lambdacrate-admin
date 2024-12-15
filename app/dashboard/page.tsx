@@ -11,14 +11,12 @@ import ErrorUI from "@/components/error-ui";
 import { GatewayItem } from "@/components/gateway-item";
 import { CreateGatewayResponse } from "@/trpc/api/gateway/types";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useProfile } from "@/components/ui/profile/profile-provider";
 import { useEffect } from "react";
 export default function Dashboard() {
   const { data, isPending, isError, isSuccess } = trpc.gateway.list.useQuery();
   useEffect(() => {
     console.log(data);
   }, [data]);
-  const profile = useProfile();
 
   return (
     <div className="flex flex-col w-full h-screen">
@@ -54,7 +52,7 @@ export default function Dashboard() {
             {data!.length > 0 ? (
               <>
                 <ScrollArea
-                  className="w-full p-4  h-full"
+                  className="w-full p-4 h-full pb-10"
                   style={{ maxHeight: "calc(100% - 2rem)" }}
                 >
                   <div className="grid mx-auto lg:max-w-8xl grid-cols-3 grid-rows-2 gap-5">
@@ -62,6 +60,7 @@ export default function Dashboard() {
                       <GatewayItem data={item} key={item.id} />
                     ))}
                   </div>
+                  <div className="w-full py-3"></div>
                 </ScrollArea>
               </>
             ) : (
