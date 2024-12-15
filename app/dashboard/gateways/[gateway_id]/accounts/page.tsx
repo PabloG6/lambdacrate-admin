@@ -59,25 +59,6 @@ export default function Page({
   const [isDialogOpen, setDialogOpenChange] = useState<boolean>(false);
   return (
     <main className="w-full h-full">
-      <div className="h-16 flex flex-col gap-3">
-        <h1 className="text-2xl font-semibold">Customers</h1>
-      </div>
-      <div className="h-12 w-full flex justify-end">
-        <Dialog open={isDialogOpen} onOpenChange={setDialogOpenChange}>
-          <DialogTrigger asChild>
-            <Button>Create Account</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <CreateAccount
-              onNotifySubmit={() => {
-                console.log("notifying submit");
-                setDialogOpenChange(false);
-                refetch();
-              }}
-            ></CreateAccount>
-          </DialogContent>
-        </Dialog>
-      </div>
       <DataTable data={accounts ?? []} columns={accountColumns} />;
     </main>
   );

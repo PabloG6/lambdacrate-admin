@@ -12,6 +12,8 @@ import { GatewayItem } from "@/components/gateway-item";
 import { CreateGatewayResponse } from "@/trpc/api/gateway/types";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useEffect } from "react";
+import { TopBar } from "@/components/top-bar";
+import NewGateway from "@/components/ui/new-gateway";
 export default function Dashboard() {
   const { data, isPending, isError, isSuccess } = trpc.gateway.list.useQuery();
   useEffect(() => {
@@ -20,6 +22,12 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-col w-full h-screen">
+      <TopBar
+        title="Dashboard"
+        sheetContent={(onOpenChange) => (
+          <NewGateway onOpenChange={onOpenChange}></NewGateway>
+        )}
+      ></TopBar>
       <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] overflow-hidden  flex-1 flex-col gap-4 px-4 md:gap-8 ">
         {isPending && (
           <div className="grid gap-4 md:grid-cols-2 pt-4 lg:grid-cols-3">

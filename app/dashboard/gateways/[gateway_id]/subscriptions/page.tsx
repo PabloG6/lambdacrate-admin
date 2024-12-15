@@ -96,24 +96,6 @@ export default function Page({
   const onSubmit = () => {};
   return (
     <main className="w-full h-full">
-      <div className="h-16 flex flex-col gap-3">
-        <h1 className="text-2xl font-semibold">Subscriptions</h1>
-      </div>
-      <div className="h-12 w-full flex justify-end">
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>Create Subscription</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogTitle>Create a subscription</DialogTitle>
-
-            <SubscriptionForm
-              gateway_id={gateway_id}
-              onSubmit={onSubmit}
-            ></SubscriptionForm>
-          </DialogContent>
-        </Dialog>
-      </div>
       <DataTable data={subscriptions ?? []} columns={productColumns} />;
     </main>
   );

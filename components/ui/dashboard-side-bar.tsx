@@ -12,27 +12,29 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-  useSidebar,
 } from "./sidebar";
 import { UserDropDown } from "./user-dropdown";
-import { DashboardIcon } from "@radix-ui/react-icons";
-import { UsersIcon, Wallet2Icon } from "lucide-react";
+import { CircleGaugeIcon, KeyIcon, UsersIcon, Wallet2Icon } from "lucide-react";
 import { useParams, useSelectedLayoutSegment } from "next/navigation";
-import { useEffect } from "react";
+import { DashboardIcon } from "@radix-ui/react-icons";
 
 const links = [
   {
     name: "Dashboard",
     link: "/dashboard",
-    icon: UsersIcon,
+    icon: CircleGaugeIcon,
+  },
+  {
+    name: "Api Keys",
+    link: "/dashboard/settings/apikeys",
+    icon: KeyIcon,
   },
 ];
 export default function DashboardSideBar() {
   const params = useParams();
-  const gatewayID = params["gateway_id"];
   return (
     <Sidebar>
-      <SidebarHeader>
+      <SidebarHeader className="h-14 border-b flex justify-center">
         <Logo />
         {/*fix this open close to fix the sidebar animation*/}
       </SidebarHeader>

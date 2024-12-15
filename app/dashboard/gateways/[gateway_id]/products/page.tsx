@@ -13,6 +13,7 @@ import { HelpCircle } from "lucide-react";
 import { TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip";
 import { Tooltip, TooltipContent } from "@/components/ui/tooltip";
 import { useState } from "react";
+import { TopBar } from "@/components/top-bar";
 
 type ParamProps = {
   gateway_id: string;
@@ -132,20 +133,6 @@ export default function Page({
 
   return (
     <main className="w-full h-full">
-      <div className="h-16 flex flex-col gap-3">
-        <h1 className="text-2xl font-semibold">Products</h1>
-      </div>
-      <div className="h-12 w-full flex justify-end">
-        <Dialog open={isDialogOpen} onOpenChange={onDialogOpenChange}>
-          <DialogTrigger asChild>
-            <Button>Create Product</Button>
-          </DialogTrigger>
-          <DialogTitle className="sr-only"></DialogTitle>
-          <DialogContent>
-            <GwProductForm onSubmit={onSubmit}></GwProductForm>
-          </DialogContent>
-        </Dialog>
-      </div>
       <DataTable data={products ?? []} columns={productColumns} />;
     </main>
   );
